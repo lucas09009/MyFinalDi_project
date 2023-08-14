@@ -1,0 +1,37 @@
+{% extends "layout.html" %}
+
+<title>{% block blocktitle %} HOME{% endblock %}</title>
+
+{% block body%}
+
+
+<body>
+    <form method="POST" enctype="multipart/form-data" class="container">
+        {% with messages = get_flashed_messages() %}
+        {% if messages %}
+        <div class="alert alert-success">
+            {% for message in messages %}
+            <p>{{ message }}</p>
+            {% endfor %}
+        </div>
+        {% endif %}
+        {% endwith %}
+        <div>
+
+            {{ form.hidden_tag() }}
+            <h1 class="h1">Inscrivez-vous<i class="far fa-smile" style="color: #0000c8; font-size: 25px; margin-left: 10px;"></i></h1>
+            <hr>
+
+            {{ form.Username(placeholder="username") }}
+
+            {{ form.Password(placeholder="Password") }}
+
+            {{ form.confirm_Password(placeholder="Confirm your Password") }}
+
+            {{ form.submit }}
+        </div>
+    </form>
+
+
+{% endblock %}
+

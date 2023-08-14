@@ -1,0 +1,162 @@
+{% extends "layout.html" %}
+{% block blocktitle %}Home{% endblock %}
+
+{% block body %}
+<header>
+    <nav>
+        <ul>
+            <li style="font-family: 'Dancing Script', cursive; font-size:40px">Mongo<span style="color:red">DB</span>
+            </li>
+            <div class="SearchDiv">
+                <input type="text" id="SearchInput" name="Search">
+                <i class="fas fa-camera"></i>
+                <button>Search</button>
+            </div>
+            <li><i class="fas fa-shopping-cart fa-lg"></i></li>
+            <p style="color:black">{{ current_user.authenticated}}</p>
+
+            {% if not current_user.authenticated %}
+            <li><i class="fa-solid fa-user fa-lg" style="margin-left: 150px;"></i></li>
+            {% else %}
+                <li><a href="{{url_for('Signup')}}"><button style="background-color: white; color:#3d5d83; width:70px; border-radius: 5px; border:1px solid #3d5d83; height: 30px; margin-left: 190px;">SIGNUP</button></a></li>
+                <li><a href="{{url_for('Login')}}"><button style="background-color:#173354 ; color:white; width:70px; border-radius: 5px; border:1px solid #3d5d83; height: 30px">LOGIN</button></a></li>
+            {% endif %}
+            <li>
+                <label for="depliant">LANGUES</label>
+                <!-- <i class="fas fa-chevron-down" id="depliant"> -->
+            </li>
+        </ul>
+    </nav>
+</header>
+<main>
+    <div class="mon-main">
+        <div class="bar-defilante">
+            <div class="message">
+                <p>Bienvenue sur MongoDB, votre plateforme d'achat et de vente en ligne. Faites vos achats en toute
+                    sécurité</p>
+            </div>
+        </div>
+        <ul class="liste">
+            <div style="display:flex; border:1px solid gray; padding:10px; border-radius:10px; margin-left: 25px; align-items: center; cursor: pointer">
+                <i class="fas fa-bars menu-icon" style=" font-size: 14px; cursor:pointer"></i>
+                <span style="font-size: 16px; margin-left: 5px; font-family: Arial, Helvetica, sans-serif;">Menu</span>
+            </div>
+            <div style="border:1px solid gray; width:2px; height:15px; background-color: gray; margin-right: 250px;">
+            </div>
+            <i class="fas fa-home menu-icon"></i>
+            <i class="fas fa-cog menu-icon"></i>
+            <li>Les categories</li>
+            <li>Vetements</li>
+            <li>Aliments</li>
+            <li>Les produits Tendances </li>
+            <li>Explorez nos produits</li>
+        </ul>
+        <div class="produits-defilants">
+            <div class="image_de_produits-defilants">
+                <i class="fa-solid fa-chevron-left"></i>
+                <i class="fa-solid fa-chevron-right"></i>
+                {% for items in images %}
+                <img src="{{items.image}}" alt="{{items.details}}" width="100px" height="100px"></img>
+                {% endfor %}
+            </div>
+        </div>
+        <div style="width:100%; margin-top: 35px; display: flex">
+            <div class="Menu">
+                <h2 style="font-family:Quicksand; text-align: center;font-size:19px; margin-bottom: 10px;">Les catégories</h2>
+                <ul>
+                    <li><i class="fas fa-laptop"></i><span style="margin-left:8px">HIGH-TECH</span></li>
+                    <li><i class="fas fa-tshirt"></i><span style="margin-left:8px">Vetements</span></li>
+                    <li><i class="fas fa-socks"></i><span style="margin-left:8px"></span>Sous-Vetements </span></li>
+                    <li><i class="fas fa-shoe-prints"><span style="margin-left:8px"></span></i>Chaussures</span></li>
+                    <li><i class="fas fa-shopping-bag"><span style="margin-left:8px"></span></i>Sacs</span></li>
+                    <li><i class="fas fa-book"></i><span style="margin-left:8px"></span>Education</span></li>
+                    <li><i class="fas fa-dumbbell"></i><span style="margin-left:8px"></span>Sport</span></li>
+                    <li><i class="fas fa-palette"></i><span style="margin-left:8px"></span>Beauté-Esthétique</span></li>
+                    <li><i class="fas fa-couch"></i><span style="margin-left:8px"></span>Meubles pour maison</span></li>
+                </ul>
+            </div>
+            <div class="inventaire-des-articles" style="width:80%">
+                {% for item in images%}
+                <div class="exposition-images">
+                    <img src="{{item.image}}" width="250px" height="290px">
+                    <div style="justify-content: space-around; align-items:center;">
+                        <div style="display:flex; height:80px">
+                            <div>
+                                <span style="width:4px; height:4px"><img src=></span>
+                                <span>{{item.name}}</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                {% endfor %}
+            </div>
+        </div>
+
+        <div>
+
+        </div>
+    </div>
+</main>
+<footer style="background-color: #606f87; height:8cm; color:white">
+    <div class="footer-content">
+        <div class="footer-logo">
+            <h3>MongoDB</h3>
+        </div>
+        <div class="footer-links">
+            <ul>
+                <li><a href="#">Avis de confidentialité</a></li>
+                <li><a href="#">Nos conditions de location</a></li>
+                <li><a href="#">Aide</a></li>
+                <li><a href="#">Devenir partenaire – Marketplace</a></li>
+                <li><a href="#">Notre fonctionnement</a></li>
+            </ul>
+        </div>
+        <div class="footer-contact">
+            <p>Contactez-nous :</p>
+            <ul>
+                <li><i class="fa-solid fa-phone"></i> Téléphone : +123456789</li>
+                <li><i class="fa-solid fa-envelope"></i> Email : info@MongoDB.com</li>
+                <li><i class="fa-solid fa-map-marker-alt"></i> Adresse : 123 Rue du commerce3, Ville</li>
+            </ul>
+        </div>
+    </div>
+    <div class="footer-bottom">
+        <p>&copy; 2023 MongoDB. Tous droits réservés.</p>
+        <div class="social-icons">
+            <a href="#"><i class="fa-brands fa-facebook"></i></a>
+            <a href="#"><i class="fa-brands fa-twitter"></i></a>
+            <a href="#"><i class="fa-brands fa-instagram"></i></a>
+        </div>
+    </div>
+</footer>
+<script>
+    let currentIndex = 0;
+    let images = document.querySelectorAll('.image_de_produits-defilants img');
+    let prevButton = document.querySelector('.fa-chevron-left');
+    let nextButton = document.querySelector('.fa-chevron-right');
+
+    function showImage(index) {
+        if (index < 0) {
+            index = images.length - 1;
+        } else if (index >= images.length) {
+            index = 0;
+        }
+        images.forEach(img => img.style.display = 'none');
+        images[index].style.display = 'block';
+        currentIndex = index;
+    }
+
+    function prevImage() {
+        showImage(currentIndex - 1);
+    }
+
+    function nextImage() {
+        showImage(currentIndex + 1);
+    }
+
+    prevButton.addEventListener('click', prevImage);
+    nextButton.addEventListener('click', nextImage);
+
+    setInterval(nextImage, 6000);
+</script>
+{%endblock%}
