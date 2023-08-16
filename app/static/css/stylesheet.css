@@ -3,6 +3,9 @@
     margin:0;
     box-sizing: border-box;
 }
+body{
+    font-family: 'Cairo';
+}
 
 header {
     /* position: fixed; */
@@ -12,6 +15,7 @@ header {
     background-color: white;
     box-shadow: 0px 2px 5px rgba(0, 0, 0, 0.1);
     z-index: 1000;
+    align-items:center;
 }
 
 nav ul {
@@ -104,9 +108,34 @@ nav ul li {
     display:flex
 }
 
+.barre-des-taches{
+    width:1cm; 
+    margin:0px 0px 0px 15px;
+    height:20cm; 
+    background-color: white;
+    display: flex;
+    flex-direction: column;
+}
+
+.barre-des-taches ul {
+    list-style: none; 
+    margin: 0;
+    padding: 0;
+}
+
+.barre-des-taches ul li {
+    list-style-type: none;
+    color:rgb(152, 146, 146);
+    text-align: center;
+    margin:15px 0px 0px 0px;
+
+} 
+
+
 
 .barre-defilante{
     border: 1px solid #ccc;
+    z-index:0
 }
 
 .message {
@@ -122,7 +151,7 @@ nav ul li {
 }
 
 .produits-defilants{
-    z-index: 1;
+    z-index: 0;
     position: relative;
     margin: 0px 65px 0px 0px;
 
@@ -131,7 +160,6 @@ nav ul li {
 .produits-defilants .fa-chevron-left, .fa-chevron-right{
     opacity:0; 
     transition: opacity 0.5s ease-in-out;
-
 }
 
 .produits-defilants:hover .fa-chevron-left{
@@ -192,6 +220,67 @@ nav ul li {
 
 }
 
+.depliant {
+    position: relative;
+    cursor: pointer;
+    /* display: inline-block */
+}
+
+.depliant-content {
+    display: none;
+    flex-direction: column;
+    position: absolute;
+    background-color: white;
+    border-radius: 5px;
+    list-style: none;
+    right: 0; 
+    font-size: 12px;
+    margin:15px 10px 0px 20px;
+    text-align: center; 
+    z-index: 1; 
+    width:128px;
+    height:auto;
+
+}
+
+.depliant.active  .depliant-content {
+    display: block;
+}
+
+.depliant-content li {
+    padding: 7px 0px 7px 0px;
+    justify-content: center;
+    align-items:center;
+    float:left;
+}
+
+.depliant-content i{
+    margin-right:5px
+}
+
+.trait {
+    opacity:10%;
+    margin-top:5px
+}
+
+.depliant-content li a {
+    text-decoration: none;
+    color: #333;
+    display: block;
+}
+.coins-div{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    width: 2cm; text-align: center;
+    margin-left:150px
+}
+
+.coins-icon{
+    color: goldenrod;
+}
+
+
 body{
     background-color:#f0f4f7;
 }
@@ -200,7 +289,7 @@ body{
     background-color: #f0f4f7;
     height: 20cm;
     width: 25cm;
-    margin: auto;
+    margin: 0px 0px 0px 10px;
     display: flex;
     flex-wrap: wrap;
     border: 2px solid red;
@@ -230,6 +319,137 @@ body{
     height: 240px;
 }
 
+.user-grande-div{
+    display:flex; 
+    flex-direction: column; 
+    align-items:center;
+
+}
+
+.user-moyenne-div{
+    font-family: 'Cairo';
+    width:70%; 
+    height: 5cm; 
+    background-color:white; 
+    margin:70px auto ;
+    border-radius: 10px; 
+    z-index:1;
+    margin-bottom:30px;
+    display:flex;
+    flex-direction: column;
+}
+
+.user-petite-div{
+    width:70%; 
+    height: 1cm; 
+    background-color:rgb(255, 255, 255); 
+}
+.user-petite-div ul{
+    display:flex;
+
+}
+
+.user-petite-div ul li{
+    list-style: none;
+}
+
+.profile {
+    width: 50%;
+    height: 17cm;
+    margin: 50px auto;
+    padding: 20px;
+    background-color: #fff;
+    border-radius: 10px;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+}
+.profile .image {
+    background-color: #ffffff;
+    width: 100px;
+    height: 100px;
+    border-radius: 50%;
+    object-fit: cover;
+    margin: 0 auto; 
+    text-align: center;
+    justify-content: center;
+    align-items: center;
+    display: flex; 
+    border: 4px solid rgb(143, 143, 143)
+}
+
+.upload-container {
+    position: relative;
+    width: 100px;
+    height: 100px;
+    border-radius: 50%;
+    border: 2px dashed gray;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    overflow: hidden;
+}
+
+.upload-icon {
+    font-size: 24px;
+    color: gray;
+    transition: opacity 0.3s;
+}
+
+.uploaded-image {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: none;
+}
+
+/* 
+.personalisation-champ-image-parcourir{
+    display: none;
+}       
+
+.personalisation-champ-image{
+    cursor: pointer;
+    background-color: #337ab7;
+    color: white;
+    padding: 5px 10px;
+    border-radius: 4px;
+    display: inline-block;
+} */
+
+
+/* .personalisation-champ-image::after {
+    content: 'Téléverser une image';
+} */
+
+.profile h5 {
+    font-size: 16px;
+    margin-top: 10px;
+    padding: 5px;
+}
+.profile p {
+    font-size: 16px;
+    margin: 10px 0;
+}
+
+
+.username{
+    margin-left:10px;
+    padding: 5px 40px 5px 0px
+}
+
+.Bio{
+    padding: 10px;
+    text-align: start
+}
+
+.envoyer{
+    color:rgb(255, 255, 255); 
+    background-color: #0461d3;
+    border:1px solid #0461d3;
+    border-radius:5px;
+    padding:10px
+}
+
 footer {
     background-color: #333;
     color: #fff;
@@ -238,73 +458,72 @@ footer {
     font-family:'Cairo'
   }
   
-  .footer-content {
+.footer-content {
     display: flex;
     justify-content: space-between;
-  }
-  
-  .footer-logo h3 {
+}
+
+.footer-logo h3 {
     font-size: 14px;
     margin: 0px;
-  }
-  
-  .footer-links ul {
+}
+
+.footer-links ul {
     list-style: none;
     padding: 0;
     margin: 0;
-  }
-  
-  .footer-links li {
+}
+
+.footer-links li {
     display: inline-block;
     margin-right: 20px;
-  }
-  
-  .footer-links a {
+}
+
+.footer-links a {
     color: #fff;
     text-decoration: none;
     font-size: 16px;
-  }
-  
-  .footer-links a:hover {
+}
+
+.footer-links a:hover {
     text-decoration: underline;
-  }
-  
-  .footer-contact p {
+}
+
+.footer-contact p {
     margin: 0;
     font-size: 16px;
-  }
-  
-  .footer-contact ul {
+}
+
+.footer-contact ul {
     list-style: none;
     padding: 0;
     margin: 0;
-  }
-  
-  .footer-contact li {
-    margin-bottom: 8px;
-  }
-  
-  .footer-contact i {
+}
+
+.footer-contact li {
+    margin-bottom: 8px; 
+}
+
+.footer-contact i {
     margin-right: 8px;
-  }
-  
-  .footer-bottom {
+}
+
+.footer-bottom {
     display: flex;
     justify-content: space-between;
     margin-top: 20px;
     border-top: 1px solid #555;
     padding-top: 10px;
     font-size: 14px;
-  }
-  
-  .footer-bottom p {
-    margin: 0;
-  }
-  
-  .social-icons a {
+}
+
+.footer-bottom p {
+margin: 0;
+}
+
+.social-icons a {
     color: #fff;
     text-decoration: none;
     margin-left: 10px;
     font-size: 18px;
-  }
-  
+}

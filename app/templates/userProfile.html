@@ -1,0 +1,128 @@
+{% extends "layout.html" %}
+{% block blocktitle %}Home{% endblock %}
+
+{% block body %}
+<header>
+    <nav>
+        <ul>
+            <li style="font-family: 'Dancing Script', cursive; font-size:40px">Mongo<span style="color:red">DB</span>
+            </li>
+            <div class="SearchDiv">
+                <input type="text" id="SearchInput" name="Search">
+                <i class="fas fa-camera"></i>
+                <button>Search</button>
+            </div>
+            <li><i class="fas fa-shopping-cart fa-lg"></i></li>
+
+            {% if current_user.is_authenticated %}
+            <div class="coins-div">
+                <span class="coins-icon">
+                    <i class="fa-solid fa-coins"></i>
+                </span>
+                <span>0 francs</span>
+            </div>
+            <!-- <li><i class="fa-regular fa-bell"></i></li>
+            <li><i class="fa-regular fa-message"></i></li> -->
+            <span style="display:flex; flex-direction: column; text-align:center">
+                <li><i class="fa-solid fa-user fa-lg"
+                        style="padding:20px 10px 20px 10px; background-color: white;color:#3d5d83; border-radius:50px; cursor:pointer"></i>
+                </li>
+                <li>{{current_user.Username}}</li>
+            </span>
+            <div class="depliant" id="users-info">
+                <i class="fa-solid fa-chevron-down" style="margin-left:10px"></i>
+                <ul class="depliant-content">
+                    <li>
+                        <a href="{{url_for('editProfile',user_id=current_user.id)}}"><i class="fa-solid fa-shop"
+                                style="margin-right: 5px;"></i>Profil</a>
+                    </li>
+                    <li>
+                        <a href="{{url_for('publierArticles')}}"><i class="fa-solid fa-shop"
+                                style="margin-right: 5px;"></i>Mettre un article en vente</a>
+                    </li>
+                    <li>
+                        <a href="#"><i class="fas fa-cog menu-icon" style="margin-right: 5px;"></i>Préférences</a>
+                    </li>
+                    <li>
+                        <a href="{{url_for('Logout')}}"><i class="fa-solid fa-right-from-bracket"
+                                style="margin-right: 5px;"></i>Déconnexion</a>
+                    </li>
+                </ul>
+            </div>
+            {% else %}
+            <li><a href="{{url_for('Signup')}}"><button
+                        style="background-color: white; color:#3d5d83; width:70px; border-radius: 5px; border:1px solid #3d5d83; height: 30px; margin-left: 190px;">SIGNUP</button></a>
+            </li>
+            <li><a href="{{url_for('Login')}}"><button
+                        style="background-color:#173354 ; color:white; width:70px; border-radius: 5px; border:1px solid #3d5d83; height: 30px">LOGIN</button></a>
+            </li>
+            {% endif %}
+        </ul>
+    </nav>
+</header>
+<main>
+    <form method="POST" enctype="multipart/form-data" class="container">
+        <div class="profile">   
+            {{ form.hidden_tag() }}
+            <label class="personalisation-champ-image">
+                <div class="upload-container">
+                    {{ form.Image(placeholder='', class_='personalisation-champ-image-parcourir', style='opacity: 0; position: absolute; left: 0; top: 0; width: 100%; height: 100%; cursor: pointer;', accept='image/*', onchange='previewImage(this);') }}
+                    <i class="upload-icon fas fa-image"></i>
+                    <img class="uploaded-image" id="uploadedImage">
+                </div>
+            </label><hr style="color:rgb(203, 202, 202); margin-top:30px">
+
+            
+            <div style="display:flex">
+            <h5>{{ form.Username.label }}</h5 style="color:rgb(203, 202, 202); margin-top:10px">
+            <h5>{{ form.Username(placeholder='Veuillez saisir votre username', class_='username') }}</h5>
+        </div>
+        <p style="color:gray; font-size:10px">Les noms d'utilisateur ne peuvent contenir que des lettres, des chiffres, des traits de soulignement et des points. La modification de ton nom d'utilisateur changera aussi ton lien de profil.</p><hr style="color:rgb(203, 202, 202); margin-top:10px">
+        <div style="display:flex; align-items:center">
+        <h5>{{ form.Biographie.label }}</h5 >
+        <h5>{{ form.Biographie( placeholder='Biographie', class_='Bio') }}</h5 >
+        </div>
+        <p style="color:gray; font-size:10px; ">Votre biographie ne peut contenir que 80 lettres</p><hr style="color:rgb(203, 202, 202); margin:10px 0px 10px 0px">
+        <a href="{{url_for('home')}}"style="text-decoration:none; border:1px solid gray; padding:3px; border-radius:3px"><buton>Annuler</buton></a>  
+       
+
+        {{ form.submit( class_='envoyer') }}
+        </div>
+    </form>
+</main>
+
+<footer style="background-color: #606f87; height:8cm; color:white">
+    <div class="footer-content">
+        <div class="footer-logo">
+            <h3>MongoDB</h3>
+        </div>
+        <div class="footer-links">
+            <ul>
+                <li><a href="#">Avis de confidentialité</a></li>
+                <li><a href="#">Nos conditions de location</a></li>
+                <li><a href="#">Aide</a></li>
+                <li><a href="#">Devenir partenaire – Marketplace</a></li>
+                <li><a href="#">Notre fonctionnement</a></li>
+            </ul>
+        </div>
+        <div class="footer-contact">
+            <p>Contactez-nous :</p>
+            <ul>
+                <li><i class="fa-solid fa-phone"></i> Téléphone : +123456789</li>
+                <li><i class="fa-solid fa-envelope"></i> Email : info@MongoDB.com</li>
+                <li><i class="fa-solid fa-map-marker-alt"></i> Adresse : 123 Rue du commerce3, Ville</li>
+            </ul>
+        </div>
+    </div>
+    <div class="footer-bottom">
+        <p>&copy; 2023 MongoDB. Tous droits réservés.</p>
+        <div class="social-icons">
+            <a href="#"><i class="fa-brands fa-facebook"></i></a>
+            <a href="#"><i class="fa-brands fa-twitter"></i></a>
+            <a href="#"><i class="fa-brands fa-instagram"></i></a>
+        </div>
+    </div>
+</footer>
+{% endblock %}
+
+

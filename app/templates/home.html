@@ -13,18 +13,41 @@
                 <button>Search</button>
             </div>
             <li><i class="fas fa-shopping-cart fa-lg"></i></li>
-            <p style="color:black">{{ current_user.authenticated}}</p>
 
-            {% if not current_user.authenticated %}
-            <li><i class="fa-solid fa-user fa-lg" style="margin-left: 150px;"></i></li>
+            {% if current_user.is_authenticated %}
+            <div class="coins-div">
+                <span class="coins-icon">
+                    <i class="fa-solid fa-coins"></i>
+                </span>                
+                <span>0 francs</span>
+            </div>
+            <li><i class="fa-regular fa-bell"></i></li>
+            <li><i class="fa-regular fa-message"></i></li>
+            <span style="display:flex; flex-direction: column; text-align:center">
+                <li><i class="fa-solid fa-user fa-lg" style="padding:20px 10px 20px 10px; background-color: white;color:#3d5d83; border-radius:50px; cursor:pointer"></i></li>
+                <li>{{current_user.Username}}</li>
+            </span>
+            <div class="depliant" id="users-info">
+                <i class="fa-solid fa-chevron-down" style="margin-left:10px" ></i>
+                <ul class="depliant-content">
+                    <li>
+                        <a href="{{url_for('editProfile', user_id=current_user.id)}}"><i class="fa-solid fa-user fa-lg"></i>Profil</a>
+                    </li>
+                    <li>
+                        <a href="{{url_for('publierArticles')}}"><i class="fa-solid fa-shop"></i>Mettre un article en vente</a>
+                    </li>
+                    <li>
+                        <a href="#"><i class="fas fa-cog menu-icon" ></i>Préférences</a><hr class="trait">
+                    </li>
+                    <li>
+                        <a href="{{url_for('Logout')}}"><i class="fa-solid fa-right-from-bracket" ></i>Déconnexion</a>
+                    </li>
+                </ul>
+            </div>  
             {% else %}
                 <li><a href="{{url_for('Signup')}}"><button style="background-color: white; color:#3d5d83; width:70px; border-radius: 5px; border:1px solid #3d5d83; height: 30px; margin-left: 190px;">SIGNUP</button></a></li>
                 <li><a href="{{url_for('Login')}}"><button style="background-color:#173354 ; color:white; width:70px; border-radius: 5px; border:1px solid #3d5d83; height: 30px">LOGIN</button></a></li>
             {% endif %}
-            <li>
-                <label for="depliant">LANGUES</label>
-                <!-- <i class="fas fa-chevron-down" id="depliant"> -->
-            </li>
         </ul>
     </nav>
 </header>
@@ -41,10 +64,8 @@
                 <i class="fas fa-bars menu-icon" style=" font-size: 14px; cursor:pointer"></i>
                 <span style="font-size: 16px; margin-left: 5px; font-family: Arial, Helvetica, sans-serif;">Menu</span>
             </div>
-            <div style="border:1px solid gray; width:2px; height:15px; background-color: gray; margin-right: 250px;">
-            </div>
+            <div style="border:1px solid gray; width:2px; height:15px; background-color: gray; margin-right: 250px;"></div>
             <i class="fas fa-home menu-icon"></i>
-            <i class="fas fa-cog menu-icon"></i>
             <li>Les categories</li>
             <li>Vetements</li>
             <li>Aliments</li>
@@ -82,7 +103,7 @@
                     <div style="justify-content: space-around; align-items:center;">
                         <div style="display:flex; height:80px">
                             <div>
-                                <span style="width:4px; height:4px"><img src=></span>
+                                <span style="width:4px; height:4px"></span>
                                 <span>{{item.name}}</span>
                             </div>
                         </div>
@@ -90,6 +111,14 @@
                 </div>
                 {% endfor %}
             </div>
+            {% if not current_user.is_authenticated %}
+            <div class="barre-des-taches">
+                <ul>
+                    <li><i class="fa-solid fa-user fa-lg"></i></li>
+
+                </ul>
+            </div>
+            {% endif %}
         </div>
 
         <div>
@@ -129,34 +158,6 @@
         </div>
     </div>
 </footer>
-<script>
-    let currentIndex = 0;
-    let images = document.querySelectorAll('.image_de_produits-defilants img');
-    let prevButton = document.querySelector('.fa-chevron-left');
-    let nextButton = document.querySelector('.fa-chevron-right');
+<script src="{{url_for('static', filename='javascript/script.js')}}"></script>
 
-    function showImage(index) {
-        if (index < 0) {
-            index = images.length - 1;
-        } else if (index >= images.length) {
-            index = 0;
-        }
-        images.forEach(img => img.style.display = 'none');
-        images[index].style.display = 'block';
-        currentIndex = index;
-    }
-
-    function prevImage() {
-        showImage(currentIndex - 1);
-    }
-
-    function nextImage() {
-        showImage(currentIndex + 1);
-    }
-
-    prevButton.addEventListener('click', prevImage);
-    nextButton.addEventListener('click', nextImage);
-
-    setInterval(nextImage, 6000);
-</script>
 {%endblock%}

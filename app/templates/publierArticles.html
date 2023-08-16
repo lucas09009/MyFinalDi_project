@@ -1,0 +1,48 @@
+{% extends "layout.html" %}
+
+<title>{% block blocktitle %} HOME{% endblock %}</title>
+
+{% block body%}
+
+
+<body>
+    <form method="POST" enctype="multipart/form-data" class="container">
+        {% with messages = get_flashed_messages() %}
+        {% if messages %}
+        <div class="alert alert-success">
+            {% for message in messages %}
+            <p>{{ message }}</p>
+            {% endfor %}
+        </div>
+        {% endif %}
+        {% endwith %}
+        <div>
+
+            {{ form.hidden_tag() }}
+            <h1 class="h1">Ajouter un nouvel article</h1>
+            <hr>
+
+            {{ form.name(placeholder="Nom de l'article") }}
+
+            {{ form.category(placeholder="Type d'article") }}
+
+            {{ form.Description(placeholder="Description de l'article") }}
+
+            {{ form.date_arrive(placeholder="Date d'arrivée") }}
+
+            {{ form.details(placeholder="Détails supplémentaires") }}
+
+            {{ form.price(placeholder="Prix de l'article") }}
+
+            {{ form.quantity(placeholder="Quantité disponible") }}
+
+            {{ form.image(placeholder="Sélectionnez l'image de l'article") }}
+
+
+            {{ form.submit }}
+        </div>
+    </form>
+
+
+{% endblock %}
+

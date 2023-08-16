@@ -10,6 +10,36 @@
     <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@500&family=Quicksand:wght@300&family=Raleway:wght@100&display=swap" rel="stylesheet">
     <title>{% block title %} {% endblock %}</title>
 </head>
+<style>
+
+.alert-error {
+    background-color: red;
+    color: white;
+    font-family: "Quicksand";
+    animation: flashAnimation 8s;
+    animation-fill-mode: forwards;
+}
+
+.alert-success {
+    background-color: green;
+    color: rgb(255, 255, 255);
+    font-family: "Quicksand";
+    animation: flashAnimation 8s;
+    animation-fill-mode: forwards;
+    height: 1cm;
+    align-items: center;
+}
+
+@keyframes flashAnimation {
+    0%, 80%{
+        opacity: 1;
+    }
+    100% {
+        opacity: 0;
+        display:none
+    }
+}
+</style>
 {% block body %}
    
 {% endblock %}
