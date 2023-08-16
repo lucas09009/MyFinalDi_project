@@ -123,6 +123,27 @@
         </div>
     </div>
 </footer>
+
+<script>
+    function previewImage(input) {
+        const uploadedImage = document.getElementById("uploadedImage");
+        const uploadIcon = document.querySelector(".upload-icon");
+
+        if (input.files && input.files[0]) {
+            const reader = new FileReader();
+
+            reader.onload = function(e) {
+                uploadedImage.src = e.target.result;
+                uploadedImage.style.display = "block";
+                uploadIcon.style.opacity = 0;
+            };
+
+            reader.readAsDataURL(input.files[0]);
+        }
+    }
+</script>
+</body>
+</html>
 {% endblock %}
 
 
