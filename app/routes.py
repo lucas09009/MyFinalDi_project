@@ -1,73 +1,82 @@
-from flask import render_template, redirect, url_for, request, flash
+########## MES-IMPORTATIONS ##########
+from flask import render_template, redirect, url_for, request, flash, jsonify
 from app import app, bcrypt, db, login_manager
 from .models import ImageDefilante, Articles, UsersData
-from .forms import LoginForm, SignupForm, PublierArticles,EditProfileForm
+from .forms import LoginForm, SignupForm, PublierArticles,EditProfileForm, ImageDefilanteForm, DeleteArticleForm
 from flask_login import login_user, logout_user, current_user
 import flask_login
 import os, random
 from werkzeug.utils import secure_filename
-from datetime import datetime, timedelta
+from functools import wraps
 
+
+####### CETTE ROUTE PERMET DE CHARGER D'UN UTILISATEUR DEPUIS LA DATABASE UsersData A PARTIR DE SON ID #########
 @login_manager.user_loader
 def load_user(user_id):
     return UsersData.query.get(int(user_id))
 
-@app.route('/', methods=['GET', 'POST'])
+#######CETTE ROUTE RENVOIE LES IMAGES ET LES ARTICLES A LA PAGE D'ACCEUIL ###########
+@app.route('/', methods=['GET', ' POST'])
 def home():
-    form = EditProfileForm()
-    image_uploaded = True  
-    images = Articles.query.all()
-    random.shuffle(images)
+    articles = Articles.query.all()
+    random.shuffle(articles)
 
-    return render_template('home.html', images=images, form=form)
+    imagesdefilante = ImageDefilante.query.all()
+
+    print('MES IMAGES', imagesdefilante)
+
+    return render_template('home.html', articles=articles, imagesdefilante=imagesdefilante )
+
+######### CETTE ROUTE RETURNE LE TEMPLATE home.html UNE FOIS QU'ON ACCEDE A L'URL '/ADMIN' 
+@app.route('/admin')
+def viewsForAdmin():
+    return render_template('home.html')
+
+####### CE CODE RESTREINT L'ACCES A CERTAINES ROUTES 
+
+def admin_required(view):                 
+    @wraps(view)
+    def view_decorate(*args, **kwargs):
+        if current_user.is_authenticated and current_user.is_admin:
+            return view(*args, **kwargs)
+        
+        return redirect(url_for('index'))
+    return view_decorate    
+
+
+############# CETTE ROUTE EST RESERVEE AUX Utilisateurs connectes, ELLE PERMET AUX utilisateurs DE MODIFIER LEURS PROFILS
 
 @flask_login.login_required
 @app.route('/editProfile/<int:user_id>', methods=['GET', 'POST'])
 def editProfile(user_id):
     user = UsersData.query.get_or_404(user_id)
     form = EditProfileForm(obj=user)
+    if user:
+        articles = user.articles
+        print('MES ARTICLES',articles)
+        if form.validate_on_submit():
+            user.Username = form.Username.data
+            user.Biographie = form.Biographie.data
 
-    if form.validate_on_submit():
-        user.Username = form.Username.data
-        user.Biographie = form.Biographie.data
+            if form.Image.data:
+                uploaded_file = form.Image.data
+                filename = secure_filename(uploaded_file.filename)
+                image_path = os.path.join(app.config['UPLOAD_PATH'], filename)
+                uploaded_file.save(image_path)
+                image = image_path
+                path_list = image.split('/')[1:]
+                new_path = '/'.join(path_list)
 
-        if form.Image.data:
-            uploaded_file = form.Image.data
-            filename = secure_filename(uploaded_file.filename)
-            image_path = os.path.join(app.config['UPLOAD_PATH'], filename)
-            uploaded_file.save(image_path)
-            image = image_path
-            path_list = image.split('/')[1:]
-            new_path = '/'.join(path_list)
-
-            user.Image = new_path
+                user.Image = new_path
+                db.session.commit()
+                return redirect(url_for('editProfile', user_id=user.id))
             db.session.commit()
             flash('Les modifications ont été enregistrées')
-            return redirect(url_for('editProfile', user_id=user.id))
-        db.session.commit()
-        flash('Les modifications ont été enregistrées')
 
-    return render_template('userProfile.html', form=form)
-    #     Username = form.Username.data
-    #     Biographie = form.Biographie.data
-    #     Image = form.Image.data
-
-    #     uploaded_file = form.Image.data
-    #     filename = secure_filename(uploaded_file.filename)
-    #     image_path = os.path.join(app.config['UPLOAD_PATH'], filename)
-    #     uploaded_file.save(image_path)
-    #     image = image_path
-    #     path_list = image.split('/')[1:]
-    #     new_path = '/'.join(path_list)
-
-    #     user_new_infos = UsersData(Username=Username , Image = new_path, Biographie=Biographie)
-    #     db.session.add(user_new_infos)
-    #     db.session.commit()
-    #     return redirect(url_for('edit_profile', user_id=user.id))
-    # return render_template('userProfile.html', form=form)
-
-
-
+        return render_template('userProfile.html', form=form, articles=articles)
+    return "User non trouvé"
+    
+############# CETTE ROUTE PERMET AUX Utilisateurs DE SE CONNECTER ###########
 
 
 @app.route('/Login', methods=['GET', 'POST'])
@@ -82,7 +91,6 @@ def Login():
             if bcrypt.check_password_hash(user.Password, password):
                 login_user(user)
                 next = request.args.get('next')
-                print('USERCONNECTED',current_user.is_authenticated)
                 if user.is_admin:
                     return redirect(next or url_for('viewsForAdmin'))   
                 else:
@@ -92,11 +100,17 @@ def Login():
                 return redirect(url_for('Login'))
     return render_template('login.html', form=form)
 
+
+############# CETTE ROUTE PERMET AUX Utilisateurs DE SE DECONNECTER ###########
+
+
 @app.route('/Logout')
 def Logout():
     logout_user()
     return redirect(url_for('home'))
 
+
+############# CETTE ROUTE PERMET AUX Utilisateurs DE S'INSCRIRE ###########
 
 @app.route('/Signup', methods=['GET', 'POST'])
 def Signup():
@@ -125,6 +139,9 @@ def Signup():
 
         return redirect(url_for('home'))
     return render_template('Signup.html', form =form)
+
+
+############# CETTE ROUTE PERMET AUX Utilisateurs DE PUBLIER DES ARTICLES ###########
 
 @app.route('/publierArticles', methods = ['GET', 'POST'])
 def publierArticles():
@@ -158,7 +175,68 @@ def publierArticles():
             db.session.add(new_articles)
             db.session.commit()
             
-            flash(f"L'article            a été ajouté avec succes")
-            return redirect(url_for('home'))
+            flash(f"L'article a été ajouté avec succes")
     return render_template('publierArticles.html', form=form)
 
+
+############# CETTE ROUTE PERMET AUX ADMINS POUR PROMOUVOIR DES ARTICLES OU FAIRE DES ANNONCES ###########
+
+
+@admin_required
+@app.route('/newAd', methods = ['GET', 'POST'])
+def MakeNewAds():
+    form = ImageDefilanteForm()
+    if form.validate_on_submit():
+            details = form.details.data
+            image = form.image.data
+      
+
+            uploaded_file = form.image.data
+            filename = secure_filename(uploaded_file.filename)
+            image_path = os.path.join(app.config['UPLOAD_PATH'], filename)
+            uploaded_file.save(image_path)
+            image = image_path
+            path_list = image.split('/')[1:]
+            new_path = '/'.join(path_list)
+
+
+            newAd = ImageDefilante(details=details, image=new_path)  
+            db.session.add(newAd)
+            db.session.commit()
+            
+            flash(f"L'article a été ajouté avec succes")
+    return render_template('ImageDefilante.html', form=form)
+
+
+############# CETTE ROUTE PERMET AUX ADMINS DE MODIFIER DES ARTICLES ###########
+
+
+
+############# CETTE ROUTE PERMET AUX ADMINS DE SUPPRIMER DES ARTICLES ###########
+
+
+@app.route('/admin/deleteArticle', methods=['GET', 'POST'])
+@admin_required 
+def deleteArticle():
+    form = DeleteArticleForm()
+    if  form.validate_on_submit():
+        id = form.id.data
+        name = form.name.data
+        article_to_delete = Articles.query.get(id)
+        if article_to_delete and (article_to_delete.name == name or article_to_delete.id == id):
+            db.session.delete(article_to_delete)
+            db.session.commit()
+            flash(f"L'article a été supprimé avec succès")
+        else:
+            flash(f"Erreur: L'article avec cet ID ou ce nom n'a pas été trouvée ou les informations ne correspondent pas.")
+            return redirect(url_for('delete_article'))
+    return render_template('delete_article.html', form=form)
+
+
+
+@app.route('/get_filtered_articles', methods=['POST'])
+def get_filtered_articles():
+    selected_category = request.form.get('category')
+    filtered_articles = Articles.query.filter_by(category=selected_category).all()
+
+    return jsonify({'filtered_articles': filtered_articles})

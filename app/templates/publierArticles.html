@@ -4,40 +4,38 @@
 
 {% block body%}
 
+{% with messages = get_flashed_messages() %}
+{% if messages %}
+<div class="alert alert-success">
+    {% for message in messages %}
+    <p>{{ message }}</p>
+    {% endfor %}
+</div>
+{% endif %}
+{% endwith %}
 
-<body>
     <form method="POST" enctype="multipart/form-data" class="container">
-        {% with messages = get_flashed_messages() %}
-        {% if messages %}
-        <div class="alert alert-success">
-            {% for message in messages %}
-            <p>{{ message }}</p>
-            {% endfor %}
-        </div>
-        {% endif %}
-        {% endwith %}
         <div>
 
             {{ form.hidden_tag() }}
             <h1 class="h1">Ajouter un nouvel article</h1>
             <hr>
 
-            {{ form.name(placeholder="Nom de l'article") }}
+            {{ form.name(placeholder="Nom de l'article") }}<br>
 
-            {{ form.category(placeholder="Type d'article") }}
+            {{ form.category(placeholder="Type d'article") }}<br>
 
-            {{ form.Description(placeholder="Description de l'article") }}
+            {{ form.Description(placeholder="Description de l'article") }}<br>
 
-            {{ form.date_arrive(placeholder="Date d'arrivée") }}
+            {{ form.date_arrive(placeholder="Date d'arrivée") }}<br>
 
-            {{ form.details(placeholder="Détails supplémentaires") }}
+            {{ form.details(placeholder="Détails supplémentaires") }}<br>
 
-            {{ form.price(placeholder="Prix de l'article") }}
+            {{ form.price(placeholder="Prix de l'article") }}<br>
 
-            {{ form.quantity(placeholder="Quantité disponible") }}
+            {{ form.quantity(placeholder="Quantité disponible") }}<br>
 
-            {{ form.image(placeholder="Sélectionnez l'image de l'article") }}
-
+            {{ form.image(placeholder="Sélectionnez l'image de l'article") }}<br>
 
             {{ form.submit }}
         </div>

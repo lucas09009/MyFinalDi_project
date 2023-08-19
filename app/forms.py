@@ -15,17 +15,7 @@ class LoginForm(FlaskForm):
 
 class PublierArticles(FlaskForm):
         name = StringField("name", validators=[DataRequired()])
-        category = SelectField("category", validators=[DataRequired()], choices=[
-        'HIGH-TECH',
-        'Vetements',
-        'Sous-Vetements',
-        'Chaussures',
-        'Sacs',
-        'Education',
-        'Sport',
-        'Beauté-Esthétique',
-        'Meubles pour maison'
-    ])        
+        category = SelectField("category", validators=[DataRequired()], choices=['Sport', 'Vetements'])        
         Description = StringField("Description", validators=[DataRequired()])
         date_arrive = DateField("date_arrive ", validators=[DataRequired()])
         details = TextAreaField("details", validators=[DataRequired()])
@@ -39,3 +29,27 @@ class EditProfileForm(FlaskForm):
     Image = FileField("Image",  validators=[Optional()])
     Biographie = TextAreaField(('Bio'), validators=[Optional()])
     submit = SubmitField('Enregistrer')
+
+
+class ImageDefilanteForm(FlaskForm):
+    image = FileField("image",  validators=[DataRequired()])
+    details = StringField("details,", validators=[DataRequired()])
+    submit = SubmitField('Enregistrer')
+
+
+class ModifierArticleForm(FlaskForm):
+    id = IntegerField("article_id", validators=[DataRequired()])
+    name = StringField("name", validators=[Optional()])
+    name = StringField("name", validators=[DataRequired()])
+    category = SelectField("category", validators=[DataRequired()], choices=[])        
+    Description = StringField("Description", validators=[DataRequired()])
+    date_arrive = DateField("date_arrive ", validators=[DataRequired()])
+    details = TextAreaField("details", validators=[DataRequired()])
+    price = IntegerField("price", validators=[DataRequired()])
+    quantity = IntegerField("quantity", validators=[DataRequired()])
+    image = FileField("image",  validators=[DataRequired()])
+    submit = SubmitField("submit", validators=[DataRequired()])
+class DeleteArticleForm(FlaskForm):
+        id = IntegerField("article_id", validators=[DataRequired()])
+        name = StringField("name", validators=[Optional()])
+        submit = SubmitField("submit", validators=[DataRequired()])

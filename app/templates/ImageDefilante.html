@@ -3,6 +3,9 @@
 <title>{% block blocktitle %} HOME{% endblock %}</title>
 
 {% block body%}
+
+
+<body>
 {% with messages = get_flashed_messages() %}
 {% if messages %}
 <div class="alert alert-success">
@@ -14,17 +17,21 @@
 {% endwith %}
     <form method="POST" enctype="multipart/form-data" class="container">
         <div>
+
             {{ form.hidden_tag() }}
-            <h1 class="h1">Connexion</h1>
+            <h1 class="h1">Promouvoir un article</h1>
             <hr>
-            {{ form.Username(placeholder="Pseudo") }}
 
-            {{ form.Password(placeholder="Password") }}
-            
+            {{ form.image(placeholder="Sélectionnez l'image de l'article") }}
+
+            {{ form.details(placeholder="Détails supplémentaires") }}
+
+
+
             {{ form.submit }}
-
         </div>
-        <a href="{{url_for('Signup')}}" style="text-decoration: none; font-family:'Cairo'; margin-right: 220px;">Pas de compte?,<span style="text-decoration:underline">Inscrivez vous</span></a>
     </form>
+
+
 {% endblock %}
 

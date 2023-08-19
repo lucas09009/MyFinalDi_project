@@ -1,0 +1,35 @@
+{% extends "layout.html" %}
+
+<title>{% block blocktitle %} HOME{% endblock %}</title>
+
+{% block body%}
+
+
+<body>
+    <form method="POST" enctype="multipart/form-data" class="container">
+        {% with messages = get_flashed_messages() %}
+        {% if messages %}
+        <div class="alert alert-success">
+            {% for message in messages %}
+            <p>{{ message }}</p>
+            {% endfor %}
+        </div>
+        {% endif %}
+        {% endwith %}
+        <div>
+
+            {{ form.hidden_tag() }}
+            <h1 class="h1">Supprimer un article</h1>
+            <hr>
+
+            {{ form.id(placeholder="Saisissez l'id de l'article à supprimer ") }}
+
+            {{ form.name(placeholder="Saisissez le nom de l'article à supprimer ") }}
+
+            {{ form.submit }}
+        </div>
+    </form>
+
+
+{% endblock %}
+

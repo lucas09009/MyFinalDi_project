@@ -10,6 +10,10 @@ class ImageDefilante(db.Model):
     image = db.Column(db.String, nullable=False)
     details = db.Column(db.String, nullable=False)
 
+    
+    def __repr__(self):
+        return f'<Articles: {self.id}--{self.image} >'
+
 class UsersData(db.Model, UserMixin):
     __tablename__='usersdata'
     id = db.Column(db.Integer, primary_key=True)
@@ -17,8 +21,13 @@ class UsersData(db.Model, UserMixin):
     Biographie = db.Column(db.Text, nullable=True)
     Username = db.Column(db.String, nullable=False, unique=True)
     Password = db.Column(db.String, nullable=False, unique=True)
-    # inscription_time = db.Column(db.DateTime, nullable=False, default=datetime.utcnow)
     is_admin = db.Column(db.Boolean, default=False)
+    # paniers = db.relationship('Panier', secondary=user_panier_associations, back_populates='users')
+    articles = db.relationship('Articles', backref='usersdata')
+
+    def __repr__(self):
+        return f'<Articles: {self.id}--{self.Username} >'
+
 
 class Articles(db.Model):
         __tablename__ = 'articles'
@@ -32,7 +41,29 @@ class Articles(db.Model):
         price = db.Column(db.Integer, nullable=False)
         quantity = db.Column(db.Integer, nullable=False)
         image = db.Column(db.String, nullable=False)
-        # users_id = db.Column(db.Integer, db.ForeignKey('users_data.id'),nullable=True)
+        user_id = db.Column(db.Integer, db.ForeignKey("usersdata.id"),nullable=True)
+        # users_cart_items = db.relationship('Articles', back_populates='cart_items')
 
         def __repr__(self):
             return f'<Articles: {self.id}--{self.name} >'
+        
+
+# user_panier_association = db.Table(
+#     'user_panier_association',
+#     db.Column('user_id', db.Integer, db.ForeignKey('usersdata.id')),
+#     db.Column('panier_id', db.Integer, db.ForeignKey('panier.id'))
+# )
+
+
+# class Panier(db.Model):
+#     __tablename__ = 'panier'
+#     id = db.Column(db.Integer, primary_key=True)
+#     image = db.Column(db.String, nullable=False)
+#     users = db.relationship('UsersData', secondary=user_panier_association, back_populates='paniers')
+
+
+# user_panier_association = db.Table(
+#     'user_panier_association',
+#     db.Column('user_id', db.Integer, db.ForeignKey('usersdata.id')),
+#     db.Column('panier_id', db.Integer, db.ForeignKey('panier.id'))
+# )
