@@ -53,3 +53,10 @@ class DeleteArticleForm(FlaskForm):
         id = IntegerField("article_id", validators=[DataRequired()])
         name = StringField("name", validators=[Optional()])
         submit = SubmitField("submit", validators=[DataRequired()])
+
+
+class EditArticleForm(FlaskForm):
+    id = IntegerField("article_id", validators=[DataRequired()])
+    name = StringField("name", validators=[Optional()])
+    submit = SubmitField("submit", validators=[DataRequired()])
+

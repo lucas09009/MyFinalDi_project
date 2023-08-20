@@ -1,8 +1,8 @@
 ########## MES-IMPORTATIONS ##########
-from flask import render_template, redirect, url_for, request, flash, jsonify
+from flask import render_template, redirect, url_for, request, flash, session
 from app import app, bcrypt, db, login_manager
-from .models import ImageDefilante, Articles, UsersData
-from .forms import LoginForm, SignupForm, PublierArticles,EditProfileForm, ImageDefilanteForm, DeleteArticleForm
+from .models import ImageDefilante, Articles, UsersData, Panier
+from .forms import LoginForm, SignupForm, PublierArticles,EditProfileForm, ImageDefilanteForm, DeleteArticleForm, EditArticleForm 
 from flask_login import login_user, logout_user, current_user
 import flask_login
 import os, random
@@ -156,6 +156,7 @@ def publierArticles():
             quantity = form.quantity.data
             image = form.image.data
 
+
             uploaded_file = form.image.data
             filename = secure_filename(uploaded_file.filename)
             image_path = os.path.join(app.config['UPLOAD_PATH'], filename)
@@ -171,7 +172,8 @@ def publierArticles():
                             details=details,
                             price=price,
                             quantity=quantity, 
-                            image=new_path)  
+                            image=new_path,
+                            user_id = current_user.id)  
             db.session.add(new_articles)
             db.session.commit()
             
@@ -234,9 +236,56 @@ def deleteArticle():
 
 
 
-@app.route('/get_filtered_articles', methods=['POST'])
-def get_filtered_articles():
-    selected_category = request.form.get('category')
-    filtered_articles = Articles.query.filter_by(category=selected_category).all()
 
-    return jsonify({'filtered_articles': filtered_articles})
+@app.route('/editArticle/', methods=['GET', 'POST'])
+def editArticle():
+    article_to_edit = Articles.query.get(id)
+    if article_to_edit and (article_to_edit.name == name or article_to_edit.id == id):
+        flash(f"L'article avec l'ID {id} n'a pas été trouvé.")
+        return redirect(url_for('editArticle'))  
+
+    form = PublierArticles(obj=article_to_edit)
+
+    if form.validate_on_submit():
+        form.populate_obj(article_to_edit)
+        db.session.commit()
+        flash(f"L'article a été modifié avec succès")
+        return redirect(url_for('editArticle'))
+
+    return render_template('edit_article.html', form=form, article=article_to_edit)
+
+
+
+@app.route('/monpanier', methods=['GET','POST'])
+def MonPanier():
+    if request.method == 'POST':
+        article_id = request.form.get('article_id') 
+        if 'panier' not in session:
+            session['panier'] = []
+        
+        if article_id not in session['panier']:
+            session['panier'].append(article_id)
+        
+        nouvel_ajout = Panier(user_id=current_user.id, article_id=article_id, quantite=1)
+        db.session.add(nouvel_ajout)
+        db.session.commit()
+
+        session['panier'].append(article_id)
+
+    articles_dans_le_panier = Articles.query.all()
+    return render_template('mon_panier.html', articles_dans_le_panier= articles_dans_le_panier)
+
+
+
+
+@app.route('/supprimer_article_panier/<int:article_id>', methods=['GET', 'POST'])
+def supprimer_article_panier(article_id):
+    if 'panier' in session and article_id in session['panier']:
+        session['panier'].remove(article_id)
+        
+        panier_a_supprimer = Panier.query.filter_by(user_id=current_user.id, article_id=article_id).first()
+        if panier_a_supprimer:
+            db.session.delete(panier_a_supprimer)
+            db.session.commit()
+
+    return redirect(url_for('MonPanier'))

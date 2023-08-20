@@ -74,7 +74,7 @@
 
             
             <div style="display:flex">
-            <h5>{{ form.Username.label }}</h5 style="color:rgb(203, 202, 202); margin-top:10px">
+            <h5>{{ form.Username.label }}</h5 >
             <h5>{{ form.Username(placeholder='Veuillez saisir votre username', class_='username') }}</h5>
         </div>
         <p style="color:gray; font-size:10px">Les noms d'utilisateur ne peuvent contenir que des lettres, des chiffres, des traits de soulignement et des points. La modification de ton nom d'utilisateur changera aussi ton lien de profil.</p><hr style="color:rgb(203, 202, 202); margin-top:10px">
@@ -94,6 +94,7 @@
             <ul style="margin-left: 20px;">
                 <li data-category="Mes-articles">Mes Articles</li>
                 <li data-category="Mes-ventes">Mes ventes</li>
+                <li data-category="Mon-Panier">Mon Panier</li>
             </ul>
         </div>
         <div class="les_images">
@@ -141,8 +142,7 @@
 </footer>
 
 <script src="{{url_for('static', filename='javascript/script.js')}}"></script>
-</body>
-</html>
+
 {% endblock %}
 
 
