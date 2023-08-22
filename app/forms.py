@@ -15,7 +15,18 @@ class LoginForm(FlaskForm):
 
 class PublierArticles(FlaskForm):
         name = StringField("name", validators=[DataRequired()])
-        category = SelectField("category", validators=[DataRequired()], choices=['Sport', 'Vetements'])        
+        category = SelectField("category", validators=[DataRequired()], 
+                               choices=['Sport', 
+                                        'Vetements', 
+                                        'Sous-Vetements',
+                                        'Chaussures',
+                                        'Sacs',
+                                        'Education',
+                                        'Sport',
+                                        'Beauté-Esthétique',
+                                        'Meubles pour maison',
+                                        'Nourritures'
+                                        ])        
         Description = StringField("Description", validators=[DataRequired()])
         date_arrive = DateField("date_arrive ", validators=[DataRequired()])
         details = TextAreaField("details", validators=[DataRequired()])

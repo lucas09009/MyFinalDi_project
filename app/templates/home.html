@@ -1,233 +1,208 @@
-{% extends "layout.html" %}
-{% block blocktitle %}Home{% endblock %}
+    {% extends "layout.html" %}
+    {% block blocktitle %}Home{% endblock %}
 
-{% block body %}
-<div class="notification-container"></div>
+    {% block body %}
+    <div class="notification-container"></div>
 
-<header>
-    <nav>
-        <ul>
-            <li style="font-family: 'Dancing Script', cursive; font-size:40px">Mongo<span style="color:red">DB</span>
-            </li>
-            <div class="SearchDiv">
-                <input type="text" id="SearchInput" name="Search">
-                <i class="fas fa-camera"></i>
-                <button>Search</button>
-            </div>
-            <a href="{{url_for('MonPanier')}}">
-                <li><i class="fas fa-shopping-cart fa-lg"></i><span class="cart-notification"></span></li>
-            </a>
-            {% if current_user.is_authenticated %}
-            <div class="coins-div">
-                <span class="coins-icon">
-                    <i class="fa-solid fa-coins"></i>
-                </span>                
-                <span>0 francs</span>
-            </div>
-            <li><i class="fa-regular fa-bell"></i></li>
-            <li><i class="fa-regular fa-message"></i></li>
-            <span style="display:flex; flex-direction: column; text-align:center">
-                <li><i class="fa-solid fa-user fa-lg" style="padding:20px 10px 20px 10px; background-color: white;color:#3d5d83; border-radius:50px; cursor:pointer"></i></li>
-                <li>{{current_user.Username}}</li>
-            </span>
-            <div class="depliant" id="users-info">
-                <i class="fa-solid fa-chevron-down" style="margin-left:10px" ></i>
-                <ul class="depliant-content">
-                    
-                    <li>
-                        <a href="{{url_for('editProfile', user_id=current_user.id)}}"><i class="fa-solid fa-user fa-lg"></i>Profil</a>
-                    </li>
-                    
-                    <li>
-                        <a href="{{ url_for('publierArticles') }}"><i class="fa-solid fa-shop"></i>Mettre un article en vente</a>
-                    </li>
-                    
-                    <li>
-                        <a href="{{url_for('deleteArticle')}}"><i class="fa-solid fa-shop"></i>Supprimer un article</a>
-                    </li>
-                    {% if current_user.is_admin %}
-
-                    <li>
-                        <a href="{{url_for('deleteArticle')}}"><i class="fa-solid fa-shop"></i>Supprimer un article</a>
-                    </li>
-
-                    <li>
-                        <a href="{{url_for('MakeNewAds')}}"><i class="fa-solid fa-shop"></i>Promouvoir un article</a>
-                    </li>
-                    {% endif %}
-
-                    <li>
-                        <a href="#"><i class="fas fa-cog menu-icon" ></i>Préférences</a><hr class="trait">
-                    </li>
-
-                    <li>
-                        <a href="{{url_for('Logout')}}"><i class="fa-solid fa-right-from-bracket" ></i>Déconnexion</a>
-                    </li>
-
-                </ul>
-            </div>  
-            {% else %}
-                <li><a href="{{url_for('Signup')}}"><button style="background-color: white; color:#3d5d83; width:70px; border-radius: 5px; border:1px solid #3d5d83; height: 30px; margin-left: 190px;">SIGNUP</button></a></li>
-                <li><a href="{{url_for('Login')}}"><button style="background-color:#173354 ; color:white; width:70px; border-radius: 5px; border:1px solid #3d5d83; height: 30px">LOGIN</button></a></li>
-            {% endif %}
-        </ul>
-    </nav>
-</header>
-
-<main>
-<div class="mon-main">
-    <div class="bar-defilante">
-        <div class="message">
-            <p>Bienvenue sur MongoDB, votre plateforme d'achat et de vente en ligne. Faites vos achats en toute
-                sécurité</p>
-        </div>
-    </div>
-    <ul class="liste">
-        <div class="presentation" >
-            <i class="fas fa-bars menu-icon" ></i>
-            <span>Menu</span>
-        </div>
-        <div class="presentation1" ></div>
-        <i class="fas fa-home menu-icon"></i>
-        <li>Les categories</li>
-        <li>Vetements</li>
-        <li>Aliments</li>
-        <li>Les produits Tendances </li>
-        <li>Explorez nos produits</li>
-    </ul>
-    <div class="produits-defilants">
-        <div class="image_de_produits-defilants">
-            <i class="fa-solid fa-chevron-left"></i>
-            <i class="fa-solid fa-chevron-right"></i>
-            {% for item in imagesdefilante %}
-            <img src="{{item.image}}" alt="{{item.details}}" width="10px" height="100px"></img>
-            {% endfor %}
-        </div>
-    </div>
-    <div style="width:100%; margin-top: 35px; display: flex; cursor:pointer">
-        <section>
-            <div class="Menu">
-                <h2 class="les-categories" id="all-categories">Les catégories</h2>
-                <ul>
-                    <li data-category="HIGH-TECH"><i class="fas fa-laptop"></i><span >HIGH-TECH</span></li>
-                    <li data-category="Vetements"><i class="fas fa-tshirt"></i><span >Vetements</span></li>
-                    <li data-category="Sous-Vetements"><i class="fas fa-socks"></i><span >Sous-Vetements</span></li>
-                    <li data-category="Chaussures"><i class="fas fa-shoe-prints"><span ></i>Chaussures</span></li>
-                    <li data-category="Sacs"><i class="fas fa-shopping-bag"><span ></i>Sacs</span></li>
-                    <li data-category="Education"><i class="fas fa-book"></i><span>Education</span></li>
-                    <li data-category="Sport"><i class="fas fa-dumbbell"></i><span>Sport</span></li>
-                    <li data-category="Beauté-Esthétique"><i class="fas fa-palette"></i><span>Beauté-Esthétique</span></li>
-                    <li data-category="Meubles-pour-maison"><i class="fas fa-couch"></i><span>Meubles pour maison</span></li>
-                    <li data-category="Nourritures"><i class="fas fa-utensils"></i><span >Nourritures</span></li>
-                </ul>
-            </div>
-        </section>
-        <div style="flex-direction: column; width:100%">
-            <div class="inventaire-des-articles" style="width:97%">
-                {% for article in articles %}
-                <div class="exposition-images" data-category="{{ article.category }}">
-                    <img src="{{article.image}}" width="250px" height="290px">
-                    <form method="POST" action="{{ url_for('MonPanier') }}">
-                        <button type="submit" name="article_id" value="{{ article.id }}" class="cart-button">
-                            <i class="fa-solid fa-cart-shopping"></i>
-                        </button>
+    <header>
+        <nav>
+            <ul>
+                <li style="font-family: 'Dancing Script', cursive; font-size:40px">Mongo<span style="color:red">Market</span>
+                </li>
+                <div class="SearchDiv">
+                    <input type="text" id="SearchInput" name="Search">
+                    <i class="fas fa-camera"></i>
+    
+                    <form method="POST" action="{{ url_for('SearchFor', saisie=saisie) }}">
+                        <button type="submit">Search</button>
                     </form>
-                    <!-- <div class="message-box">Ce article a bien ete ajoute a votre panier </div> -->
-                    <div style="justify-content: space-around; align-items:center;">
-                        <div style="display:flex; height:80px">
-                            <div class="description">
-                                <span style="width:4px; height:4px">
-                                </span>
-                                <span class="article_name">{{article.name}}</span>
-                                <span class="article_price">{{article.price}}francs</span>
+
+                    <!-- <form method="POST" action="{{ url_for('SearchFor') }}">
+                        <input type="text" id="SearchInput" name="Search">
+                        <button type="submit">Rechercher</button>
+                    </form> -->
+                </div>
+
+                <div class="panier-div">
+                    <div id="cart-count" class="cart-count">0</div>
+                    <a href="{{url_for('MonPanier')}}" style="color: white; text-decoration: none;">
+                        <i class="fas fa-shopping-cart fa-lg"></i><span class="cart-notification">Mon Panier</span>
+                    </a>
+                </div>
+                {% if current_user.is_authenticated %}
+                <div class="articles-div">
+                    <a href="{{url_for('MesArticles')}}" style="color: white; text-decoration: none;">
+                        <i class="fas fa-tag"></i>
+                        <span class="cart-notification">Mes articles</span>
+                    </a>                         
+                </div>
+                <li><i class="fa-regular fa-bell"></i></li>
+                <li><i class="fa-regular fa-message"></i></li>
+                <span style="display:flex; flex-direction: column; text-align:center">
+                    <li><i class="fa-solid fa-user fa-lg" style="padding:20px 10px 20px 10px; background-color: white;color:#3d5d83; border-radius:50px; cursor:pointer"></i></li>
+                    <li>{{current_user.Username}}</li>
+                </span>
+                <div class="depliant" id="users-info">
+                    <i class="fa-solid fa-chevron-down" style="margin-left:10px" ></i>
+                    <ul class="depliant-content">
+                        
+                        <li>
+                            <a href="{{url_for('editProfile', user_id=current_user.id)}}"><i class="fa-solid fa-user fa-lg"></i>Profil</a>
+                        </li>
+                        
+                        <li>
+                            <a href="{{ url_for('publierArticles') }}"><i class="fa-solid fa-shop"></i>Mettre un article en vente</a>
+                        </li>
+                        
+                        <li>
+                            <a href="{{url_for('deleteArticle')}}"><i class="fa-solid fa-shop"></i>Supprimer un article</a>
+                        </li>
+                        {% if current_user.is_admin %}
+
+                        <li>
+                            <a href="{{url_for('deleteArticle')}}"><i class="fa-solid fa-shop"></i>Supprimer un article</a>
+                        </li>
+
+                        <li>
+                            <a href="{{url_for('MakeNewAds')}}"><i class="fa-solid fa-shop"></i>Promouvoir un article</a>
+                        </li>
+                        {% endif %}
+
+                        <li>
+                            <a href="#"><i class="fas fa-cog menu-icon" ></i>Préférences</a><hr class="trait">
+                        </li>
+
+                        <li>
+                            <a href="{{url_for('Logout')}}"><i class="fa-solid fa-right-from-bracket" ></i>Déconnexion</a>
+                        </li>
+
+                    </ul>
+                </div>  
+                {% else %}
+                    <li><a href="{{url_for('Signup')}}"><button style="background-color: white; color:#3d5d83; width:70px; border-radius: 5px; border:1px solid #3d5d83; height: 30px; margin-left: 190px;">SIGNUP</button></a></li>
+                    <li><a href="{{url_for('Login')}}"><button style="background-color:#173354 ; color:white; width:70px; border-radius: 5px; border:1px solid #3d5d83; height: 30px">LOGIN</button></a></li>
+                {% endif %}
+            </ul>
+        </nav>
+    </header>
+
+    <main>
+    <div class="mon-main">
+        <div class="bar-defilante">
+            <div class="message">
+                <p>Bienvenue sur MongoDB, votre plateforme d'achat et de vente en ligne. Faites vos achats en toute
+                    sécurité</p>
+            </div>
+        </div>
+        <ul class="liste">
+            <div class="presentation" >
+                <i class="fas fa-bars menu-icon" ></i>
+                <span>Menu</span>
+            </div>
+            <div class="presentation1" ></div>
+            <i class="fas fa-home menu-icon"></i>
+            <li>Les categories</li>
+            <li>Vetements</li>
+            <li>Aliments</li>
+            <li>Les produits Tendances </li>
+            <li>Explorez nos produits</li>
+        </ul>
+        <div class="produits-defilants">
+            <div class="image_de_produits-defilants">
+                <i class="fa-solid fa-chevron-left"></i>
+                <i class="fa-solid fa-chevron-right"></i>
+                {% for item in imagesdefilante %}
+                <img src="{{item.image}}" alt="{{item.details}}" width="10px" height="100px"></img>
+                {% endfor %}
+            </div>
+        </div>
+        <div style="width:100%; margin-top: 35px; display: flex; cursor:pointer">
+            <section>
+                <div class="Menu">
+                    <h2 class="les-categories" id="all-categories">Les catégories</h2>
+                    <ul>
+                        <li data-category="HIGH-TECH"><i class="fas fa-laptop"></i><span >HIGH-TECH</span></li>
+                        <li data-category="Vetements"><i class="fas fa-tshirt"></i><span >Vetements</span></li>
+                        <li data-category="Sous-Vetements"><i class="fas fa-socks"></i><span >Sous-Vetements</span></li>
+                        <li data-category="Chaussures"><i class="fas fa-shoe-prints"><span ></i>Chaussures</span></li>
+                        <li data-category="Sacs"><i class="fas fa-shopping-bag"><span ></i>Sacs</span></li>
+                        <li data-category="Education"><i class="fas fa-book"></i><span>Education</span></li>
+                        <li data-category="Sport"><i class="fas fa-dumbbell"></i><span>Sport</span></li>
+                        <li data-category="Beauté-Esthétique"><i class="fas fa-palette"></i><span>Beauté-Esthétique</span></li>
+                        <li data-category="Meubles-pour-maison"><i class="fas fa-couch"></i><span>Meubles pour maison</span></li>
+                        <li data-category="Nourritures"><i class="fas fa-utensils"></i><span>Nourritures</span></li>
+                    </ul>
+                </div>
+            </section>
+            <div style="flex-direction: column; width:100%">
+                <div class="inventaire-des-articles" style="width:97%">
+                    {% for article in articles %}
+                    <div class="exposition-images" data-category="{{ article.category }}">
+                        <img src="{{article.image}}" width="250px" height="290px">
+                        <!-- <form method="POST" action="{{ url_for('MonPanier') }}"> -->
+                            <button type="button" class="cart-button" data-article-id="{{ article.id }}">
+                                <i class="fa-solid fa-cart-shopping"></i>
+                            </button>
+                            
+                        <!-- </form> -->
+                        <div style="justify-content: space-around; align-items:center;">
+                            <div style="display:flex; height:80px">
+                                <div class="description">
+                                    <span style="width:4px; height:4px">
+                                    </span>
+                                    <span class="article_name">{{article.name}}</span>
+                                    <span class="article_price">{{article.price}}francs</span>
+                                </div>
                             </div>
                         </div>
                     </div>
+                    {% endfor %}
                 </div>
-                {% endfor %}
+                <div class="pagination">
+                    <span class="arrow" id="prev-page">&#171;</span>
+                    <span class="arrow" id="first-page">&#60;&#60;</span>
+                    <span class="page" data-page="1">1</span>
+                    <span class="page" data-page="2">2</span>
+                    <span class="arrow" id="next-page">&#62;&#62;</span>
+                    <span class="arrow" id="last-page">&#187;</span>
+                </div>          
             </div>
-            <div class="pagination">
-                <span class="arrow" id="prev-page">&#171;</span>
-                <span class="arrow" id="first-page">&#60;&#60;</span>
-                <span class="page" data-page="1">1</span>
-                <span class="page" data-page="2">2</span>
-                <span class="arrow" id="next-page">&#62;&#62;</span>
-                <span class="arrow" id="last-page">&#187;</span>
-            </div>          
+    </main>
+
+    <footer style="background-color: #606f87; height:8cm; color:white">
+        <div class="footer-content">
+            <div class="footer-logo">
+                <h3>MongoDB</h3>
+                
+            </div>
+            <div class="footer-links">
+                <ul>
+                    <li><a href="#">Avis de confidentialité</a></li>
+                    <li><a href="#">Nos conditions de location</a></li>
+                    <li><a href="#">Aide</a></li>
+                    <li><a href="#">Devenir partenaire – Marketplace</a></li>
+                    <li><a href="#">Notre fonctionnement</a></li>
+                </ul>
+            </div>
+            <div class="footer-contact">
+                <p>Contactez-nous :</p>
+                <ul>
+                    <li><i class="fa-solid fa-phone"></i> Téléphone : +123456789</li>
+                    <li><i class="fa-solid fa-envelope"></i> Email : info@MongoDB.com</li>
+                    <li><i class="fa-solid fa-map-marker-alt"></i> Adresse : 123 Rue du commerce3, Ville</li>
+                </ul>
+            </div>
         </div>
-</main>
-
-<footer style="background-color: #606f87; height:8cm; color:white">
-    <div class="footer-content">
-        <div class="footer-logo">
-            <h3>MongoDB</h3>
-            
+        <div class="footer-bottom">
+            <p>&copy; 2023 MongoDB. Tous droits réservés.</p>
+            <div class="social-icons">
+                <a href="#"><i class="fa-brands fa-facebook"></i></a>
+                <a href="#"><i class="fa-brands fa-twitter"></i></a>
+                <a href="#"><i class="fa-brands fa-instagram"></i></a>
+            </div>
         </div>
-        <div class="footer-links">
-            <ul>
-                <li><a href="#">Avis de confidentialité</a></li>
-                <li><a href="#">Nos conditions de location</a></li>
-                <li><a href="#">Aide</a></li>
-                <li><a href="#">Devenir partenaire – Marketplace</a></li>
-                <li><a href="#">Notre fonctionnement</a></li>
-            </ul>
-        </div>
-        <div class="footer-contact">
-            <p>Contactez-nous :</p>
-            <ul>
-                <li><i class="fa-solid fa-phone"></i> Téléphone : +123456789</li>
-                <li><i class="fa-solid fa-envelope"></i> Email : info@MongoDB.com</li>
-                <li><i class="fa-solid fa-map-marker-alt"></i> Adresse : 123 Rue du commerce3, Ville</li>
-            </ul>
-        </div>
-    </div>
-    <div class="footer-bottom">
-        <p>&copy; 2023 MongoDB. Tous droits réservés.</p>
-        <div class="social-icons">
-            <a href="#"><i class="fa-brands fa-facebook"></i></a>
-            <a href="#"><i class="fa-brands fa-twitter"></i></a>
-            <a href="#"><i class="fa-brands fa-instagram"></i></a>
-        </div>
-    </div>
-</footer>
-<script src="{{url_for('static', filename='javascript/script.js')}}"></script>
+    </footer>
+    <script src="{{url_for('static', filename='javascript/script.js')}}"></script>
 
-<!-- <script>
-//   document.addEventListener('DOMContentLoaded', function () {
-//     const expositionImages = document.querySelectorAll('.exposition-images');
-
-//     // Appliquer l'effet "shine" à un article aléatoire toutes les 10 secondes
-//     setInterval(function () {
-//         const randomIndex = Math.floor(Math.random() * expositionImages.length);
-//         expositionImages.forEach((image, index) => {
-//             if (index === randomIndex) {
-//                 image.classList.add('shine');
-//             } else {
-//                 image.classList.remove('shine');
-//             }
-//         });
-//     }, 10000); // Toutes les 10 secondes
-
-//     // Gérer les interactions avec les articles
-//     expositionImages.forEach(function (image) {
-//         const icon = image.querySelector('.fa-cart-shopping');
-
-//         image.addEventListener('click', function () {
-//             icon.classList.toggle('active');
-//         });
-
-//         image.addEventListener('mouseover', function () {
-//             icon.classList.add('fas', 'fa-heart');
-//         });
-
-//         image.addEventListener('mouseout', function () {
-//             if (!icon.classList.contains('active')) {
-//                 icon.classList.remove('fas', 'fa-heart');
-//             }
-//         });
-//     });
-// });
-
-</script> -->
-
-{%endblock%}
+   
+    {%endblock%}

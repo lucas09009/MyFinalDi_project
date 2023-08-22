@@ -7,15 +7,14 @@
 <header>
     <nav>
         <ul>
-            <li style="font-family: 'Dancing Script', cursive; font-size:40px">Mongo<span
-                    style="color:red">Market</span>
+            <li style="font-family: 'Dancing Script', cursive; font-size:40px">Mongo<span style="color:red">DB</span>
             </li>
             <div class="SearchDiv">
                 <input type="text" id="SearchInput" name="Search">
                 <i class="fas fa-camera"></i>
                 <button>Search</button>
             </div>
-
+          
             {% if current_user.is_authenticated %}
             <div class="coins-div">
                 <span class="coins-icon">
@@ -107,8 +106,7 @@
 
         <div style="flex-direction: column; width:100%">
             <div class="inventaire-des-articles" style="width:97%">
-                {% if current_user.is_authenticated %}
-                {% for article in articles_dans_le_panier %}
+                {% for article in mes_articles %}
                 <div class="exposition-images" data-category="{{ article.category }}">
                     <img src="{{article.image}}" width="250px" height="290px">
                     <div style="justify-content: space-around; align-items:center;">
@@ -116,11 +114,10 @@
                             <div class="description">
                                 <span style="width:4px; height:4px">
                                 </span>
-                                <form method="POST"
-                                    action="{{ url_for('supprimer_article_panier', article_id=article.id) }}">
-                                    <button type="submit">Supprimer l'article</button>
+                                <form method="POST" action="{{ url_for('editArticle', article_id=article.id) }}">
+                                    <button type="submit">Modifier l'article</button>
                                 </form>
-
+                                
                                 <span class="article_name">{{article.name}}</span>
                                 <span class="article_price">{{article.price}}francs</span>
                             </div>
@@ -128,27 +125,6 @@
                     </div>
                 </div>
                 {% endfor %}
-                {% else %}
-                {% for article in session['panier'] %}
-                <div class="exposition-images" data-category="{{ article.category }}">
-                    <img src="{{ article.image }}" width="250px" height="290px">
-                    <div style="justify-content: space-around; align-items:center;">
-                        <div style="display:flex; height:80px">
-                            <div class="description">
-                                <span style="width:4px; height:4px"></span>
-                                <form method="POST"
-                                    action="{{ url_for('supprimer_article_panier', article_id=article.id) }}">
-                                    <button type="submit">Supprimer l'article</button>
-                                </form>
-                                <span class="article_name">{{ article['name'] }}</span>
-                                <span class="article_price">{{ article['price'] }}francs</span>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
-                {% endfor %}
-                {% endif %}
             </div>
             <div class="pagination">
                 <span class="arrow" id="prev-page">&#171;</span>

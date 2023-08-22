@@ -40,12 +40,11 @@ def admin_required(view):
         if current_user.is_authenticated and current_user.is_admin:
             return view(*args, **kwargs)
         
-        return redirect(url_for('index'))
+        return redirect(url_for('home'))
     return view_decorate    
 
 
-############# CETTE ROUTE EST RESERVEE AUX Utilisateurs connectes, ELLE PERMET AUX utilisateurs DE MODIFIER LEURS PROFILS
-
+############# CETTE ROUTE EST RESERVEE AUX Utilisateurs connectes, ELLE PERMET AUX utilisateurs DE MODIFIER LEURS PROFIL
 @flask_login.login_required
 @app.route('/editProfile/<int:user_id>', methods=['GET', 'POST'])
 def editProfile(user_id):
@@ -66,7 +65,6 @@ def editProfile(user_id):
                 image = image_path
                 path_list = image.split('/')[1:]
                 new_path = '/'.join(path_list)
-
                 user.Image = new_path
                 db.session.commit()
                 return redirect(url_for('editProfile', user_id=user.id))
@@ -146,6 +144,7 @@ def Signup():
 @app.route('/publierArticles', methods = ['GET', 'POST'])
 def publierArticles():
     form = PublierArticles()
+
     if form.validate_on_submit():
             name = form.name.data
             category = form.category.data
@@ -217,8 +216,7 @@ def MakeNewAds():
 ############# CETTE ROUTE PERMET AUX ADMINS DE SUPPRIMER DES ARTICLES ###########
 
 
-@app.route('/admin/deleteArticle', methods=['GET', 'POST'])
-@admin_required 
+@app.route('/deleteArticle', methods=['GET', 'POST']) 
 def deleteArticle():
     form = DeleteArticleForm()
     if  form.validate_on_submit():
@@ -235,24 +233,41 @@ def deleteArticle():
     return render_template('delete_article.html', form=form)
 
 
+@app.route('/editArticle/<int:article_id>', methods=['GET', 'POST'])
+def editArticle(article_id):
+    article_to_edit = Articles.query.get(article_id)
+    if article_to_edit:
+        form = PublierArticles(obj=article_to_edit)
+
+        if form.validate_on_submit():
+            article_to_edit.name = form.name.data
+            article_to_edit.category = form.category.data
+            article_to_edit.Description = form.Description.data
+            article_to_edit.date_arrive = form.date_arrive.data
+            article_to_edit.details = form.details.data
+            article_to_edit.price = form.price.data
+            article_to_edit.quantity = form.quantity.data
+            article_to_edit.image = form.image.data
+
+            uploaded_file = form.image.data
+            filename = secure_filename(uploaded_file.filename)
+            image_path = os.path.join(app.config['UPLOAD_PATH'], filename)
+            uploaded_file.save(image_path)
+            image = image_path
+            path_list = image.split('/')[1:]
+            new_path = '/'.join(path_list)
+            article_to_edit.image = new_path
+            db.session.commit()
+            flash(f"L'article a été ajouté avec succes")
+
+    return render_template('edit_article.html', form=form)
 
 
-@app.route('/editArticle/', methods=['GET', 'POST'])
-def editArticle():
-    article_to_edit = Articles.query.get(id)
-    if article_to_edit and (article_to_edit.name == name or article_to_edit.id == id):
-        flash(f"L'article avec l'ID {id} n'a pas été trouvé.")
-        return redirect(url_for('editArticle'))  
-
-    form = PublierArticles(obj=article_to_edit)
-
-    if form.validate_on_submit():
-        form.populate_obj(article_to_edit)
-        db.session.commit()
-        flash(f"L'article a été modifié avec succès")
-        return redirect(url_for('editArticle'))
-
-    return render_template('edit_article.html', form=form, article=article_to_edit)
+@flask_login.login_required
+@app.route('/Mes_articles')
+def MesArticles():
+    mes_articles = Articles.query.filter_by(user_id=current_user.id).all()
+    return render_template('mes_articles.html', mes_articles=mes_articles)
 
 
 
@@ -262,15 +277,29 @@ def MonPanier():
         article_id = request.form.get('article_id') 
         if 'panier' not in session:
             session['panier'] = []
-        
-        if article_id not in session['panier']:
-            session['panier'].append(article_id)
-        
-        nouvel_ajout = Panier(user_id=current_user.id, article_id=article_id, quantite=1)
-        db.session.add(nouvel_ajout)
-        db.session.commit()
 
-        session['panier'].append(article_id)
+        article = Articles.query.get(article_id)
+
+        if article:
+            if current_user.is_authenticated:
+                article = Articles.query.get(article_id)
+                nouvel_ajout = Panier(user_id=current_user.id, quantite=1)
+                db.session.add(nouvel_ajout)
+                db.session.commit()
+            else:
+                article_dict = {
+                    'id': article_id,
+                    'name': article.name,
+                    'category': article.category,
+                    'Description': article.Description,
+                    'date_arrive': article.date_arrive,
+                    'details': article.details,
+                    'price': article.price,
+                    'quantity': article.quantity,
+                    'image': article.image,
+                }
+                session['panier'].append(article_dict)
+                print(session['panier'])
 
     articles_dans_le_panier = Articles.query.all()
     return render_template('mon_panier.html', articles_dans_le_panier= articles_dans_le_panier)
@@ -289,3 +318,21 @@ def supprimer_article_panier(article_id):
             db.session.commit()
 
     return redirect(url_for('MonPanier'))
+
+
+
+@app.route('/searchFor', methods=['GET', 'POST'])
+def SearchFor():
+    search_query = request.args.get('saisie')
+    if search_query:
+        articles = Articles.query.filter(Articles.name.ilike(f"%{search_query}%")).all()
+        return render_template('home.html', articles=articles, search_query=search_query)
+    
+    return render_template('home.html')
+
+
+
+
+@app.route('/payement', methods=['GET', 'POST'])
+def payement():
+    return render_template('payement.html')

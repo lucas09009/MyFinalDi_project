@@ -14,16 +14,28 @@
 {% endif %}
 {% endwith %}
 
-    <form action="{{ url_for('editArticle') }}" method="POST" enctype="multipart/form-data" class="container">
+    <form method="POST" enctype="multipart/form-data" class="container">
         <div>
 
             {{ form.hidden_tag() }}
-            <h1 class="h1">Modifier un article</h1>
+            <h1 class="h1">Modifier l'article</h1>
             <hr>
 
-            {{ form.id(placeholder="Id de l'article") }}<br>
-
             {{ form.name(placeholder="Nom de l'article") }}<br>
+
+            {{ form.category(placeholder="Type d'article") }}<br>
+
+            {{ form.Description(placeholder="Description de l'article") }}<br>
+
+            {{ form.date_arrive(placeholder="Date d'arrivée") }}<br>
+
+            {{ form.details(placeholder="Détails supplémentaires") }}<br>
+
+            {{ form.price(placeholder="Prix de l'article") }}<br>
+
+            {{ form.quantity(placeholder="Quantité disponible") }}<br>
+
+            {{ form.image(placeholder="Sélectionnez l'image de l'article") }}<br>
 
             {{ form.submit }}
         </div>

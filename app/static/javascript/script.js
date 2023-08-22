@@ -58,28 +58,37 @@ function previewImage(input) {
 
 
 
-// function filterArticlesByCategory(category) {
-//     const allArticlesDivs = document.querySelectorAll('.exposition-images');
-//     allArticlesDivs.forEach((ArticlesDiv) => {
-//         if (ArticlesDiv.dataset.category === category || category === 'all') {
-//             ArticlesDiv.style.display = 'block';
-//         } else {
-//             ArticlesDiv.style.display = 'none';
-//         }
-//     });
-// }
+document.addEventListener('DOMContentLoaded', function () {
+    const inventoryContainer = document.querySelector('.inventaire-des-articles');
+    const cartCount = document.getElementById('cart-count');
+    const notificationContainer = document.querySelector('.notification-container');
 
-// document.addEventListener('DOMContentLoaded', function () {
-//     filterArticlesByCategory('all');
+    let itemCount = 0;
 
-//     const categoryItems = document.querySelectorAll('.Menu li[data-category]');
-// categoryItems.forEach((item) => {
-//     item.addEventListener('click', function () {
-//         const selectedCategory = this.dataset.category;
-//         filterArticlesByCategory(selectedCategory);
-//     });
-// });
-// });
+    inventoryContainer.addEventListener('click', event => {
+        if (event.target.classList.contains('cart-button')) {
+            itemCount++;
+            cartCount.textContent = itemCount;
+
+            const icon = event.target.querySelector('.fa-cart-shopping');
+            icon.classList.add('active');
+
+            const notification = document.createElement('div');
+            notification.classList.add('notification');
+            notification.textContent = 'Article ajouté au panier';
+
+            notificationContainer.appendChild(notification);
+
+            setTimeout(function () {
+                notification.style.opacity = '0';
+                notification.addEventListener('transitionend', function () {
+                    notification.remove();
+                }, { once: true });
+                icon.classList.remove('active');
+            }, 6000);
+        }
+    });
+});
 
 
 
@@ -97,10 +106,8 @@ function filterArticlesByCategory(category) {
 document.addEventListener('DOMContentLoaded', function () {
     const allCategoriesTitle = document.getElementById('all-categories');
 
-    // Au chargement de la page, afficher toutes les catégories
     filterArticlesByCategory('all');
 
-    // Ajouter un écouteur de clic à l'élément h2 pour afficher toutes les catégories
     allCategoriesTitle.addEventListener('click', function () {
         filterArticlesByCategory('all');
     });
@@ -117,75 +124,23 @@ document.addEventListener('DOMContentLoaded', function () {
 
 
 document.addEventListener('DOMContentLoaded', function () {
-    const expositionImages = document.querySelectorAll('.exposition-images');
-    const notificationContainer = document.querySelector('.notification-container');
-
-    expositionImages.forEach(function (image) {
-        const icon = image.querySelector('.fa-cart-shopping');
-
-        icon.addEventListener('click', function (event) {
-            event.stopPropagation(); // Empêche la propagation de l'événement au conteneur parent
-
-            icon.classList.toggle('active');
-
-            if (icon.classList.contains('active')) {
-                const notification = document.createElement('div');
-                notification.classList.add('notification');
-                notification.textContent = 'Article ajouté au panier';
-
-                notificationContainer.appendChild(notification);
-
-                setTimeout(function () {
-                    notification.style.opacity = '0';
-                    notification.addEventListener('transitionend', function () {
-                        notification.remove();
-                    }, { once: true });
-                }, 6000);
-            }
-        });
-
-        image.addEventListener('mouseover', function () {
-            icon.classList.add('fas', 'fa-heart');
-        });
-
-        image.addEventListener('mouseout', function () {
-            if (!icon.classList.contains('active')) {
-                icon.classList.remove('fas', 'fa-heart');
-            }
-        });
-    });
-});
-
-
-
-
-
-
-
-
-
-
-document.addEventListener('DOMContentLoaded', function () {
     const pageButtons = document.querySelectorAll('.page');
     const prevButton = document.getElementById('prev-page');
     const nextButton = document.getElementById('next-page');
 
-    let currentPage = 1; // Page actuelle
+    let currentPage = 1; 
 
-    // Gérer le clic sur un bouton de page
     pageButtons.forEach((button) => {
         button.addEventListener('click', function () {
             const newPage = parseInt(this.dataset.page);
             if (newPage !== currentPage) {
                 currentPage = newPage;
-                // Mettre à jour la logique pour afficher les articles de la nouvelle page
-                // Ici, vous pourriez appeler une fonction pour mettre à jour les articles en fonction de la nouvelle page
+               
                 updateArticlesForPage(currentPage);
             }
         });
     });
 
-    // Gérer le clic sur le bouton "Précédent"
     prevButton.addEventListener('click', function () {
         if (currentPage > 1) {
             currentPage--;
@@ -193,20 +148,15 @@ document.addEventListener('DOMContentLoaded', function () {
         }
     });
 
-    // Gérer le clic sur le bouton "Suivant"
     nextButton.addEventListener('click', function () {
-        // Mettez à jour cette logique en fonction du nombre total de pages disponibles
-        const totalPages = getTotalPages(); // Remplacez getTotalPages par votre propre logique
+        const totalPages = getTotalPages();
         if (currentPage < totalPages) {
             currentPage++;
             updateArticlesForPage(currentPage);
         }
     });
 
-    // Mettre à jour les articles en fonction de la page sélectionnée
     function updateArticlesForPage(page) {
-        // Mettez à jour la logique pour afficher les articles en fonction de la page
-        // Vous pourriez utiliser votre fonction filterArticlesByCategory ici avec la page comme argument
     }
 });
 
