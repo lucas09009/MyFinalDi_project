@@ -5,7 +5,7 @@
 <header>
     <nav>
         <ul>
-            <li style="font-family: 'Dancing Script', cursive; font-size:40px">Mongo<span style="color:red">DB</span>
+            <li style="font-family: 'Dancing Script', cursive; font-size:40px">Mongo<span style="color:red">Market</span>
             </li>
             <div class="SearchDiv">
                 <input type="text" id="SearchInput" name="Search">
@@ -77,26 +77,29 @@
                 <div class="upload-container">
                     {{ form.Image(placeholder='', class_='personalisation-champ-image-parcourir', style='opacity: 0; position: absolute; left: 0; top: 0; width: 100%; height: 100%; cursor: pointer;', accept='image/*', onchange='previewImage(this);') }}
                     <i class="upload-icon fas fa-image"></i>
-                    <img class="uploaded-image" id="uploadedImage"  src="{{ url_for('static', filename='images/current_user.Image') }}">
+                    <!-- <img class="uploaded-image" id="uploadedImage"  src="{{current_user.Image}}"> -->
+                    <img class="uploaded-image" id="uploadedImage" src="{{ url_for('static', filename='images/' + current_user.Image) }}">
+                    <h6>{{ url_for('static', filename='images/' + current_user.Image) }}</h6> class="uploaded-image" id="uploadedImage" src="{{ url_for('static', filename='images/' + current_user.Image) }}">
                 </div>
             </label><hr style="color:rgb(203, 202, 202); margin-top:30px">
-
+            
             
             <div style="display:flex">
-            <h5>{{ form.Username.label }}</h5 >
-            <h5>{{ form.Username(placeholder='Veuillez saisir votre username', class_='username') }}</h5>
-        </div>
-        <p style="color:gray; font-size:10px">Les noms d'utilisateur ne peuvent contenir que des lettres, des chiffres, des traits de soulignement et des points. La modification de ton nom d'utilisateur changera aussi ton lien de profil.</p><hr style="color:rgb(203, 202, 202); margin-top:10px">
+                <h5>{{ form.Username.label }}</h5 >
+                    <h5>{{ form.Username(placeholder='Veuillez saisir votre username', class_='username') }}</h5>
+                </div>
+                <p style="color:gray; font-size:10px">Les noms d'utilisateur ne peuvent contenir que des lettres, des chiffres, des traits de soulignement et des points. La modification de ton nom d'utilisateur changera aussi ton lien de profil.</p><hr style="color:rgb(203, 202, 202); margin-top:10px">
         <div style="display:flex; align-items:center">
         <h5>{{ form.Biographie.label }}</h5 >
         <h5>{{ form.Biographie( placeholder='Biographie', class_='Bio') }}</h5 >
         </div>
         <p style="color:gray; font-size:10px; ">Votre biographie ne peut contenir que 80 lettres</p><hr style="color:rgb(203, 202, 202); margin:10px 0px 10px 0px">
         <a href="{{url_for('home')}}"style="text-decoration:none; border:1px solid gray; padding:3px; border-radius:3px"><buton>Annuler</buton></a>  
-       
-
+       {#
+        <h6>{{ url_for('static', filename='images/' + current_user.Image) }}</h6>#}
         {{ form.submit( class_='envoyer') }}
-        </div>
+
+    </div>
     </form>
     <div class="contour">
         <div class="les_categories">

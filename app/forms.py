@@ -1,7 +1,7 @@
 from wtforms import StringField, PasswordField, SubmitField, DateField, TextAreaField, FileField, IntegerField,SelectField
 from wtforms.validators import DataRequired, Optional
 from flask_wtf import FlaskForm
-
+from .utils import ChoixDeCategories
 class SignupForm(FlaskForm):
     Username = StringField("Username",  validators=[DataRequired()])
     Password = PasswordField("Password",  validators=[DataRequired()])
@@ -13,20 +13,15 @@ class LoginForm(FlaskForm):
     Password = PasswordField("Password",  validators=[DataRequired()])
     submit = SubmitField('Se connecter')
 
+
+class AjouterCategorieForm(FlaskForm):
+    name = StringField('Nom de la catégorie', validators=[DataRequired()])
+    icon_name = StringField('Icone Name', validators=[DataRequired()])
+    submit = SubmitField('Ajouter')
+
 class PublierArticles(FlaskForm):
         name = StringField("name", validators=[DataRequired()])
-        category = SelectField("category", validators=[DataRequired()], 
-                               choices=['Sport', 
-                                        'Vetements', 
-                                        'Sous-Vetements',
-                                        'Chaussures',
-                                        'Sacs',
-                                        'Education',
-                                        'Sport',
-                                        'Beauté-Esthétique',
-                                        'Meubles pour maison',
-                                        'Nourritures'
-                                        ])        
+        category = SelectField("Category", choices=[])        
         Description = StringField("Description", validators=[DataRequired()])
         date_arrive = DateField("date_arrive ", validators=[DataRequired()])
         details = TextAreaField("details", validators=[DataRequired()])
@@ -48,6 +43,7 @@ class ImageDefilanteForm(FlaskForm):
     submit = SubmitField('Enregistrer')
 
 
+
 class ModifierArticleForm(FlaskForm):
     id = IntegerField("article_id", validators=[DataRequired()])
     name = StringField("name", validators=[Optional()])
@@ -60,6 +56,8 @@ class ModifierArticleForm(FlaskForm):
     quantity = IntegerField("quantity", validators=[DataRequired()])
     image = FileField("image",  validators=[DataRequired()])
     submit = SubmitField("submit", validators=[DataRequired()])
+
+
 class DeleteArticleForm(FlaskForm):
         id = IntegerField("article_id", validators=[DataRequired()])
         name = StringField("name", validators=[Optional()])
@@ -71,3 +69,9 @@ class EditArticleForm(FlaskForm):
     name = StringField("name", validators=[Optional()])
     submit = SubmitField("submit", validators=[DataRequired()])
 
+class PayementForm(FlaskForm):
+    id = IntegerField("userId", validators=[DataRequired()])
+    article_name = StringField('Nom', validators=[DataRequired()], render_kw={'readonly': True})
+    prix_total = IntegerField('Prix Total', validators=[DataRequired()] , render_kw={'readonly': True})
+
+    submit = SubmitField("submit", validators=[DataRequired()])

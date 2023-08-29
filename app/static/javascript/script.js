@@ -92,35 +92,25 @@ document.addEventListener('DOMContentLoaded', function () {
 
 
 
-function filterArticlesByCategory(category) {
-    const allArticlesDivs = document.querySelectorAll('.exposition-images');
-    allArticlesDivs.forEach((ArticlesDiv) => {
-        if (category === 'all' || ArticlesDiv.dataset.category === category) {
-            ArticlesDiv.style.display = 'block';
-        } else {
-            ArticlesDiv.style.display = 'none';
-        }
-    });
-}
+// ...
 
-document.addEventListener('DOMContentLoaded', function () {
-    const allCategoriesTitle = document.getElementById('all-categories');
+// document.addEventListener('DOMContentLoaded', function () {
+//     const allCategoriesTitle = document.getElementById('all-categories');
 
-    filterArticlesByCategory('all');
+//     filterArticlesByCategory('all');
 
-    allCategoriesTitle.addEventListener('click', function () {
-        filterArticlesByCategory('all');
-    });
+//     allCategoriesTitle.addEventListener('click', function () {
+//         filterArticlesByCategory('all');
+//     });
 
-    const categoryItems = document.querySelectorAll('.Menu li[data-category]');
-    categoryItems.forEach((item) => {
-        item.addEventListener('click', function () {
-            const selectedCategory = this.dataset.category;
-            filterArticlesByCategory(selectedCategory);
-        });
-    });
-});
-
+//     const categoryItems = document.querySelectorAll('.Menu li[data-category]');
+//     categoryItems.forEach((item) => {
+//         item.addEventListener('click', function () {
+//             const selectedCategory = this.getAttribute('data-category'); 
+//             filterArticlesByCategory(selectedCategory);
+//         });
+//     });
+// });
 
 
 document.addEventListener('DOMContentLoaded', function () {
@@ -163,3 +153,51 @@ document.addEventListener('DOMContentLoaded', function () {
 
 
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+function filterArticlesByCategory(category) {
+    const allArticlesDivs = document.querySelectorAll('.exposition-images'); 
+    allArticlesDivs.forEach((articleDiv) => {
+        if (category === 'all' || articleDiv.dataset.category === category) {
+            console.log(articleDiv.dataset.category)
+            console.log(category)
+            articleDiv.style.display = 'block';
+        } else {
+            articleDiv.style.display = 'none';
+        }
+    });
+}
+
+document.addEventListener('DOMContentLoaded', function () {
+    const allCategoriesTitle = document.getElementById('all-categories');
+
+    filterArticlesByCategory('all');
+
+    allCategoriesTitle.addEventListener('click', function () {
+        filterArticlesByCategory('all');
+    });
+
+    const categoryItems = document.querySelectorAll('.Menu li[data-category]');
+    console.log(categoryItems)
+    categoryItems.forEach((item) => {
+        item.addEventListener('click', function () {
+            const selectedCategory = this.getAttribute('data-category'); 
+            filterArticlesByCategory(selectedCategory);
+                console.log(selectedCategory);
+            console.log(item);
+        });
+    });
+});

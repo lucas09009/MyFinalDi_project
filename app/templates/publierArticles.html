@@ -15,7 +15,7 @@
 {% endwith %}
 
     <form method="POST" enctype="multipart/form-data" class="container">
-        <div>
+        <div class="publierArticles">
 
             {{ form.hidden_tag() }}
             <h1 class="h1">Ajouter un nouvel article</h1>
@@ -23,7 +23,7 @@
 
             {{ form.name(placeholder="Nom de l'article") }}<br>
 
-            {{ form.category(placeholder="Type d'article") }}<br>
+            {{ form.category(class="form-control", placeholder="Type d'article") }}<br>
 
             {{ form.Description(placeholder="Description de l'article") }}<br>
 
@@ -38,6 +38,7 @@
             {{ form.image(placeholder="Sélectionnez l'image de l'article") }}<br>
 
             {{ form.submit }}
+
         </div>
     </form>
 

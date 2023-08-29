@@ -1,15 +1,17 @@
-from flask import Flask
+from flask import Flask , Blueprint
 from flask_sqlalchemy import SQLAlchemy
 from flask_migrate import Migrate
 from flask_login import LoginManager
 from flask_bcrypt import Bcrypt
 from .config import Config
+from flask_bootstrap import Bootstrap
 import os
 
 
 
 app = Flask(__name__)
 bcrypt = Bcrypt(app)
+bootstrap = Bootstrap(app)
 app.config.from_object(Config)
 basedir = os.path.abspath(os.path.dirname(__file__))
 

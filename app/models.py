@@ -40,7 +40,6 @@ class Articles(db.Model):
     __tablename__ = 'articles'
     id = db.Column(db.Integer, primary_key=True, autoincrement=True)
     name = db.Column(db.String, nullable=False)
-    category = db.Column(db.String, nullable=False)
     Description = db.Column(db.String, nullable=False)
     date_arrive = db.Column(db.Date, nullable=False)
     details = db.Column(db.Text, nullable=False)
@@ -48,9 +47,17 @@ class Articles(db.Model):
     quantity = db.Column(db.Integer, nullable=False)
     image = db.Column(db.String, nullable=False)
     user_id = db.Column(db.Integer, db.ForeignKey('usersdata.id'))
-    
+    user_name = db.Column(db.String)
+    category_id = db.Column(db.Integer, db.ForeignKey('category.id'), nullable=False)
     def __repr__(self):
         return f'<Articles: {self.id}--{self.name}>'
+
+
+class Category(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    icon_name = db.Column(db.String, nullable=False)
+    name = db.Column(db.String, nullable=False)
+    articles = db.relationship('Articles', backref='category', lazy=True)
 
 
 class Panier(db.Model):
@@ -60,3 +67,10 @@ class Panier(db.Model):
     user_id = db.Column(db.Integer, db.ForeignKey('usersdata.id'))
     articles_paniers = db.relationship('Articles',secondary=association_table_articles_panier, backref='')
 
+
+class Payement(db.Model):
+    __tablename__ = 'payement'
+    id = db.Column(db.Integer, primary_key=True, autoincrement=True)
+    article_name = db.Column(db.String, nullable=False)
+    prix_total = db.Column(db.Integer, nullable=False)
+    user_id = db.Column(db.Integer, ForeignKey('usersdata.id'))

@@ -1,0 +1,33 @@
+{% extends "layout.html" %}
+
+<title>{% block blocktitle %} Ajouter une Catégorie {% endblock %}</title>
+
+{% block body%}
+
+{% with messages = get_flashed_messages() %}
+{% if messages %}
+<div class="alert alert-success">
+    {% for message in messages %}
+    <p>{{ message }}</p>
+    {% endfor %}
+</div>
+{% endif %}
+{% endwith %}
+    <form method="POST" enctype="multipart/form-data" class="container">
+        <div>
+            {{ form.hidden_tag() }}
+            <h1 class="h1">Ajouter une Catégorie</h1>
+            <hr>
+            {{ form.name.label(class="form-label") }}
+
+            {{ form.name(class="form-control", placeholder="Nom de la catégorie") }}<br>
+
+            {{ form.icon_name.label(class="form-label") }}
+
+            {{ form.icon_name(class="", placeholder="Icon name") }}<br>
+            
+            {{ form.submit() }}
+        </div>
+    </form>
+{% endblock %}
+ 
