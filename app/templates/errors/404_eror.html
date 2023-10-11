@@ -1,0 +1,63 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport"
+          content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>ERROR</title>
+</head>
+<body>
+<h1 style="color: red">
+        PAGE D'ERREUR
+</h1>
+<p>La page n'existe pas !</p>
+</body>
+</html>
+
+
+
+
+
+{#<div style="border-right: 8px solid gray; margin-left: 40px;"></div>
+<!-- <div  style="height:auto; width:622px; border:10px soild rgb(38, 194, 137)"> -->
+    {#{% for message, articles in comments %}
+        <p style="font-family: Courgette; font-size:20px; text-align: center;">Commentaires</p>
+        <div style="background-color: white; margin:15px 0px 0px 60px; height:230px; width: 80%;border-radius: 10px; ">
+            <div>{{ message.commentaires }}</div>
+
+                {% if article.user_image == None %}
+                    <div class="profil">
+                            <span class="username">{{article.user_image}}</span>
+                            <span><i class="fa-solid fa-user fa-lg" style="padding:15px 5px 15px 5px; background-color: white;color:#3d5d83; border-radius:50px; cursor:pointer"></i></span>
+                    </div>
+                {% else %}
+                    <div class="profil">
+                        <span class="username" >{{article.commentaires.user_name}}</span>
+                        <img class src="{{ article.user_image }}"   width="30px" height="27px"; style= "border-radius: 50% 50% 50% 50%">
+                    </div>  
+                {% endif %}
+
+        </div>
+    {% endfor %}
+<!-- </div> -->
+<div class="commentaires" style="height:80%; width:628px; text-align:center">  
+    <div style="background-color: white;height:80%; width:80%; margin:50px 0px 0px 70px; text-align:center" >
+        <div>
+            {% if article.user_image == None %}
+                <div class="profil" style="background-color: blue;">
+                    <span class="username">{{cuurent_user.Image}}</span>
+                    <span><i class="fa-solid fa-user fa-lg" style="padding:15px 5px 15px 5px; background-color: white;color:#3d5d83; border-radius:50px; cursor:pointer"></i></span>
+                </div> 
+            {% else %}
+                <div class="profil"  style="background-color: blue;">
+                    <img class src="{{ current_user.Image }}"   width="30px" height="27px"; style= "border-radius: 50% 50% 50% 50%">
+                    <span class="username" >{{current_user.Username}}</span>
+                </div> 
+            {% endif %}
+        </div>
+      
+    </div>
+    </div>
+    
+</div>#}

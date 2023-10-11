@@ -4,31 +4,42 @@
 
 {% block body%}
 
+{% with messages = get_flashed_messages() %}
+{% if messages %}
+<div class="alert-container">
+    {% for message in messages %}
+    {% if 'error' in message %}   
+    <div class="alert alert-error">
+        {% set error_message = message.split(';')[0] %} 
+            <h6>{{error_message}}</h6>
+    </div>
+    {% elif 'success' in message %}
+    <div class="alert alert-success">
+        {% set success_message = message.split(';')[0] %} 
+        <h6>{{success_message}}</h6>
+    </div>
+    {% endif %}
+    {% endfor %}
+</div>
+{% endif %}
+{% endwith %}
+      
+<div class="big-div-articles">
+  <form method="POST" enctype="multipart/form-data" class="container">
+    <div class="publierArticles-formulaire">
 
-<body>
-    <form method="POST" enctype="multipart/form-data" class="container">
-        {% with messages = get_flashed_messages() %}
-        {% if messages %}
-        <div class="alert alert-success">
-            {% for message in messages %}
-            <p>{{ message }}</p>
-            {% endfor %}
-        </div>
-        {% endif %}
-        {% endwith %}
-        <div>
+      {{ form.hidden_tag() }}
+      <h1 class="titre">Supprimer un article</h1>
+      <hr>
 
-            {{ form.hidden_tag() }}
-            <h1 class="h1">Supprimer un article</h1>
-            <hr>
+      {{ form.id(placeholder="Saisissez l'id de l'article à supprimer" ,class_='style') }}
 
-            {{ form.id(placeholder="Saisissez l'id de l'article à supprimer ") }}
+      {{ form.name(placeholder="Saisissez le nom de l'article à supprimer " ,class_='style') }}
 
-            {{ form.name(placeholder="Saisissez le nom de l'article à supprimer ") }}
-
-            {{ form.submit }}
-        </div>
-    </form>
+      {{ form.submit(class_='button-valider')}}
+    </div>
+  </form>
+</div>
 
 
 {% endblock %}

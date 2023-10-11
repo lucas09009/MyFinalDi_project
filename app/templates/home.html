@@ -2,215 +2,336 @@
 {% block blocktitle %}Home{% endblock %}
 
 {% block body %}
-<div class="notification-container"></div>
-<header>
-    <nav>
-        <ul>
-            <li style="font-family: 'Dancing Script', cursive; font-size:40px">Mongo<span
-                    style="color:red">Market</span>
-            </li>
-            <div class="SearchDiv">
-                <input type="text" id="SearchInput" name="Search">
-                <i class="fas fa-camera"></i>
-
-                <form method="POST" action="{{ url_for('SearchFor', saisie=saisie) }}">
-                    <button type="submit">Search</button>
-                </form>
-
-                <!-- <form method="POST" action="{{ url_for('SearchFor') }}">
-                            <input type="text" id="SearchInput" name="Search">
-                            <button type="submit">Rechercher</button>
-                        </form> -->
-            </div>
-        
-            {#<form method="POST" action="{{ url_for('panier') }}">
-                <a href="{{url_for('panier')}}" style="color: white; text-decoration: none;">
-                    <div class="panier-div">
-                        <div id="cart-count" class="cart-count">0</div>
-                        <i class="fas fa-shopping-cart fa-lg"></i><span class="cart-notification">Mon Panier</span>
+{% with messages = get_flashed_messages() %}
+{% if messages %}
+<div class="alert-container">
+    {% for message in messages %}
+    {% if 'error' in message %}   
+    <div class="notification-container"></div>
+        {% set error_message = message.split(';')[0] %} 
+            <h6>{{error_message}}</h6>
+    </div>
+    {% elif 'success' in message %}
+    <div class="notification-container"></div>
+        {% set success_message = message.split(';')[0] %} 
+        <h6>{{success_message}}</h6>
+    </div>
+    {% endif %}
+    {% endfor %}
+</div>
+{% endif %}
+{% endwith %}
+<div class="bloc">
+    <div class="notification-container"></div>
+    <header>
+        <nav>
+            <ul>
+                {% if not current_user.is_authenticated %}
+                    <a href="{{url_for('home')}}">
+                        <li class="mongo">Mongo<span class="market">Market</span></li>
+                    </a>
+                    <div class="SearchDiv">
+                        <form method="POST" action="{{url_for('SearchFor', saisie='')}}">
+                            <input type="text" id="SearchInput" name="saisie">
+                            <i class="fas fa-camera"></i>
+                            <button type="submit">Search</button>
+                        </form>
                     </div>
-            </form>#}
-            </a>
-            {% if current_user.is_authenticated %}
-            <div class="articles-div">
-                <a href="{{url_for('MesArticles')}}" style="color: white; text-decoration: none;">
-                    <i class="fas fa-tag"></i>
-                    <span class="cart-notification">Mes articles</span>
-                </a>
-            </div>
-            <!-- <li><i class="fa-regular fa-bell"></i></li>
-                    <li><i class="fa-regular fa-message"></i></li> -->
-            <span style="display:flex; flex-direction: column; text-align:center">
-                <li><i class="fa-solid fa-user fa-lg"
-                        style="padding:20px 10px 20px 10px; background-color: white;color:#3d5d83; border-radius:50px; cursor:pointer"></i>
-                </li>
-                <li>{{current_user.Username}}</li>
-            </span>
-            <div class="depliant" id="users-info">
-                <i class="fa-solid fa-chevron-down" style="margin-left:10px"></i>
-                <ul class="depliant-content">
-
-                    <li>
-                        <a href="{{url_for('editProfile', user_id=current_user.id)}}"><i
-                                class="fa-solid fa-user fa-lg"></i>Profil</a>
+                    <div id="results">
+                        <p></p>
+                    </div>
+                    <form method="POST">
+                        <a href="{{ url_for('panierForUserNonConnecte')}}" style="color: white; text-decoration: none;" >
+                            <div class="panier-div" >
+                                <div id="cart-count" class="cart-count">{{session['panier']|length}}</div>
+                                <i class="fas fa-shopping-cart fa-lg"></i><span class="cart-notification">Mon Panier</span>
+                            </div>
+                        </a>
+                    </form>
+                
+                    <li><a href="{{url_for('Signup')}}"><button class="signup-lien">SIGNUP</button></a>
                     </li>
-
-                    <li>
-                        <a href="{{ url_for('publierArticles') }}"><i class="fa-solid fa-shop"></i>Mettre un article en
-                            vente</a>
+                    <li><a href="{{url_for('Login')}}"><button class="login-lien">LOGIN</button></a>
                     </li>
+                {% else %}
+                    <a href="{{url_for('home')}}">
+                        <li class="mongo">Mongo<span class="market">Market</span></li>
+                    </a>
+                    <div class="SearchDiv">
+                        <form method="POST" action="{{url_for('SearchFor', saisie='')}}">
+                            <input type="text" id="SearchInput" name="saisie">
+                            <i class="fas fa-camera"></i>
 
-                    <li>
-                        <a href="{{url_for('deleteArticle')}}"><i class="fa-solid fa-shop"></i>Supprimer un article</a>
-                    </li>
-                    {% if current_user.is_admin %}
-
-                    <li>
-                        <a href="{{url_for('deleteArticle')}}"><i class="fa-solid fa-shop"></i>Supprimer un article</a>
-                    </li>
-
-                    <li>
-                        <a href="{{url_for('MakeNewAds')}}"><i class="fa-solid fa-shop"></i>Promouvoir un article</a>
-                    </li>
+                            <button type="submit">Search</button>
+                        </form>
+                    </div>
+                    <form method="POST">
+                        <a href="{{ url_for('panier')}}" style="color: white; text-decoration: none;">
+                            <div class="panier-div" onmouseover="survolPanier()" onmouseout="quittePanier()"    >
+                                <div id="cart-count" class="cart-count">{{cart_item|length}}</div>
+                                <i class="fas fa-shopping-cart fa-lg"></i><span class="cart-notification">Mon Panier</span>
+                                <div id="panier-div-id">Cliquez pour accéder au contenu de votre panier</div>
+                            </div>
+                        </a>
+                    </form>
+                    <a href="{{url_for('MesArticles')}}" style="color: white; text-decoration: none;">
+                        <div class="articles-div" onmouseover="survol()" onmouseout="quitte()">
+                            <i class="fas fa-tag"></i>
+                            <span class="cart-notification">Mes articles</span>
+                            <div id="articles-div-id">Retrouvez ici vos articles mis en vente</div>
+                        </div>
+                    </a>
+                    <a href="{{url_for('VoirFavoris')}}" style="color: white; text-decoration: none;">
+                        <div class="articles-div" onmouseover="survolFavoris()" onmouseout="quitteFavoris()">
+                            <i class="fas fa-heart"></i>
+                            <span class="cart-notification">Favoris</span>
+                            <div id="favoris-div-id">Découvrez vos favoris</div>
+                        </div>
+                    </a>    
+                    {% if current_user.Image == None %}
+                    <div class="profil">
+                        <li class="username">{{current_user.Username}}</li>
+                        <li><i class="fa-solid fa-user fa-lg" style="padding:15px 5px 15px 5px; background-color: white;color:#3d5d83; border-radius:50px; cursor:pointer"></i></li>
+                    </div>
+                    {% else %}
+                    <div class="profil">
+                        <li class="username" >{{current_user.Username}}</li>
+                        <img class src="{{ current_user.Image }}"   width="30px" height="27px"; style= "border-radius: 50% 50% 50% 50%">
+                    </div>  
                     {% endif %}
+                
+                    <div class="depliant" id="users-info">
+                        <i class="fa-solid fa-chevron-down" style="margin-left:10px"></i>
+                        <ul class="depliant-content">
+                            <li>
+                                <a href="{{ url_for('editProfile', user_id=current_user.id) }}"><i class="fa-solid fa-user fa-lg"></i>Profil</a>
+                            </li>
+                            <li>
+                                <a href="{{ url_for('publierArticles') }}"><i class="fa-solid fa-shop"></i>Mettre un article
+                                    en
+                                    vente</a>
+                            </li>
+                            {% if current_user.is_admin %}
+                            <li>
+                                <a href="{{url_for('deleteArticle')}}"><i class="fa-solid fa-trash-can"></i>Supprimer un
+                                    article</a>
+                            </li>
+                            <li>
+                                <a href="{{url_for('promotionsArticles')}}"><i class="fa-solid fa-shop"></i>Promouvoir un
+                                    article</a>
+                            </li>
+                            {% endif %}
+                            <li style=" white-space: nowrap;">
+                                <a href="#"><i class="fas fa-cog menu-icon"></i>Préférences</a>
+                                <hr class="trait">
+                            </li>
+                            <li>
+                                <a href="{{url_for('Logout')}}"><i
+                                        class="fa-solid fa-right-from-bracket"></i>Déconnexion</a>
+                            </li>
+                        </ul>
+                    </div>
+                {% endif %}
+            </ul>
+        </nav>
+    </header>
 
-                    <li>
-                        <a href="#"><i class="fas fa-cog menu-icon"></i>Préférences</a>
-                        <hr class="trait">
-                    </li>
+    <main>
+        <div class="mon-main" style="background-color:#f0f4f7">
+            <div class="bar-defilante">
+                <div class="message">
+                    <p>Bienvenue sur MongoMarket, votre plateforme d'achat et de vente en ligne. Faites vos achats en
+                        toute
+                        sécurité </p>
+                </div>
+            </div>
+            {#<ul class="liste">
+                <div class="presentation">
+                    <i class="fas fa-bars menu-icon"></i>
+                    <span>Menu</span>
+                </div>
 
-                    <li>
-                        <a href="{{url_for('Logout')}}"><i class="fa-solid fa-right-from-bracket"></i>Déconnexion</a>
-                    </li>
+                <div class="presentation1"></div>
+                <a href="{{url_for('home')}}">
+                <i class="fas fa-home menu-icon"></i>
+                </a>
+                <li>Les categories</li>
+                <li>Vetements</li>
+                <li>Aliments</li>
+                <li>Les produits Tendances </li>
+                <li>Explorez nos produits</li>
+            </ul>#}
+            <div class="produits-defilants" onmouseover="survolPromo()" onmouseout="quittePromo()">
+                <div class="image_de_produits-defilants">
+                    <i class="fa-solid fa-chevron-left"></i>
+                    <i class="fa-solid fa-chevron-right"></i>
+                    {% for item in les_promos %}
+                    <a href="{{url_for('VoirArticlesEnPromo', promo_id = item.id )}}">
+                        <img src="{{item.image}}" alt="{{item.details}}" width="10px" height="100px"></img>
+                    </a>
+                    {% endfor %}
+                    <div id="produits-defilants-child-id" style="display:none"> Découvrez nos promos en cours </div>
+                </div>
+            </div>
+            <div style="width:100%;  display: flex; cursor:pointer">
+                <section>
+                    <div class="Menu">
+                        <h2 class="les-categories" id="all-categories">Les catégories</h2>
+                        <ul>
+                            {% for category_name, icon_name in categories_with_icons.items() %}
+                            <li data-category="{{ category_name }}"><i class="fas fa-{{ icon_name }}"></i><span>{{
+                                    category_name }}</span></li>
+                            {% endfor %}
+                        </ul>
+                    </div>
+                </section>
+                <div style="flex-direction: column; width:100%">
+                    <div class="inventaire-des-articles" style="width:97%">
+                        {% for article in pagination.items %}
+                        {% if current_user.is_authenticated %}
+                        <div class="exposition-images" data-category="{{ article.category.name }}">           
+                            <a href="{{url_for('AjouterAuxFavoris',id_of_user=current_user.id, id_of_article=article.id)}}">
+                                <i class="fas fa-heart" style="color:red;" onmouseover="survolHeart()" onmouseout="quitteHeart()"></i>
+                            </a>
+                            <a href="{{url_for('ArticlesDetails', article_id = article.id )}}">
+                                <img src="{{ article.image }}" >
+                            </a>
+                            <div class="description">
+                                <div style="align-items:center">
+                                    {% if article.user_image == None %}
+                                    <span class="article_description">Mise en vente par: {{ article.user_name|upper if article.user_name|length <= 16 else article.user_name[:12] ~  '...' }} SHOP</span>
+                                    {% else %}
+                                    <span class="article_description" style="align-items:center">
+                                        <span><img class src="{{ article.user_image }}"   width="2px" height="2px" style= "border-radius: 50% 50% 50% 50%;margin-top:5px; max-width:15px; max-height: 15px;"></span>
+                                        <span>Mise en vente par: {{article.user_name|upper if article.user_name|length <= 16 else article.user_name[:12] ~  '...' }} SHOP</span>
+                                    </span>
+                                    {% endif %}
+                                </div>
 
+                                <span class="article_description">{{article.Description}}</span>
+                                <span class="article_name">{{article.name if article.name|length <= 24 else article.name[:21] ~  '...' }}</span>
+                                <span class="article_price">{{article.price}}francs</span>
+
+                                <form method="POST"
+                                    action="{{url_for('add_to_cart',user_id=current_user.id, article_id=article.id)}}">
+                                    <button type="submit" class="cart-button" data-article-id="{{ article.id }}">
+                                        <i class="fa-solid fa-cart-shopping"></i>
+                                    </button>
+                                </form>
+                            </div>
+                        </div>
+                        {% else %}
+                        <div class="exposition-images" data-category="{{ article.category.name }}">
+                            <a href="{{url_for('ArticlesDetails', article_id = article.id)}}">
+                                <img src="{{article.image}}" width="250px" height="290px">
+                            </a>
+                            <div class="description">
+                                <div style="align-items:center">
+                                    {% if article.user_image == None %}
+                                    <span class="article_description">Mise en vente par: {{ article.user_name|upper if article.user_name|length <= 16 else article.user_name[:12] ~  '...' }} SHOP</span>
+                                    {% else %}
+                                    <span class="article_description" style="align-items:center">
+                                        <span><img class src="{{ article.user_image }}"   width="2px" height="2px" style= "border-radius: 50% 50% 50% 50%;margin-top:5px; max-width:15px; max-height: 15px;"></span>
+                                        <span>Mise en vente par: {{article.user_name|upper if article.user_name|length <= 16 else article.user_name[:12] ~  '...' }} SHOP</span>
+                                    </span>
+                                    {% endif %}
+                                </div>
+
+                                <span class="article_description">{{article.Description}}</span>
+                                <span class="article_name">{{article.name if article.name|length <= 24 else article.name[:21] ~  '...' }}</span>
+                                <span class="article_price">{{article.price}}francs</span>
+
+                                <form method="POST" action="{{ url_for('add_to_cart_without_login', article_id = article.id )}}">
+                                    <button type="submit" class="cart-button" data-article-id="{{ article.id }}">
+                                        <i class="fa-solid fa-cart-shopping"></i>
+                                    </button>
+                                </form>
+                            </div>
+                        </div>
+                        {% endif %}
+                        {% endfor %}
+                    </div>
+                    <div class="pagination">
+                        <ul>
+                            <a href="#"><li>&laquo;</a></li>
+                            <a href="{{url_for('home', page=1 )}}"><li>1</li></a>
+                            <a href="{{url_for('home', page=2 )}}"><li>2</li></a>
+                            <a href="{{url_for('home', page=3 )}}"><li>3</li></a>
+                            <a href="{{url_for('home', page=4 )}}"><li>4</li></a>
+                            <a href="{{url_for('home', page=5 )}}"><li>5</li></a>
+                            <a href="#"><li>&raquo;</li></a>
+                        </ul>
+                    </div>
+                </div>
+            </div>                                              
+            <div style="display: flex; margin:300px 0px 0px 0px; justify-content: center; ">
+                <a href="{{ url_for('publierArticles')}}" style="color:inherit; text-decoration: none;">
+                    <div style="display: flex;  justify-content: center; background-color:#3d5d83; height:250px;width:500px; border-radius: 20px;">
+                        <p style="font-family: Courgette; color:white; font-size:20px">Devenez un vendeur Mongo Market<br> et profitez de plus d'avantages</p>
+                        <img src="{{url_for('static', filename='images/vendeur-removebg.png')}}" width="100px" height="auto">
+                    </div>
+                </a>
+                <a href="{{ url_for('publierArticles')}}" style="color:inherit; text-decoration: none;">
+                <div style="display: flex; flex-direction: column;text-align: center;  background-color:#3d5d83; height:250px;width:500px; margin:0px 0px 0px 20px;border-radius: 20px;">
+                    <div>
+                        <p style="font-family: Courgette; color:white; font-size:20px">Faites votre premier pas avec nous<br> et bénéficiez de 50% de réduction </p>
+                    </div>
+                    <div> 
+                        <img src="{{url_for('static', filename='images/caddie-sac-plastique-rouge-dessus_1340-37199-removebg-preview.png')}}" width="230px" height="auto">
+                    </div>
+                </div>
+                </a> 
+            </div>
+        </div>
+        <div style="margin:40px 0px 0px 40px">
+            <div class="statuts" style="border:3px solid blue;height:100px; width: 100px; border-radius:50%">
+                <img src="{{url_for('static', filename='images/collection-produits-dont-qui-dit-xcel_950347-8927.avif')}}" width="100%" height="100%">
+            </div>
+        </div>
+    </main>
+    <footer style="background-color: #3d5d83; height:8cm; color:white">
+        <div class="footer-content">
+            <div class="footer-logo">
+                <h3>MongoMarket</h3>
+
+            </div>
+            <div class="footer-links">
+                <ul>
+                    <li><a href="#">Avis de confidentialité</a></li>
+                    <li><a href="#">Nos conditions de location</a></li>
+                    <li><a href="#">Aide</a></li>
+                    <li><a href="#">Devenir partenaire – Marketplace</a></li>
+                    <li><a href="#">Notre fonctionnement</a></li>
                 </ul>
             </div>
-            {% else %}
-            <li><a href="{{url_for('Signup')}}"><button
-                        style="background-color: white; color:#3d5d83; width:70px; border-radius: 5px; border:1px solid #3d5d83; height: 30px; margin-left: 40px;">SIGNUP</button></a>
-            </li>
-            <li><a href="{{url_for('Login')}}"><button
-                        style="background-color:#173354 ; color:white; width:70px; border-radius: 5px; border:1px solid #3d5d83; height: 30px">LOGIN</button></a>
-            </li>
-            {% endif %}
-        </ul>
-    </nav>
-</header>
-
-<main>
-    <div class="mon-main">
-        <div class="bar-defilante">
-            <div class="message">
-                <p>Bienvenue sur MongoMarket, votre plateforme d'achat et de vente en ligne. Faites vos achats en toute
-                    sécurité</p>
+            <div class="footer-contact">
+                <p>Contactez-nous :</p>
+                <ul>
+                    <li><i class="fa-solid fa-phone"></i> Téléphone : +123456789</li>
+                    <li><i class="fa-solid fa-envelope"></i> Email : info@MongoMarket.com</li>
+                    <li><i class="fa-solid fa-map-marker-alt"></i> Adresse : 123 Rue du commerce3, Ville</li>
+                </ul>
             </div>
         </div>
-        <ul class="liste">
-            <div class="presentation">
-                <i class="fas fa-bars menu-icon"></i>
-                <span>Menu</span>
-            </div>
-
-            <div class="presentation1"></div>
-            <i class="fas fa-home menu-icon"></i>
-            <li>Les categories</li>
-            <li>Vetements</li>
-            <li>Aliments</li>
-            <li>Les produits Tendances </li>
-            <li>Explorez nos produits</li>
-        </ul>
-        <div class="produits-defilants">
-            <div class="image_de_produits-defilants">
-                <i class="fa-solid fa-chevron-left"></i>
-                <i class="fa-solid fa-chevron-right"></i>
-                {% for item in imagesdefilante %}
-                <img src="{{item.image}}" alt="{{item.details}}" width="10px" height="100px"></img>
-                {% endfor %}
+        <div class="footer-bottom">
+            <p>&copy; 2023 MongoMarket. Tous droits réservés.</p>
+            <div class="social-icons">
+                <a href="#"><i class="fa-brands fa-facebook"></i></a>
+                <a href="#"><i class="fa-brands fa-twitter"></i></a>
+                <a href="#"><i class="fa-brands fa-instagram"></i></a>
             </div>
         </div>
-        <div style="width:100%; margin-top: 35px; display: flex; cursor:pointer">
-            <section>
-                <div class="Menu">
-                    <h2 class="les-categories" id="all-categories">Les catégories</h2>
-                    <ul>
-                        {% for category_name, icon_name in categories_with_icons.items() %}
-                            <li data-category="{{ category_name }}"><i class="fas fa-{{ icon_name }}"></i><span>{{ category_name }}</span></li>
-                        {% endfor %}
-                    </ul>
-                </div>
-                
-            </section>
-            <div style="flex-direction: column; width:100%">
-                <div class="inventaire-des-articles" style="width:97%">
-                    {% for article in articles %}
-                    <div class="exposition-images" data-category="{{ article.category.name }}">
-                        <img src="{{article.image}}" width="250px" height="290px">
-                        <!-- <h6>{{article.image}}</h6> -->
-                        <div class="description">
-
-                            <span class="article_description">Mise en vente par: {{article.user_name|upper}} SHOP</span>
-                            <span class="article_description">{{article.Description}}</span>
-                            <span class="article_name">{{article.name}}</span>
-                            <span class="article_price">{{article.price}}francs</span>
-
-                           {# <form method="POST" action="{{ url_for('panier', article_id=article.id) }}">
-                                <button type="submit" class="cart-button" data-article-id="{{ article.id }}">
-                                    <i class="fa-solid fa-cart-shopping"></i>
-                                </button>
-                            </form>
-                            <h6>{{article.id}}</h6>
-
-                            <form method="POST" action="{{ url_for('ArticlesDetails', article_id =article.id) }}">
-                                <button>See More</button>
-                            </form>#}
-                        </div>
-                    </div>
-                    {% endfor %}
-                </div>
-                <div class="pagination">
-                    <span class="arrow" id="prev-page">&#171;</span>
-                    <span class="arrow" id="first-page">&#60;&#60;</span>
-                    <span class="page" data-page="1">1</span>
-                    <span class="page" data-page="2">2</span>
-                    <span class="arrow" id="next-page">&#62;&#62;</span>
-                    <span class="arrow" id="last-page">&#187;</span>
-                </div>
-            </div>
-</main>
-
-<footer style="background-color: #606f87; height:8cm; color:white">
-    <div class="footer-content">
-        <div class="footer-logo">
-            <h3>MongoMarket</h3>
-
-        </div>
-        <div class="footer-links">
-            <ul>
-                <li><a href="#">Avis de confidentialité</a></li>
-                <li><a href="#">Nos conditions de location</a></li>
-                <li><a href="#">Aide</a></li>
-                <li><a href="#">Devenir partenaire – Marketplace</a></li>
-                <li><a href="#">Notre fonctionnement</a></li>
-            </ul>
-        </div>
-        <div class="footer-contact">
-            <p>Contactez-nous :</p>
-            <ul>
-                <li><i class="fa-solid fa-phone"></i> Téléphone : +123456789</li>
-                <li><i class="fa-solid fa-envelope"></i> Email : info@MongoDB.com</li>
-                <li><i class="fa-solid fa-map-marker-alt"></i> Adresse : 123 Rue du commerce3, Ville</li>
-            </ul>
-        </div>
-    </div>
-    <div class="footer-bottom">
-        <p>&copy; 2023 MongoMarket. Tous droits réservés.</p>
-        <div class="social-icons">
-            <a href="#"><i class="fa-brands fa-facebook"></i></a>
-            <a href="#"><i class="fa-brands fa-twitter"></i></a>
-            <a href="#"><i class="fa-brands fa-instagram"></i></a>
-        </div>
-    </div>
-</footer>
+    </footer>
+</div>
 <script src="{{url_for('static', filename='javascript/script.js')}}"></script>
+<script>
+    document.addEventListener("DOMContentLoaded", function() {
+    const depliant = document.getElementById("users-info");
+
+    depliant.addEventListener("click", function() {
+        this.classList.toggle("active");
+    });
+});
+</script>
 
 {%endblock%}

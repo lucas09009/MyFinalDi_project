@@ -7,76 +7,116 @@
 <header>
     <nav>
         <ul>
-            <li style="font-family: 'Dancing Script', cursive; font-size:40px">Mongo<span
-                    style="color:red">Market</span>
-            </li>
+            {% if not current_user.is_authenticated %}
+            <a href="{{url_for('home')}}">
+                <li class="mongo">Mongo<span class="market">Market</span></li>
+            </a>
             <div class="SearchDiv">
-                <input type="text" id="SearchInput" name="Search">
-                <i class="fas fa-camera"></i>
-                <button>Search</button>
+                <form method="POST" action="{{url_for('SearchFor', saisie='')}}">
+                    <input type="text" id="SearchInput" name="saisie">
+                    <i class="fas fa-camera"></i>
+                    <button type="submit">Search</button>
+                </form>
+            </div>
+            <form method="POST">
+                <a href="{{ url_for('panierForUserNonConnecte')}}" style="color: white; text-decoration: none;">
+                    <div class="panier-div">
+                        <div id="cart-count" class="cart-count">{{session['panier']|length}}</div>
+                        <i class="fas fa-shopping-cart fa-lg"></i><span class="cart-notification">Mon Panier</span>
+                    </div>
+                </a>
+            </form>
+
+            <li><a href="{{url_for('Signup')}}"><button class="signup-lien">SIGNUP</button></a>
+            </li>
+            <li><a href="{{url_for('Login')}}"><button class="login-lien">LOGIN</button></a>
+            </li>
+            {% else %}
+            <a href="{{url_for('home')}}">
+                <li class="mongo">Mongo<span class="market">Market</span></li>
+            </a>
+            <div class="SearchDiv">
+                <form method="POST" action="{{url_for('SearchFor', saisie='')}}">
+                    <input type="text" id="SearchInput" name="saisie">
+                    <i class="fas fa-camera"></i>
+
+                    <button type="submit">Search</button>
+                </form>
             </div>
 
-            {% if current_user.is_authenticated %}
-            <div class="coins-div">
-                <span class="coins-icon">
-                    <i class="fa-solid fa-coins"></i>
-                </span>
-                <span>0 francs</span>
-            </div>
-            <li><i class="fa-regular fa-bell"></i></li>
-            <li><i class="fa-regular fa-message"></i></li>
-            <span style="display:flex; flex-direction: column; text-align:center">
+            <form method="POST">
+                <a href="{{ url_for('panier')}}" style="color: white; text-decoration: none;">
+                    <div class="panier-div">
+                        <div id="cart-count" class="cart-count">{{cart_item|length}}</div>
+                        <i class="fas fa-shopping-cart fa-lg"></i><span class="cart-notification">Mon Panier</span>
+                    </div>
+                </a>
+            </form>
+
+            <a href="{{url_for('MesArticles')}}" style="color: white; text-decoration: none;">
+                <div class="articles-div">
+                    <i class="fas fa-tag"></i>
+                    <span class="cart-notification">Mes articles</span>
+                </div>
+            </a>
+
+            <a href="{{url_for('VoirFavoris')}}" style="color: white; text-decoration: none;">
+                <div class="articles-div">
+                    <i class="fas fa-heart"></i>
+                    <span class="cart-notification">Favoris</span>
+                </div>
+            </a>
+
+            {% if current_user.Image == None %}
+            <div class="profil">
+                <li class="username">{{current_user.Username}}</li>
                 <li><i class="fa-solid fa-user fa-lg"
-                        style="padding:20px 10px 20px 10px; background-color: white;color:#3d5d83; border-radius:50px; cursor:pointer"></i>
+                        style="padding:15px 5px 15px 5px; background-color: white;color:#3d5d83; border-radius:50px; cursor:pointer"></i>
                 </li>
-                <li>{{current_user.Username}}</li>
-            </span>
+            </div>
+            {% else %}
+            <div class="profil">
+                <li class="username">{{current_user.Username}}</li>
+                <img class src="{{ current_user.Image }}" width="30px" height="27px" ;
+                    style="border-radius: 50% 50% 50% 50%">
+            </div>
+            {% endif %}
+
             <div class="depliant" id="users-info">
                 <i class="fa-solid fa-chevron-down" style="margin-left:10px"></i>
                 <ul class="depliant-content">
-
                     <li>
-                        <a href="{{url_for('editProfile', user_id=current_user.id)}}"><i
+                        <a href="{{ url_for('editProfile', user_id=current_user.id) }}"><i
                                 class="fa-solid fa-user fa-lg"></i>Profil</a>
                     </li>
-
                     <li>
-                        <a href="{{ url_for('publierArticles') }}"><i class="fa-solid fa-shop"></i>Mettre un article en
+                        <a href="{{ url_for('publierArticles') }}"><i class="fa-solid fa-shop"></i>Mettre un article
+                            en
                             vente</a>
                     </li>
-
-                    <li>
-                        <a href="{{url_for('deleteArticle')}}"><i class="fa-solid fa-shop"></i>Supprimer un article</a>
-                    </li>
+                    {#<li>
+                        <a href="{{url_for('deleteArticle')}}"><i class="fa-solid fa-trash-can"></i>Supprimer un
+                            article</a>
+                    </li>#}
                     {% if current_user.is_admin %}
-
                     <li>
-                        <a href="{{url_for('deleteArticle')}}"><i class="fa-solid fa-shop"></i>Supprimer un article</a>
+                        <a href="{{url_for('deleteArticle')}}"><i class="fa-solid fa-trash-can"></i>Supprimer un
+                            article</a>
                     </li>
-
                     <li>
-                        <a href="{{url_for('MakeNewAds')}}"><i class="fa-solid fa-shop"></i>Promouvoir un article</a>
+                        <a href="{{url_for('promotionsArticles')}}"><i class="fa-solid fa-shop"></i>Promouvoir un
+                            article</a>
                     </li>
                     {% endif %}
-
-                    <li>
+                    <li style=" white-space: nowrap;">
                         <a href="#"><i class="fas fa-cog menu-icon"></i>Préférences</a>
                         <hr class="trait">
                     </li>
-
                     <li>
                         <a href="{{url_for('Logout')}}"><i class="fa-solid fa-right-from-bracket"></i>Déconnexion</a>
                     </li>
-
                 </ul>
             </div>
-            {% else %}
-            <li><a href="{{url_for('Signup')}}"><button
-                        style="background-color: white; color:#3d5d83; width:70px; border-radius: 5px; border:1px solid #3d5d83; height: 30px; margin-left: 190px;">SIGNUP</button></a>
-            </li>
-            <li><a href="{{url_for('Login')}}"><button
-                        style="background-color:#173354 ; color:white; width:70px; border-radius: 5px; border:1px solid #3d5d83; height: 30px">LOGIN</button></a>
-            </li>
             {% endif %}
         </ul>
     </nav>
@@ -84,70 +124,179 @@
 
 <main>
     <div class="mon-main">
-        <div class="bar-defilante">
-            <div class="message">
-                <p>Bienvenue sur MongoDB, votre plateforme d'achat et de vente en ligne. Faites vos achats en toute
-                    sécurité</p>
-            </div>
-        </div>
-        <ul class="liste">
+        {#<ul class="liste">
             <div class="presentation">
                 <i class="fas fa-bars menu-icon"></i>
                 <span>Menu</span>
             </div>
+
             <div class="presentation1"></div>
-            <i class="fas fa-home menu-icon"></i>
+            <a href="{{url_for('home')}}">
+                <i class="fas fa-home menu-icon"></i>
+            </a>
             <li>Les categories</li>
             <li>Vetements</li>
-            <li>Aliments</li>
+            <a href='#aliments'><li>Aliments</li></a>
             <li>Les produits Tendances </li>
-            <li>Explorez nos produits</li>
-        </ul>
-
-
-        <div style="flex-direction: column; width:100%">
-            <div class="inventaire-des-articles" style="width:97%" id="panier">
-                {% for article in session['panier'] %}
-                <h6>{{article}}</h6>
-                <div class="exposition-images" data-category="{{ article.category }}">
-                    <img src="{{ article.image }}" width="250px" height="290px">
-                    <div style="justify-content: space-around; align-items:center;">
-                        <div style="display:flex; height:80px">
-                            <div class="description">
-                                <span style="width:4px; height:4px"></span>
-                                {#
-                                <form method="POST"
-                                    action="{{ url_for('supprimer_article_panier', article_id=article.id) }}">
-                                    <button type="submit">Supprimer l'article</button>
-                                </form>
-                                <form method="POST" action="{{ url_for('vider_panier') }}">
-                                    <button type="submit">Vider le panier</button>
-                                </form>
-                                #}
-                                <span class="article_name">{{ article['name'] }}</span>
-                                <span class="article_price">{{ article['price'] }}francs</span>
-                                <span class="article_quantity">Quantité : {{ article['quantite'] }}</span>
-                            </div>
+            <li>Explorez nos produits</li> 
+   
+        </ul>#}
+        <div style="width:100%;display:flex; margin-top: 20px">
+            {% if current_user.is_authenticated %}
+                {% if cart_item|length == 0 %}
+                    <div style="background-color: white;width:20%; height:520px; margin-left: 10px;">
+                        <p style="font-family: Courgette;width:90px;margin: 50px 0px 0px 10px; border:1px solid gray;">Vous
+                            n'avez rien dans votre panier</p>
+                        <img src="{{url_for('static', filename='images/illustration-3d-amusante-arbitre-americain.jpg')}}"
+                            width="100%" height="400px">
+                    </div>
+                    <div style="flex-direction: column;width: 70%; margin: 50px 0px 0px 15px">
+                        <p
+                            style="background-color: white;width: 95%;font-family: Courgette; margin:0px 0px 10px 5px; height:40px; text-align: center;">
+                            Decouvrez nos divers categories de produits</p>
+                        <div class="" style="width:90%;">
+                            <p style="font-family: Quicksand; font-weight:bold;">Beaute-Esthetique</p>
+                            <a href="{{ url_for('home')}}">
+                                <img src="{{url_for('static', filename='images/vue-du-produit-cosmetique-fond-couleur-abricot_23-2150191383.avif' )}}"
+                                    width="105%" alt="vue-d/'un-produit-cosmetique-fond-couleur-abricot">
+                                
+                            </a>
+                            <p>Meubles pour maison</p>
+                            <img src="{{url_for('static', filename='images/deux-lits-doubles-modernes-elegants-velours-pastel-rose-bleu-matelas-orthopediques-durs-exposes-dans-salle-exposition-magasin-meubles_328764-8599.jpg' )}}"
+                                width="105%">
                         </div>
                     </div>
-                </div>
-                {% endfor %}
-            </div>
-            <div class="pagination">
-                <span class="arrow" id="prev-page">&#171;</span>
-                <span class="arrow" id="first-page">&#60;&#60;</span>
-                <span class="page" data-page="1">1</span>
-                <span class="page" data-page="2">2</span>
-                <span class="arrow" id="next-page">&#62;&#62;</span>
-                <span class="arrow" id="last-page">&#187;</span>
-            </div>
+                    <div class="" style="width:30%;flex-direction: column;margin:50px 20px 0px 0px; background-color: rgb(255, 255, 255);height:auto">
+                    <p style="font-family: Courgette; text-align: center;">Articles avec le plus de vues</p>
+                    {% for article in articles %}
+                        {% if article.nombre_de_vues>=5 %}
+                            <div class="exposition-images-panier" data-category="{{ article.category }} "
+                                style="width:90%; height:auto;  background-color:#f0f4f7;">
+                                <div style="width:50%">
+                                    <a href="{{url_for('ArticlesDetails', article_id = article.id )}}">
+                                        <img src="{{ article.image}}" >
+                                    </a>
+                                </div>
+                                <div style="width:50%; height:auto">
+                                    <span class="article_name_panier">{{article.name if article.name|length <= 21 else article.name[:21]
+                                            ~ '...' }}</span><br>
+                                            <span class="article_price_panier">{{article.price}}francs</span><br>
+                                            <span class="article_name_panier"><span>Qté: {{article.quantity}}</span>
+                                </div>
+                            </div>
+                        {% endif %}
+                    {% endfor %}
+                    </div>
+                {% else %}
+                    <div style="width:100%">
+                        <h4 style="margin:10px 0px 0px 10px">Votre Panier({{panier_utilisateur|length}})</h4>
+                        {% for cart_item, article in panier_utilisateur %}
+                        <div class="exposition-panier-articles" data-category="{{ article.category }}">
+                            <div style="display: flex; flex-direction: column; margin: 0px 0px 10px 20px;width:20%">
+                                <span class="article_name" style="font-size: 12px;">{{ article.name }}</span>
+                                <a href="{{url_for('ArticlesDetails', article_id =article.id)}}">
+                                    <img src="{{ article.image }}" width="80px" height="150px">
+                                </a>
+                                <form method="POST" action="{{ url_for('payement', article_id=article.id) }}">
+                                    <button type="submit" class="achat">Buy</button>
+                                </form>
+                            </div>
+                            <div style="display:flex; justify-content: space-between;width:80%;">
+                                <div><span class="article_price">Prix Unitaire: {{ article.price }} francs</span></div>
+                                <div><span class="quantity-display" id="quantite">Quantité : {{ cart_item.quantite }}</span>
+                                </div>
+                                <p>Total: {{article.price*cart_item.quantite}} francs</p>
+                
+                                <div style="display:flex; margin-right:20px" class="action">
+                                    <a href="{{ url_for('supprimer_article_panier', article_id=article.id) }}">
+                                        <i class="fa-solid fa-trash-can"
+                                            style="color:rgb(255, 255, 255); margin:10px 0px 0px 5px;background-color: gray; border-radius:5px"></i>
+                                    </a>
+                                </div>
+                            </div>
+                        </div>
+                        {% endfor %}
+                    </div>
+                {% endif %}
+            {% else %}
+                {% if session['panier']|length == 0 %}
+                    <div style="background-color: white;width:20%; height:520px; margin-left: 10px;">
+                        <p style="font-family: Courgette;width:90px;margin: 10px 0px 0px 10px; border:1px solid gray;">Vous
+                            n'avez rien dans votre panier</p>
+                        <img src="{{url_for('static', filename='images/illustration-3d-amusante-arbitre-americain.jpg')}}"
+                            width="100%" height="400px">
+                    </div>
+                    <div style="flex-direction: column;width: 70%; margin-left:15px">
+                        <p
+                            style="background-color: white;width: 95%;font-family: Courgette; margin:0px 0px 10px 5px; height:40px; text-align: center;">
+                            Decouvrez nos divers categories de produits</p>
+                        <div class="" style="width:90%;">
+                            <p style="font-family: Quicksand; font-weight:bold;">Beaute-Esthetique</p>
+                            <a href="{{ url_for('home')}}">
+                                <img src="{{url_for('static', filename='images/vue-du-produit-cosmetique-fond-couleur-abricot_23-2150191383.avif' )}}"
+                                    width="105%">
+                            </a>
+                            <p>Meubles pour maison</p>
+                            <img src="{{url_for('static', filename='images/deux-lits-doubles-modernes-elegants-velours-pastel-rose-bleu-matelas-orthopediques-durs-exposes-dans-salle-exposition-magasin-meubles_328764-8599.jpg' )}}"
+                                width="105%">
+                        </div>
+                    </div>
+                    <div class=""
+                        style="width:30%;flex-direction: column;margin-right: 20px; background-color: rgb(255, 255, 255);height:auto">
+                        <p style="font-family: Courgette; text-align: center;">Articles avec le plus de vues</p>
+                            {% for article in articles %}
+                                {% if article.nombre_de_vues >= 5 %}
+                                    <div class="exposition-images-panier" data-category="{{ article.category }} "
+                                        style="width:90%; height:auto;  background-color:#f0f4f7;">
+                                        <div style="width:50%">
+                                            <a href="{{url_for('ArticlesDetails', article_id = article.id )}}">
+                                                <img src="{{ url_for('static', filename=article.image ) }}">
+                                            </a>
+                                        </div>
+                                        <div style="width:50%; height:auto">
+                                            <span class="article_name_panier">{{article.name if article.name|length <= 21 else article.name[:21]~ '...' }}</span><br>
+                                                    <span class="article_price_panier">{{article.price}}francs</span><br>
+                                                    <span class="article_name_panier"><span>Qté: {{article.quantity}}</span>
+                                        </div>
+                                    </div>
+                                {% endif %}
+                            {% endfor %}
+                    </div>  
+                {% else %}
+                    <div style="width:100%">
+                        {% for items in session['panier'] %}
+                        <div class="exposition-panier-articles" data-category="{{ items.category }}">
+                            <div style="display: flex; flex-direction: column; margin: 0px 0px 10px 20px;width:20%">
+                                <span class="article_name" style="font-size: 12px;">{{ items.name }}</span>
+                                <a href="{{url_for('ArticlesDetails', article_id = items.id)}}">
+                                    <img src="{{ url_for('static', filename='images/'+items['image'] ) }}" width="80px" height="150px">
+                                </a>
+                                <form method="POST" action="{{ url_for('payement', article_id=items.id) }}">
+                                    <button type="submit" class="achat">Buy</button>
+                                </form>
+                            </div>
+                            <div style="display:flex; justify-content: space-between;width:80%;">
+                                <div><span class="article_price">{{ items['price'] }}francs</span></div>
+                                <div><span class="quantity-display" id="quantite">Quantité : {{ items['nbr_dajout'] }}</span></div>
+                                <div style="display:flex" class="action">
+                                    <a href="{{ url_for('supprimer_article_panier', article_id=items.id) }}">
+                                        <i class="fa-solid fa-trash-can"
+                                            style="color:rgb(255, 255, 255); background-color: gray; border-radius:5px"></i>
+                                    </a>
+                                </div>
+                            </div>
+                        </div>
+                        {% endfor %}
+                    </div>
+                {% endif %}
+            {% endif %}
         </div>
 </main>
 
-<footer style="background-color: #606f87; height:8cm; color:white">
+<footer style="background-color: #3d5d83; height:8cm; color:white">
     <div class="footer-content">
         <div class="footer-logo">
-            <h3>MongoDB</h3>
+            <h3>MongoMarket</h3>
 
         </div>
         <div class="footer-links">
@@ -163,13 +312,13 @@
             <p>Contactez-nous :</p>
             <ul>
                 <li><i class="fa-solid fa-phone"></i> Téléphone : +123456789</li>
-                <li><i class="fa-solid fa-envelope"></i> Email : info@MongoDB.com</li>
+                <li><i class="fa-solid fa-envelope"></i> Email : info@MongoMarket.com</li>
                 <li><i class="fa-solid fa-map-marker-alt"></i> Adresse : 123 Rue du commerce3, Ville</li>
             </ul>
         </div>
     </div>
     <div class="footer-bottom">
-        <p>&copy; 2023 MongoDB. Tous droits réservés.</p>
+        <p>&copy; 2023 MongoMarket. Tous droits réservés.</p>
         <div class="social-icons">
             <a href="#"><i class="fa-brands fa-facebook"></i></a>
             <a href="#"><i class="fa-brands fa-twitter"></i></a>
@@ -179,6 +328,43 @@
 </footer>
 
 <script src="{{url_for('static', filename='javascript/script.js')}}"></script>
+<!-- <script>
+function incrementation() {
+    // Récupérer l'élément contenant la quantité
+    var quantiteElement = document.getElementById('quantite');
+
+    // Extraire la quantité actuelle du texte de l'élément
+    var quantiteActuelle = parseInt(quantiteElement.innerText.match(/\d+/)[0]);
+
+    // Incrémenter la quantité
+    quantiteActuelle++;
+
+    // Mettre à jour le texte de l'élément avec la nouvelle quantité
+    quantiteElement.innerText = "Quantité : " + quantiteActuelle;
+}
 
 
+function decrementation() {
+    // Récupérer l'élément contenant la quantité
+    var quantiteElement = document.getElementById('quantite');
+
+    // Extraire la quantité actuelle du texte de l'élément
+    var quantiteActuelle = parseInt(quantiteElement.innerText.match(/\d+/)[0]);
+
+    // Incrémenter la quantité
+    quantiteActuelle--;
+
+    // Mettre à jour le texte de l'élément avec la nouvelle quantité
+    quantiteElement.innerText = "Quantité : " + quantiteActuelle;
+}
+</script> -->
+<script>
+    document.addEventListener("DOMContentLoaded", function () {
+        const depliant = document.getElementById("users-info");
+
+        depliant.addEventListener("click", function () {
+            this.classList.toggle("active");
+        });
+    });
+</script>
 {%endblock%}

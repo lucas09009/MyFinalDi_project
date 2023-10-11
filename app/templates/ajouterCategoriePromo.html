@@ -1,0 +1,42 @@
+{% extends "layout.html" %}
+
+<title>{% block blocktitle %} Ajouter une Catégorie {% endblock %}</title>
+
+{% block body%}
+
+{% with messages = get_flashed_messages() %}
+{% if messages %}
+<div class="alert alert-success">
+    {% for message in messages %}
+    <p>{{ message }}</p>
+    {% endfor %}
+</div>
+{% endif %}
+{% endwith %}
+    <form method="POST" enctype="multipart/form-data" class="container">
+        <div>
+            {{ form.hidden_tag() }}
+            <h1 class="h1">Ajouter une promo</h1>
+            <hr>
+            {{ form.nom_de_la_promotion.label(class="form-label") }}
+
+            {{ form.nom_de_la_promotion(class="form-control", placeholder="Nom de la catégorie") }}<br>
+            
+
+            {{ form.duree_de_la_promo.label}}
+            {{ form.duree_de_la_promo(placeholder="Duree de la promo") }}<br>
+
+
+            {{ form.reduction.label}}
+            {{ form.reduction(placeholder=" reduction") }}<br>
+
+            {{ form.details.label}}
+            {{ form.details(placeholder=" details") }}<br>
+            
+            
+            
+            {{ form.submit() }}
+        </div>
+    </form>
+{% endblock %}
+ 

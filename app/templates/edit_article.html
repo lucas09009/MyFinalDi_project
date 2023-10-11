@@ -6,38 +6,47 @@
 
 {% with messages = get_flashed_messages() %}
 {% if messages %}
-<div class="alert alert-success">
+<div class="alert-container">
     {% for message in messages %}
-    <p>{{ message }}</p>
+    {% if 'error' in message %}   
+    <div class="alert alert-error">
+        {% set error_message = message.split(';')[0] %} 
+            <h6>{{error_message}}</h6>
+    </div>
+    {% elif 'success' in message %}
+    <div class="alert alert-success">
+        {% set success_message = message.split(';')[0] %} 
+        <h6>{{success_message}}</h6>
+    </div>
+    {% endif %}
     {% endfor %}
 </div>
 {% endif %}
 {% endwith %}
-
+<div class="big-div-articles">
     <form method="POST" enctype="multipart/form-data" class="container">
-        <div>
+        <div class="publierArticles-formulaire">
 
             {{ form.hidden_tag() }}
-            <h1 class="h1">Modifier l'article</h1>
-            <hr>
+            <h1 class="titre">Modifier l'article</h1>
 
-            {{ form.name(placeholder="Nom de l'article") }}<br>
+            {{ form.name(placeholder="Nom de l'article",class_='style') }}<br>
 
-            {{ form.category(placeholder="Type d'article") }}<br>
+            {{ form.category(placeholder="Type d'article",class_='style') }}<br>
 
-            {{ form.Description(placeholder="Description de l'article") }}<br>
+            {{ form.Description(placeholder="Description de l'article",class_='style') }}<br>
 
-            {{ form.date_arrive(placeholder="Date d'arrivée") }}<br>
+            {{ form.date_arrive(placeholder="Date d'arrivée",class_='style') }}<br>
 
-            {{ form.details(placeholder="Détails supplémentaires") }}<br>
+            {{ form.details(placeholder="Détails supplémentaires",class_='style') }}<br>
 
-            {{ form.price(placeholder="Prix de l'article") }}<br>
+            {{ form.price(placeholder="Prix de l'article",class_='style') }}<br>
 
-            {{ form.quantity(placeholder="Quantité disponible") }}<br>
+            {{ form.quantity(placeholder="Quantité disponible",class_='style') }}<br>
 
-            {{ form.image(placeholder="Sélectionnez l'image de l'article") }}<br>
+            {{ form.image(placeholder="Sélectionnez l'image de l'article",class_='style') }}<br>
 
-            {{ form.submit }}
+            {{ form.submit(class_='button-valider') }}
         </div>
     </form>
 

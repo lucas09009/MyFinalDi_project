@@ -5,26 +5,39 @@
 {% block body%}
 {% with messages = get_flashed_messages() %}
 {% if messages %}
-<div class="alert alert-success">
+<div class="alert-container">
     {% for message in messages %}
-    <p>{{ message }}</p>
+    {% if 'error' in message %}   
+    <div class="alert alert-error">
+        {% set error_message = message.split(';')[0] %} 
+            <h6>{{error_message}}</h6>
+    </div>
+    {% elif 'success' in message %}
+    <div class="alert alert-success">
+        {% set success_message = message.split(';')[0] %} 
+        <h6>{{success_message}}</h6>
+    </div>
+    {% endif %}
     {% endfor %}
 </div>
 {% endif %}
 {% endwith %}
-    <form method="POST" enctype="multipart/form-data" class="container">
-        <div>
+<div class="big-div">   
+    <form method="POST"  enctype="multipart/form-data" class="container">
+        <div class="formulaire-LOGIN">
             {{ form.hidden_tag() }}
-            <h1 class="h1">Connexion</h1>
-            <hr>
-            {{ form.Username(placeholder="Pseudo") }}
+            <h1 class="h1">Connexion</h1><br>
+            {{ form.Username(placeholder="Pseudo",class_='style') }}<br>
 
-            {{ form.Password(placeholder="Password") }}
-            
-            {{ form.submit }}
+            {{ form.Password(placeholder="Password",class_='style') }}<br>
 
+            {{ form.submit(class_ = 'LOGIN-submit' ) }}<br>
+
+            <div>
+            <a href="{{url_for('Signup')}}" style="text-decoration: none; color: inherit; font-family:'Cairo'; margin-right: 20px;">Pas de compte?,<span style="text-decoration:underline">Inscrivez vous</span></a>
+            {#<a href="{{url_for('send_Message')}}" style="text-decoration: none; color: inherit; font-family:'Cairo'; margin-right: 20px;">Mot de passe oublié?</a>#}
+            </div>
         </div>
-        <a href="{{url_for('Signup')}}" style="text-decoration: none; font-family:'Cairo'; margin-right: 220px;">Pas de compte?,<span style="text-decoration:underline">Inscrivez vous</span></a>
     </form>
+</div>
 {% endblock %}
-
