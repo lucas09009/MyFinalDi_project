@@ -3,6 +3,10 @@ from flask_sqlalchemy import SQLAlchemy
 from flask_migrate import Migrate
 from flask_login import LoginManager
 from flask_bcrypt import Bcrypt
+
+from watchdog.observers import Observer
+from watchdog.events import FileSystemEventHandler
+
 from .config import Config
 from flask_bootstrap import Bootstrap
 from flask_mail import Message, Mail
@@ -15,6 +19,7 @@ app = Flask(__name__)
 bcrypt = Bcrypt(app)
 bootstrap = Bootstrap(app)
 # blueprint = Blueprint(app)
+
 app.config.from_object(Config)
 basedir = os.path.abspath(os.path.dirname(__file__))
 
@@ -50,3 +55,12 @@ from app import routes, models
 
 
 
+
+class MyHandler(FileSystemEventHandler):
+    def on_modified(self, event):
+        print(f'event type: {event.event_type}  path : {event.src_path}')
+
+event_handler = MyHandler()
+observer = Observer()
+observer.schedule(event_handler, path='.', recursive=False)
+observer.start()

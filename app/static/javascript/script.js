@@ -35,21 +35,23 @@ setInterval(nextImage, 6000);
 
 
 function nextCommentaire() {
-    let commentaires = document.querySelectorAll('.contenu');
-    let i = 0;
+    let commentaires = document.querySelector('.contenu p');
+    console.log(commentaires.textContent)
+    // alert("skipping next commentaire")
+    // let i = 0;
 
-    function displayCommentaire(index) {
-        commentaires.forEach((commentaire) => {
-            commentaire.style.display = 'none';
-        });
+    // function displayCommentaire(index) {
+    //     commentaires.forEach((commentaire) => {
+    //         commentaire.style.display = 'none';
+    //     });
 
-        commentaires[index].style.display = 'block';
-        i = (i + 1) % commentaires.length;
+    //     commentaires[index].style.display = 'block';
+    //     i = (i + 1) % commentaires.length;
 
-        setTimeout(() => displayCommentaire(i), 6000);
-    }
+    //     setTimeout(() => displayCommentaire(i), 6000);
+    // }
 
-    displayCommentaire(i);
+    // displayCommentaire(i);
 }
 
 

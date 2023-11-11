@@ -90,6 +90,7 @@ def promotionsArticles(promo_id, article_id):
 ############# CETTE ROUTE EST RESERVEE AUX Utilisateurs connectes, ELLE PERMET AUX utilisateurs DE MODIFIER LEURS PROFIL
 @app.route('/editProfile/<int:user_id>', methods = ['GET', 'POST'])
 def editProfile(user_id):
+    cart_item = Panier.query.filter_by(user_id = current_user.id).all()
     user = UsersData.query.get_or_404(user_id)
     form = EditProfileForm(obj=user)
     if user:
@@ -128,7 +129,7 @@ def editProfile(user_id):
             flash('Les modifications ont été enregistrées')
             return redirect(url_for('home'))
 
-        return render_template('userProfile.html', form=form, user=user)
+        return render_template('userProfile.html', form=form, user=user, cart_item=cart_item)
     return "User non trouvé"
 
 ############# CETTE ROUTE PERMET AUX Utilisateurs DE SE CONNECTER ###########
@@ -601,6 +602,7 @@ def ArticlesDetails(article_id):
         category = Category.query.get(article.category_id)
         comments = db.session.query(Commentaires, Articles).join(Articles).filter(Commentaires.article_id == article_id, Articles.id == article_id).all()
         articles = Articles.query.all()
+        print(comments)
         for items in articles :
             items.image = '/'.join(''.join(items.image.split('/')[1:]).split('\\'))
 
@@ -662,5 +664,6 @@ def VoirFavoris():
     # print('favoris_utilisateur',favoris_utilisateur)
     # print('favoris_utilisateur',type(favoris_utilisateur))
     return render_template('Favoris.html', favoris_utilisateur=favoris_utilisateur,cart_item=cart_item)
+
 
 

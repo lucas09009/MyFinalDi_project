@@ -1,0 +1,13 @@
+Flask==2.0.1
+
+
+[build]
+command = "python wsgi.py"
+
+
+
+
+from app import app
+
+if __name__ == "__main__":
+    app.run()

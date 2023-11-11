@@ -169,27 +169,28 @@
                                 </div>
                                 <div style="border-right: 8px solid gray; margin-left: 40px;"></div>
                                 <div class="commentaires" style="background-color: #f0f4f7; width:679px; height:300px">
-                                    <p style="font-family: Courgette; text-align: center;">Commentaires</p>
-                                    <!-- <div class="contenu" style="background-color: #ffffff; width:520px; border-radius: 15px; height:210px; margin: 20px 0px 0px 80px"> -->
-                                        <i class="fa-solid fa-chevron-right"></i>
-                                        <!-- <i class="fa-solid fa-chevron-left"></i> -->
-                                        {#{% for elt, articles in comments %}
-                                            {% if elt.image == None %}
-                                            <div class="profil" style="display: flex; padding: 20px 0px 0px 20px">
-                                                <i class="fa-solid fa-user fa-lg" style="padding:35px 5px 15px 5px; background-color: white;color:#3d5d83; border-radius:50px; cursor:pointer"></i>
-                                                <p class="username">{{elt.user_name}}</p>
-                                            </div>
-                                            {% else %}
-                                            <div class="profil" style="display: flex; padding: 20px 0px 0px 20px">
-                                                <img class src="{{ url_for('static', filename='images/'+ elt.image) }}"   width="30px" height="27px"; style= "border-radius: 50% 50% 50% 50%">
-                                                <p class="username" >{{elt.user_name}}</p>
-                                            </div>  
-                                            {% endif %}
-                                            <p style="margin:10px 20px 0px 23px; ">{% if elt.commentaires|length > 60 %}{{ elt.commentaires | wordwrap(60) | safe }}{% else %}{{ elt.commentaires }}{% endif %}</p>
-                                        {% endfor %}#}
+                                    <p style="font-family: Courgette; text-align: center; margin-top:20px">Commentaires</p>
+                                    <div style="background-color: #ffffff; width:520px; border-radius: 15px; height:210px; margin: 20px 0px 0px 80px">
+                                        <div class="contenu" onload="nextCommentaire()">
+                                            <i class="fa-solid fa-chevron-left"></i>
+                                            <i class="fa-solid fa-chevron-right"></i>
+                                            {#{% for elt, articles in comments %}
+                                                {% if elt.image == None %}
+                                                <div class="profil" style="display: flex; padding: 20px 0px 0px 20px">
+                                                    <i class="fa-solid fa-user fa-lg" style="padding:35px 5px 15px 5px; background-color: white;color:#3d5d83; border-radius:50px; cursor:pointer"></i>
+                                                    <p class="username">{{elt.user_name}}</p>
+                                                </d iv>
+                                                {% else %}
+                                                <div class="profil" style="display: flex; padding: 20px 0px 0px 20px">
+                                                    <img class src="{{ url_for('static', filename='images/'+ elt.image) }}"   width="30px" height="27px"; style= "border-radius: 50% 50% 50% 50%">
+                                                    <p class="username" >{{elt.user_name}}</p>
+                                                </div>  
+                                                {% endif %}
+                                                <p class="contenuCommentaires" style="margin:10px 20px 0px 23px; ">{{ elt.commentaires }}</p>
+                                            {% endfor %}#}
+                                        </div>
                                     </div>
                                 </div>
-                                
                             </div>
                         {% endif %}
                     {% endfor %}
@@ -339,7 +340,7 @@
         <div class="contenu" style="background-color: #ffffff; width:520px;border-radius: 15px; height:210px; margin: 20px 0px 0px 80px">
             <i class="fa-solid fa-chevron-right"></i>
             <!-- <i class="fa-solid fa-chevron-left"></i> -->
-            {% for elt, articles in comments %}
+            {#{% for elt, articles in comments %}
                 {% if elt.image == None %}
                 <div class="profil" style="display: flex; padding: 20px 0px 0px 20px">
                     <i class="fa-solid fa-user fa-lg" style="padding:35px 5px 15px 5px; background-color: white;color:#3d5d83; border-radius:50px; cursor:pointer"></i>
@@ -352,7 +353,7 @@
                 </div>  
                 {% endif %}
                     <p style="margin:10px 20px 0px 23px; ">{% if elt.commentaires|length > 60 %}{{ elt.commentaires | wordwrap(60) | safe }}{% else %}{{ elt.commentaires }}{% endif %}</p>
-            {% endfor %}
+            {% endfor %}#}
         </div>
     </div>
     <footer style="background-color: #3d5d83; height:8cm; color:white">
@@ -388,7 +389,7 @@
             </div>
         </div>
     </footer>
-    <script src="{{url_for('static', filename='javascript/script.js')}}"></script>
+    {#<script src="{{url_for('static', filename='javascript/script.js')}}"></script>#}
     <script>
         document.addEventListener("DOMContentLoaded", function() {
             const depliant = document.getElementById("users-info");
@@ -397,13 +398,7 @@
                 this.classList.toggle("active");
             });
         });
-        // document.addEventListener("DOMContentLoaded", function() {
-        //     const commentaires = document.getElementById("commentaires-id");
-
-        //     commentaires.addEventListener("click", function() {
-        //         this.classList.toggle("active");
-        //     });
-        // });
+     
         document.addEventListener("DOMContentLoaded", function() {
         const commentaires = document.getElementById("commentaires-id");
         const contenuCommentaires = document.querySelector(".commentaires-class");
@@ -425,8 +420,28 @@
     });
 });
 
-    </script>
-    {% endblock %}
+
+    let contenuDiv = document.querySelector('.contenu');
+    let comments = contenuDiv.querySelectorAll('.contenuCommentaires');
+    let username = contenuDiv.querySelectorAll('.profil')
+    let currentIndex = 0;
+
+    function showNextComment() {
+        comments[currentIndex].style.display = 'none';
+        profil[currentIndex].style.display = 'none';
+        currentIndex = (currentIndex + 1) % comments.length;
+        comments[currentIndex].style.display = 'block';
+    }
+
+    function startInterval() {
+        setInterval(showNextComment, 7000); 
+    }
+
+    window.onload = startInterval;
+
+</script>
+
+{% endblock %}
 
 
 
