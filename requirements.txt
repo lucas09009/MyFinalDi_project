@@ -1,9 +1,10 @@
 Flask==2.0.1
+python-3.11
 
 
 command = "python wsgi.py"
 
-
+command = "pip3 install --upgrade pip && pip3 install -r requirements.txt"
 
 
 from app import app
