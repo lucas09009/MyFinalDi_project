@@ -56,12 +56,18 @@ def admin_required(view):
 @app.route('/admin')
 @admin_required
 def viewsForAdmin():
+    liste_des_articles_en_promo = []
+
     articles = Articles.query.all()
     random.shuffle(articles)
 
-    promo = Promotions.query.all()
+    articles_en_promo = Promotions.query.all()
+    for item in articles_en_promo:
+        liste_des_articles_en_promo.append(item)
+    les_promos = liste_des_articles_en_promo
+
     categories_with_icons = get_categories_with_icons()
-    return render_template('adminhome.html', articles=articles, promo=promo, categories_with_icons=categories_with_icons)
+    return render_template('adminhome.html', articles=articles, les_promos=les_promos, categories_with_icons=categories_with_icons)
 
 
 ####### CETTE ROUTE PERMET DE CHARGER D'UN UTILISATEUR DEPUIS LA DATABASE UsersData A PARTIR DE SON ID #########
@@ -118,19 +124,27 @@ def editProfile(user_id):
                 # new_path = new_path.replace('\\', '/')
 
                 user.Image = new_path
-                articles_of_user = Articles.query.filter_by(user_id=current_user.id)
-                print(articles_of_user)
-                if articles_of_user:
-                    for article in articles_of_user:
-                        article.user_image = current_user.Image
+                # articles_of_user = Articles.query.filter_by(user_id=current_user.id)
+                # if articles_of_user:
+                #     for article in articles_of_user:
+                #         article.user_image = current_user.Image
                 db.session.commit()
-                return redirect(url_for('editProfile', user_id=user.id))
-            db.session.commit()
-            flash('Les modifications ont été enregistrées')
-            return redirect(url_for('home'))
-
-        return render_template('userProfile.html', form=form, user=user, cart_item=cart_item)
+                flash('Les modifications ont été enregistrées')
+                return redirect(url_for('userProfile', user_id=user.id))
+            # db.session.commit()
+            # return redirect(url_for('home'))
+        return render_template('editprofile.html', form=form, user=user, cart_item=cart_item)
     return "User non trouvé"
+
+
+
+@app.route('/userProfile/<int:user_id>', methods = ['GET', 'POST'])
+def userProfile(user_id):
+    cart_item = Panier.query.filter_by(user_id = current_user.id).all()
+    user = UsersData.query.get_or_404(user_id)
+    form = EditProfileForm(obj=user)
+    if user:
+        return render_template('userProfile.html', form=form, user=user, cart_item=cart_item)
 
 ############# CETTE ROUTE PERMET AUX Utilisateurs DE SE CONNECTER ###########
 
@@ -243,10 +257,9 @@ def ajouterCategoriePromo():
     return render_template('ajouterCategoriePromo.html', form=form)
 
 ############# CETTE ROUTE PERMET AUX Utilisateurs DE PUBLIER DES ARTICLES ###########
-
+@admin_required
 @app.route('/publierArticles', methods=['GET', 'POST'])
 def publierArticles():
-    print('abalo')
     form = PublierArticles()
     form.category.choices = ChoixDeCategories()
     # if current_user.is_authenticated:
@@ -283,7 +296,7 @@ def publierArticles():
         db.session.add(new_article)
         db.session.commit()
         flash("L'article a été ajouté avec succès")
-        return redirect(url_for('home')) 
+        return redirect(url_for('viewsForAdmin')) 
         # else:
         #     print('connecte')
         #     next = request.args.get('next')
@@ -318,19 +331,19 @@ def VoirArticlesEnPromo(promo_id):
 ############# CETTE ROUTE PERMET AUX ADMINS DE SUPPRIMER DES ARTICLES ###########
 @app.route('/deleteArticle', methods=['GET', 'POST']) 
 def deleteArticle():
+    article_id = request.args.get('article_id')
+    article_to_delete =  Articles.query.get(article_id)
     form = DeleteArticleForm()
     if  form.validate_on_submit():
-        id = form.id.data
         name = form.name.data
-        article_to_delete = Articles.query.get(id)
-        if article_to_delete and (article_to_delete.name == name or article_to_delete.id == id):
+        if article_to_delete and (article_to_delete.name == name):
             db.session.delete(article_to_delete)
             db.session.commit()
             flash(f"L'article a été supprimé avec succès")
-            return redirect(url_for('home'))
+            return redirect(url_for('viewsForAdmin'))
         else:
             flash("Erreur: L'article avec cet ID ou ce nom n'a pas été trouvé ou les informations ne correspondent pas.", "alert-error")
-    return render_template('delete_article.html', form=form)
+    return render_template('delete_article.html', form=form, article=article_to_delete)
 
 
 @app.route('/editArticle/<int:article_id>', methods=['GET', 'POST'])
@@ -540,52 +553,24 @@ def SearchFor():
     
 
 
-# @app.route('/payement/<int:article_id>', methods=['GET', 'POST'])
-# @flask_login.login_required
-# def payement(article_id):
-#     article = Articles.query.get(article_id)
-#     name = current_user.Username
-#     Montant_Total = article.price
-
-#     form = PayementForm(name=name,  prix_total=Montant_Total)
-#     payement = Payement(name=name, prix_total=Montant_Total)
-#     db.session.add(payement)
-#     db.session.commit()
-#     flash(f"Votre demande est en cours de traitement, vous serez contactez dans un instant ")
-#     return render_template('payement.html', form=form, article=article)
-
-
-
-
 @app.route('/payement/<int:article_id>', methods=['GET', 'POST'])
 @flask_login.login_required
 def payement(article_id):
-    print(request.form)
-
     article = Articles.query.get(article_id)
     name = current_user.Username
     Montant_Total = article.price
 
     form = PayementForm(name=name,  prix_total=Montant_Total)
-    if request.method == 'POST':
-        intent = stripe.PaymentIntent.create(
-            amount=Montant_Total * 100, 
-            currency='usd',
-            payment_method_id = request.form['payment_method_id'],      
-            confirmation_method='manual',
-            confirm=True,
-        )
-        
-        if intent.status == 'succeeded':
-            payement = Payement(name=name, prix_total=Montant_Total)
-            db.session.add(payement)
-            db.session.commit()
-            flash(f"Votre demande est en cours de traitement, vous serez contacté dans un instant ")
-            return redirect(url_for('confirmation'))
-        else:
-            flash(f"Le paiement a échoué. Veuillez réessayer.")
-            return render_template('payement.html', form=form, article=article)
+    payement = Payement(name=name, prix_total=Montant_Total)
+    db.session.add(payement)
+    db.session.commit()
+    flash(f"Votre demande est en cours de traitement, vous serez contactez dans un instant ")
     return render_template('payement.html', form=form, article=article)
+
+
+
+
+
 
 
 

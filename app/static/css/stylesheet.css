@@ -36,6 +36,7 @@ nav ul {
     color:white;
     height: 90px;
     align-items: center;
+
 }
 
 nav ul a{
@@ -235,8 +236,11 @@ nav ul li {
 }
 
 
+
+
 .username{
     margin-left: 15px;
+    margin-right:5px
 }
 
 
@@ -486,11 +490,12 @@ nav ul li {
     list-style: none;
     right: 0; 
     font-size: 12px;
-    margin:15px 10px 0px 20px;
+    margin:45px 10px 90px 0px;
     text-align: center; 
     z-index: 1; 
     width:190px;
     height:auto;
+    
 
 }
 
@@ -501,9 +506,7 @@ nav ul li {
 
 .depliant-content li {
     padding: 7px 0px 7px 0px;
-    justify-content: center;
-    align-items:center;
-    float:left;
+    text-align:justify
 }
 
 
@@ -1234,6 +1237,7 @@ margin: 0;
     .profil {
         display:flex;
         align-items:center;
+        margin-left: 40px
     }
 
     .profil .username{
@@ -1296,7 +1300,7 @@ margin: 0;
     top:50%;
     left:50%;
     transform: translate(-50%, -50%);
-    height: auto 
+    height: auto ;
 }
 
 .formulaire{

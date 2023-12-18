@@ -2,100 +2,7 @@
 {% block blocktitle %}Home{% endblock %}
 
 {% block body %}
-<div class="bloc">
-<div class="notification-container"></div>
-<header>
-    <nav>
-        <ul>
-            <li class="mongo">Mongo<span class="market">Market</span></li>
-          
-            <div class="SearchDiv">
-                <input type="text" id="SearchInput" name="Search">
-                <i class="fas fa-camera"></i>
 
-                <form method="POST" action="{{ url_for('SearchFor', saisie=saisie) }}">
-                    <button type="submit">Search</button>
-                </form>
-
-                <!-- <form method="POST" action="{{ url_for('SearchFor') }}">
-                            <input type="text" id="SearchInput" name="Search">
-                            <button type="submit">Rechercher</button>
-                        </form> -->
-            </div>
-        
-            <form method="POST">
-                <a href="" style="color: white; text-decoration: none;">
-                    <div class="panier-div">
-                        <div id="cart-count" class="cart-count">0</div>
-                        <i class="fas fa-shopping-cart fa-lg"></i><span class="cart-notification">Mon Panier</span>
-                    </div>
-                </a>
-            </form>
-            {% if current_user.is_authenticated %}
-            <div class="articles-div">
-                <a href="{{url_for('MesArticles')}}" style="color: white; text-decoration: none;">
-                    <i class="fas fa-tag"></i>
-                    <span class="cart-notification">Mes articles</span>
-                </a>
-            </div>
-            <!-- <li><i class="fa-regular fa-bell"></i></li>
-                    <li><i class="fa-regular fa-message"></i></li> -->
-            <span style="display:flex; flex-direction: column; text-align:center">
-                <li><i class="fa-solid fa-user fa-lg"
-                        style="padding:20px 10px 20px 10px; background-color: white;color:#3d5d83; border-radius:50px; cursor:pointer"></i>
-                </li>
-                <li>{{current_user.Username}}</li>
-            </span>
-            <div class="depliant" id="users-info">
-                <i class="fa-solid fa-chevron-down" style="margin-left:10px"></i>
-                <ul class="depliant-content">
-
-                    <li>
-                        <a href="{{url_for('editProfile', user_id=current_user.id)}}"><i
-                                class="fa-solid fa-user fa-lg"></i>Profil</a>
-                    </li>
-
-                    <li>
-                        <a href="{{ url_for('publierArticles') }}"><i class="fa-solid fa-shop"></i>Mettre un article en
-                            vente</a>
-                    </li>
-
-                    <li>
-                        <a href="{{url_for('deleteArticle')}}"><i class="fa-solid fa-shop"></i>Supprimer un article</a>
-                    </li>
-                    {% if current_user.is_admin %}
-
-                    <li>
-                        <a href="{{url_for('deleteArticle')}}"><i class="fa-solid fa-shop"></i>Supprimer un article</a>
-                    </li>
-
-                    <li>
-                    {#    <a href="{{url_for('promotionsArticles')}}"><i class="fa-solid fa-shop"></i>Promouvoir un article</a>#}
-                    </li>
-                    {% endif %}
-
-                    <li>
-                        <a href="#"><i class="fas fa-cog menu-icon"></i>Préférences</a>
-                        <hr class="trait">
-                    </li>
-
-                    <li>
-                        <a href="{{url_for('Logout')}}"><i class="fa-solid fa-right-from-bracket"></i>Déconnexion</a>
-                    </li>
-
-                </ul>
-            </div>
-            {% else %}
-            <li><a href="{{url_for('Signup')}}"><button
-                        style="background-color: white; color:#3d5d83; width:70px; border-radius: 5px; border:1px solid #3d5d83; height: 30px; margin-left: 40px;">SIGNUP</button></a>
-            </li>
-            <li><a href="{{url_for('Login')}}"><button
-                        style="background-color:#173354 ; color:white; width:70px; border-radius: 5px; border:1px solid #3d5d83; height: 30px">LOGIN</button></a>
-            </li>
-            {% endif %}
-        </ul>
-    </nav>
-</header>
 
 <main>
     <div class="mon-main">
@@ -105,7 +12,7 @@
                     sécurité</p>
             </div>
         </div>
-        <ul class="liste">
+        <!-- <ul class="liste">
             <div class="presentation">
                 <i class="fas fa-bars menu-icon"></i>
                 <span>Menu</span>
@@ -118,17 +25,20 @@
             <li>Aliments</li>
             <li>Les produits Tendances </li>
             <li>Explorez nos produits</li>
-        </ul>
-        <div class="produits-defilants">
+        </ul> -->
+        <div class="produits-defilants" onmouseover="survolPromo()" onmouseout="quittePromo()">
             <div class="image_de_produits-defilants">
                 <i class="fa-solid fa-chevron-left"></i>
                 <i class="fa-solid fa-chevron-right"></i>
-                {% for item in promo %}
-                <img src="{{item.image}}" alt="{{item.details}}" width="10px" height="100px"></img>
+                {% for item in les_promos %}
+                <a href="{{url_for('VoirArticlesEnPromo', promo_id = item.id )}}">
+                    <img src="{{item.image}}" alt="{{item.details}}" width="10px" height="100px"></img>
+                </a>
                 {% endfor %}
+                <div id="produits-defilants-child-id" style="display:none"> Découvrez nos promos en cours </div>
             </div>
         </div>
-        <div style="width:100%; margin-top: 35px; display: flex; cursor:pointer">
+        <div style="width:100%; display: flex; cursor:pointer">
             <section>
                 <div class="Menu">
                     <h2 class="les-categories" id="all-categories">Les catégories</h2>
@@ -145,12 +55,15 @@
                     {% for article in articles %}
                     {#{% if current_user.is_authenticated and current_user.is_admin %}#}
                     <div class="exposition-images" data-category="{{ article.category.name }}">
-                        <img src="{{article.image}}" width="250px" height="290px">
+                        <a href="{{url_for('ArticlesDetails', article_id = article.id )}}">
+                            <img src="{{article.image}}" width="250px" height="290px">
+                        </a>
+
                         <div class="description">
 
                             <span class="article_description">Mise en vente par: {{article.user_name|upper}} SHOP</span>
                             <span class="article_description">{{article.Description}}</span>
-                            <span class="article_name">{{article.name}}</span>
+                            <span class="article_name">{{article.name if article.name|length <= 24 else article.name[:21] ~  '...' }}</span>
                             <span class="article_price">{{article.price}}francs</span>
 
                             <form method="POST" action="{{url_for('panier', article_id=article.id)}}">
@@ -158,62 +71,21 @@
                                     <i class="fa-solid fa-cart-shopping"></i>
                                 </button>
                             </form>
-
-                            <form method="POST" action="{{url_for('ArticlesDetails', article_id=article.id)}}">
-                                <button>See More</button>
-                            </form>
-                            <a href="{{url_for('promotionsArticles', article_id = article.id)}}">promotion</a>
-
                         </div>
                     </div>
                     {#{% endif %}#}
                     {% endfor %}
                 </div>
-                <div class="pagination">
-                    <span class="arrow" id="prev-page">&#171;</span>
-                    <span class="arrow" id="first-page">&#60;&#60;</span>
-                    <span class="page" data-page="1">1</span>
-                    <span class="page" data-page="2">2</span>
-                    <span class="arrow" id="next-page">&#62;&#62;</span>
-                    <span class="arrow" id="last-page">&#187;</span>
-                </div>
             </div>
 </main>
+<script>
+    document.addEventListener("DOMContentLoaded", function() {
+    const depliant = document.getElementById("users-info");
 
-<footer style="background-color: #606f87; height:8cm; color:white">
-    <div class="footer-content">
-        <div class="footer-logo">
-            <h3>MongoMarket</h3>
-
-        </div>
-        <div class="footer-links">
-            <ul>
-                <li><a href="#">Avis de confidentialité</a></li>
-                <li><a href="#">Nos conditions de location</a></li>
-                <li><a href="#">Aide</a></li>
-                <li><a href="#">Devenir partenaire – Marketplace</a></li>
-                <li><a href="#">Notre fonctionnement</a></li>
-            </ul>
-        </div>
-        <div class="footer-contact">
-            <p>Contactez-nous :</p>
-            <ul>
-                <li><i class="fa-solid fa-phone"></i> Téléphone : +123456789</li>
-                <li><i class="fa-solid fa-envelope"></i> Email : info@MongoDB.com</li>
-                <li><i class="fa-solid fa-map-marker-alt"></i> Adresse : 123 Rue du commerce3, Ville</li>
-            </ul>
-        </div>
-    </div>
-    <div class="footer-bottom">
-        <p>&copy; 2023 MongoMarket. Tous droits réservés.</p>
-        <div class="social-icons">
-            <a href="#"><i class="fa-brands fa-facebook"></i></a>
-            <a href="#"><i class="fa-brands fa-twitter"></i></a>
-            <a href="#"><i class="fa-brands fa-instagram"></i></a>
-        </div>
-    </div>
-</footer>
-</div>
+    depliant.addEventListener("click", function() {
+        this.classList.toggle("active");
+    });
+});
+</script>
 <script src="{{url_for('static', filename='javascript/script.js')}}"></script>
-
 {%endblock%}

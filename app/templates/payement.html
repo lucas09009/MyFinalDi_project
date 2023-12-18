@@ -149,9 +149,6 @@ input[type="number"]::-webkit-outer-spin-button {
   margin: 0;
 }
 
-input[type="number"] {
-  -moz-appearance: textfield;
-}
 
 input, select, textarea {
     outline: none; 
@@ -204,6 +201,7 @@ input, select, textarea {
                                         <div id="card-element" style="margin-left:10px">
                                             <span>Card Number</span>
                                             <i class="fa fa-eye"></i>
+                                            <input type="number" >
                                         </div>
 
                                         <div class="d-flex flex-row">
@@ -223,10 +221,6 @@ input, select, textarea {
                                         <div class="px-5 pay">
                                             <span>{{ form.submit(placeholder="Valider", class="btn btn-success btn-block") }}</span>
                                         </div>
-
-                                        <!-- <div class="px-5 pay">
-                                            <button class="btn btn-success btn-block">Valider</button>
-                                        </div> -->
                                     </div>
                                     </form>
                                 </div>
@@ -252,38 +246,4 @@ input, select, textarea {
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
 <script src="https://js.stripe.com/v3/"></script>
-
-<script>
-let stripe = Stripe(pk_test_51Nn1NTI0GTnWYq6mdWdyNj22RpBUNdvf5MX2LnvjHiil7kJgEKhyKcGjNPv9J5yUJtC0apOLGAbQWMqVKfjVdqsB00oEJwGiNS);
-
-let elements = stripe.elements();
-let cardElement = elements.create('card');
-
-cardElement.mount('#card-element');
-
-let form = document.getElementById('payment-form');
-
-form.addEventListener('submit', function(event) {
-    event.preventDefault();
-
-    stripe.createPaymentMethod({
-        type: 'card',
-        card: cardElement,
-    }).then(function(result) {
-        if (result.error) {
-            console.log('error')
-
-        } else {
-            let paymentMethodId = result.paymentMethod.id;
-            document.getElementById('payment_method_id').value = paymentMethodId;
-            console.log(paymentMethodId)
-            form.submit();
-        }
-    });
-});
-
-</script>
-  
-</body>
-
 </html>

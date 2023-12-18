@@ -27,12 +27,12 @@
 <div class="big-div-articles">
   <form method="POST" enctype="multipart/form-data" class="container">
     <div class="publierArticles-formulaire">
-
+      <p style="background-color: #ff0000; color: white; font-size:17px"> Voulez-vous vraiment supprimer: {{ article.name }} ?</p>
       {{ form.hidden_tag() }}
       <h1 class="titre">Supprimer un article</h1>
       <hr>
 
-      {{ form.id(placeholder="Saisissez l'id de l'article à supprimer" ,class_='style') }}
+      {#{{ form.id(placeholder="Saisissez l'id de l'article à supprimer" ,class_='style') }}#}
 
       {{ form.name(placeholder="Saisissez le nom de l'article à supprimer " ,class_='style') }}
 
