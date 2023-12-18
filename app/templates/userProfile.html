@@ -18,7 +18,7 @@
         <!-- <label class="personalisation-champ-image">-->
             <div class="upload-container">
                 <!-- <i class="upload-icon fas fa-image"></i>  -->
-                <img src= "{{current_user.Image }}" width="100px" height="50px" alt="photo-de-profil">
+                <img src= "{{ current_user.Image }}" width="100px" height="50px" alt="photo-de-profil">
             </div>
         <!-- </label><hr style="color:rgb(203, 202, 202); margin-top:30px">  -->
         
@@ -32,7 +32,7 @@
         <h5>{{ form.Biographie( placeholder='Biographie', class_='Bio') }}</h5 >
         </div>
         <p style="color:gray; font-size:10px; ">Votre biographie ne peut contenir que 80 lettres</p><hr style="color:rgb(203, 202, 202); margin:10px 0px 10px 0px">
-        <a href="{{url_for('editProfile', user_id=current_user.id)}}"style="text-decoration:none; border:1px solid gray; padding:3px; border-radius:3px"><buton>Modifier</buton></a>
+        <a href="{{url_for('editProfile', user_id=current_user.id)}}"style="text-decoration:none; border:1px solid gray; padding:3px; border-radius:3px"><button>Modifier</button></a>
     </div>
 </main>
 

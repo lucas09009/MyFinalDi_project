@@ -91,7 +91,7 @@ class UsersData(db.Model, UserMixin):
     __tablename__ = 'usersdata'
     id = db.Column(db.Integer, primary_key=True)
     Image = db.Column(db.String, nullable=True)
-    Biographie = db.Column(db.Text(80), nullable=True)
+    Biographie = db.Column(db.String(80), nullable=True)
     Username = db.Column(db.String, nullable=False, unique=True)
     email = db.Column(db.String, unique=True)
     Password = db.Column(db.String, nullable=False)
@@ -109,7 +109,7 @@ class Articles(db.Model):
     name = db.Column(db.String(12), nullable=False)
     Description = db.Column(db.String(30), nullable=False)
     date_arrive = db.Column(db.Date, nullable=False)
-    details = db.Column(db.Text(20), nullable=False)
+    details = db.Column(db.String(80), nullable=False)
     price = db.Column(db.Integer, nullable=False)
     quantity = db.Column(db.Integer, nullable=False)
     image = db.Column(db.String, nullable=False)

@@ -124,15 +124,15 @@ def editProfile(user_id):
                 # new_path = new_path.replace('\\', '/')
 
                 user.Image = new_path
-                # articles_of_user = Articles.query.filter_by(user_id=current_user.id)
-                # if articles_of_user:
-                #     for article in articles_of_user:
-                #         article.user_image = current_user.Image
+                articles_of_user = Articles.query.filter_by(user_id=current_user.id)
+                if articles_of_user:
+                    for article in articles_of_user:
+                        article.user_image = current_user.Image
                 db.session.commit()
                 flash('Les modifications ont été enregistrées')
                 return redirect(url_for('userProfile', user_id=user.id))
             # db.session.commit()
-            # return redirect(url_for('home'))
+            # print('fss', db.session.commit())
         return render_template('editprofile.html', form=form, user=user, cart_item=cart_item)
     return "User non trouvé"
 
@@ -144,6 +144,8 @@ def userProfile(user_id):
     user = UsersData.query.get_or_404(user_id)
     form = EditProfileForm(obj=user)
     if user:
+        print('ssff', current_user.Image)
+        db.session.commit()
         return render_template('userProfile.html', form=form, user=user, cart_item=cart_item)
 
 ############# CETTE ROUTE PERMET AUX Utilisateurs DE SE CONNECTER ###########

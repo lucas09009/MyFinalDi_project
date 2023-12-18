@@ -28,11 +28,16 @@ db_info = {
     "user": "postgres",
     "port": "5432",
     "psw": "bayernmunich",
-    "database": "ShopOnlineDB"
+    "database": "ShopOnlineDB" 
 }
-app.config['SQLALCHEMY_DATABASE_URI'] = f"postgresql://{db_info['user']}:{db_info['psw']}@{db_info['host']}/{db_info['database']}"
-app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 
+
+app.config['SQLALCHEMY_DATABASE_URI'] = os.environ.get("DATABASE_URL")
+
+# app.config['SQLALCHEMY_DATABASE_URI'] = f"postgresql://{db_info['user']}:{db_info['psw']}@{db_info['host']}/{db_info['database']}"
+# app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
+
+# postgres://shoponlinedb_ajll_user: @dpg-cm0832mg1b2c73coisv0-a.frankfurt-postgres.render.com/shoponlinedb_ajll
 
 app.config['MAIL_SERVER'] = 'smtp.gmail.com'
 app.config['MAIL_PORT'] = 465

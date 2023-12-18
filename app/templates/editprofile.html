@@ -38,7 +38,7 @@
         </div>
         <p style="color:gray; font-size:10px; ">Votre biographie ne peut contenir que 80 lettres</p><hr style="color:rgb(203, 202, 202); margin:10px 0px 10px 0px">
         <a href="{{url_for('home')}}"style="text-decoration:none; border:1px solid gray; padding:3px; border-radius:3px"><buton>Annuler</buton></a>  
-        <a href="{{url_for('userProfile', user_id=current_user.id)}}"style="text-decoration:none; border:1px solid gray; padding:3px; border-radius:3px; background-color: blue; color: white"><buton>Enregistrer</buton></a>  
+        <a href="{{url_for('userProfile', user_id=current_user.id)}}"style="text-decoration:none; border:1px solid gray; padding:3px; border-radius:3px; background-color: blue; color: white"><button>Enregistrer</button></a>  
        {#
         <h6>{{ url_for('static', filename='images/' + current_user.Image) }}</h6>
         {{ form.submit( class_='envoyer') }}#}
