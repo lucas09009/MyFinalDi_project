@@ -1,4 +1,31 @@
-from app import app 
+# from app import app 
 
-if __name__ == '__main__':
-    app.run(debug=True)
+# if __name__ == '__main__':
+#     app.run(debug=True)
+
+
+
+from app import app
+from gunicorn.app.base import BaseApplication
+from gunicorn.six import iteritems
+
+class StandaloneApplication(BaseApplication):
+    def __init__(self, app, options=None):
+        self.options = options or {}
+        self.application = app
+        super(StandaloneApplication, self).__init__()
+
+    def load_config(self):
+        config = {key: value for key, value in iteritems(self.options) if key in self.cfg.settings and value is not None}
+        for key, value in iteritems(config):
+            self.cfg.set(key.lower(), value)
+
+    def load(self):
+        return self.application
+
+if __name__ == "__main__":
+    options = {
+        "bind": "0.0.0.0:8000",
+        "workers": 4,
+    }
+    StandaloneApplication(app, options).run()
