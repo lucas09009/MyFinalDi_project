@@ -22,6 +22,9 @@ def home():
     liste_des_articles_en_promo = []
     categories_with_icons = get_categories_with_icons()
 
+    # print('isdsdsdsjdsdkd',app.config['SQLALCHEMY_DATABASE_URI']) 
+
+
     articles_en_promo = Promotions.query.all()
     for item in articles_en_promo:
         liste_des_articles_en_promo.append(item)
