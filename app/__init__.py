@@ -28,7 +28,7 @@ db_info = {
     "user": "postgres",
     "port": "5432",
     "psw": "DHlUAyzVkws6qdeouJ57182DxAGgje7L",
-    "database": "shoponlinedb" 
+    "database": "shoponlinedb_jqwj" 
 }
 
 # print(app.config['SQLALCHEMY_DATABASE_URI'])
