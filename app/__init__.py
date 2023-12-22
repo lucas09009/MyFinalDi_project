@@ -25,7 +25,7 @@ basedir = os.path.abspath(os.path.dirname(__file__))
 
 db_info = {
     "host": "localhost",
-    "user": "lucas09009",
+    "user": "postgres",
     "port": "5432",
     "psw": "bayernmunich",
     "database": " shoponlinedb_hgq9" 
@@ -39,12 +39,12 @@ app.config['SQLALCHEMY_DATABASE_URI'] = os.environ.get("DATABASE_URL")
 
 # postgres://shoponlinedb_ajll_user: @dpg-cm0832mg1b2c73coisv0-a.frankfurt-postgres.render.com/shoponlinedb_ajll
 
-app.config['MAIL_SERVER'] = 'smtp.gmail.com'
-app.config['MAIL_PORT'] = 465
-app.config['MAIL_USE_TLS'] = False
-app.config['MAIL_USE_SSL'] = True
-app.config['MAIL_USERNAME'] = 'awetandtesfit@gmail.com'
-app.config['MAIL_PASSWORD'] = 'Micheal79'
+# app.config['MAIL_SERVER'] = 'smtp.gmail.com'
+# app.config['MAIL_PORT'] = 465
+# app.config['MAIL_USE_TLS'] = False
+# app.config['MAIL_USE_SSL'] = True
+# app.config['MAIL_USERNAME'] = 'awetandtesfit@gmail.com'
+# app.config['MAIL_PASSWORD'] = 'Micheal79'
 
 
 db = SQLAlchemy(app)
