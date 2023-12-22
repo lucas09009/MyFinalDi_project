@@ -25,10 +25,10 @@ basedir = os.path.abspath(os.path.dirname(__file__))
 
 db_info = {
     "host": "localhost",
-    "user": "postgres",
+    "user": "lucas09009",
     "port": "5432",
     "psw": "bayernmunich",
-    "database": "shoponlinedb" 
+    "database": " shoponlinedb_hgq9" 
 }
 
 
