@@ -23,13 +23,6 @@ bootstrap = Bootstrap(app)
 app.config.from_object(Config)
 basedir = os.path.abspath(os.path.dirname(__file__))
 
-db_info = {
-    "host": "dpg-cm2psli1hbls73frrh50-a",
-    "user": "shoponlinedb",
-    "port": "5432",
-    "psw": "DHlUAyzVkws6qdeouJ57182DxAGgje7L",
-    "database": "shoponlinedb_jqwj" 
-}
 
 # print(app.config['SQLALCHEMY_DATABASE_URI'])
 
@@ -38,6 +31,14 @@ app.config['SQLALCHEMY_DATABASE_URI'] = os.environ.get("DATABASE_URL")
 # app.config['SQLALCHEMY_DATABASE_URI'] = f"postgresql://{db_info['user']}:{db_info['psw']}@{db_info['host']}/{db_info['database']}"
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 # print('sdsdsdsdsd',app.config['SQLALCHEMY_DATABASE_URI'])
+
+db_info = {
+    "host": "dpg-cm2psli1hbls73frrh50-a",
+    "user": "shoponlinedb",
+    "port": "5432",
+    "psw": "DHlUAyzVkws6qdeouJ57182DxAGgje7L",
+    "database": "shoponlinedb_jqwj" 
+}
 
 
 app.config['MAIL_SERVER'] = 'smtp.gmail.com'
