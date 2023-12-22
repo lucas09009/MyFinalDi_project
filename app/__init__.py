@@ -34,11 +34,12 @@ db_info = {
 
 app.config['SQLALCHEMY_DATABASE_URI'] = os.environ.get("DATABASE_URL")
 
+# postgres://shoponlinedb_b80p_user:y2YaQzxhXcRM0MT6I33Luvzy50SPX3vb@dpg-cm2p2ti1hbls73frfmd0-a.frankfurt-postgres.render.com/shoponlinedb_b80p
+
 # app.config['SQLALCHEMY_DATABASE_URI'] = f"postgresql://{db_info['user']}:{db_info['psw']}@{db_info['host']}/{db_info['database']}"
 # app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 
-# postgres://shoponlinedb_ajll_user: @dpg-cm0832mg1b2c73coisv0-a.frankfurt-postgres.render.com/shoponlinedb_ajll
-
+# postgres://lucas09009:d149F3a5naH02rVcXXKH3Ge2qLQC3w1Z@dpg-cm2o44a1hbls73fr0r00-a.frankfurt-postgres.render.com/shoponlinedb_hgq9
 # app.config['MAIL_SERVER'] = 'smtp.gmail.com'
 # app.config['MAIL_PORT'] = 465
 # app.config['MAIL_USE_TLS'] = False
