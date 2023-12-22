@@ -24,28 +24,26 @@ app.config.from_object(Config)
 basedir = os.path.abspath(os.path.dirname(__file__))
 
 db_info = {
-    "host": "localhost",
+    "host": "dpg-cm2psli1hbls73frrh50-a",
     "user": "postgres",
     "port": "5432",
-    "psw": "bayernmunich",
-    "database": " shoponlinedb_hgq9" 
+    "psw": "DHlUAyzVkws6qdeouJ57182DxAGgje7L",
+    "database": "shoponlinedb" 
 }
 
 
 app.config['SQLALCHEMY_DATABASE_URI'] = os.environ.get("DATABASE_URL")
-
-# postgres://shoponlinedb_b80p_user:y2YaQzxhXcRM0MT6I33Luvzy50SPX3vb@dpg-cm2p2ti1hbls73frfmd0-a.frankfurt-postgres.render.com/shoponlinedb_b80p
-
-# app.config['SQLALCHEMY_DATABASE_URI'] = f"postgresql://{db_info['user']}:{db_info['psw']}@{db_info['host']}/{db_info['database']}"
+# postgres://shoponlinedb:DHlUAyzVkws6qdeouJ57182DxAGgje7L@dpg-cm2psli1hbls73frrh50-a.frankfurt-postgres.render.com/shoponlinedb_jqwj
+app.config['SQLALCHEMY_DATABASE_URI'] = f"postgresql://{db_info['user']}:{db_info['psw']}@{db_info['host']}/{db_info['database']}"
 # app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 
-# postgres://lucas09009:d149F3a5naH02rVcXXKH3Ge2qLQC3w1Z@dpg-cm2o44a1hbls73fr0r00-a.frankfurt-postgres.render.com/shoponlinedb_hgq9
-# app.config['MAIL_SERVER'] = 'smtp.gmail.com'
-# app.config['MAIL_PORT'] = 465
-# app.config['MAIL_USE_TLS'] = False
-# app.config['MAIL_USE_SSL'] = True
-# app.config['MAIL_USERNAME'] = 'awetandtesfit@gmail.com'
-# app.config['MAIL_PASSWORD'] = 'Micheal79'
+
+app.config['MAIL_SERVER'] = 'smtp.gmail.com'
+app.config['MAIL_PORT'] = 465
+app.config['MAIL_USE_TLS'] = False
+app.config['MAIL_USE_SSL'] = True
+app.config['MAIL_USERNAME'] = 'awetandtesfit@gmail.com'
+app.config['MAIL_PASSWORD'] = 'Micheal79'
 
 
 db = SQLAlchemy(app)
