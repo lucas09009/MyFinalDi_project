@@ -24,12 +24,14 @@ basedir = os.path.abspath(os.path.dirname(__file__))
 
 
 db_info = {
-    "host": "dpg-cm2vf321hbls73fu5lf0-a.frankfurt-postgres.render.com",
+    "host": "dpg-cm3g5fen7f5s73boed70-a.frankfurt-postgres.render.com",
     "user": "shoponlinedb",
     "port": "5432",
-    "psw": "XfIGBJfvYyDAEOtgzYbhQW9tuSawOUMK",
-    "database": "shoponlinedb_jof6" 
+    "psw": "Ts1RtwjNdFoSpl5oFO2Qw65wb7heFEnW",
+    "database": "shoponlinedb_ksv8" 
 }
+
+# postgres://shoponlinedb:Ts1RtwjNdFoSpl5oFO2Qw65wb7heFEnW@dpg-cm3g5fen7f5s73boed70-a.frankfurt-postgres.render.com/shoponlinedb_ksv8
 
 # db_info = {
 #     "host": "localhost",
