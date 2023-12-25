@@ -62,15 +62,12 @@
             <nav>
                 <ul>                  
                     {% if not current_user.is_authenticated %}
-                        {#{% if not current_user.is_admin %}#}
-                        <a href="{{url_for('home')}}">
-                            <li class="mongo">Mongo<span class="market">Market</span></li>
-                        </a>
-                        {#{% else %}#}
-                        <!-- <a href="{{url_for('viewsForAdmin')}}">
-                            <li class="mongo">Mongo<span class="market">Market</span></li>
-                        </a> -->
-                        {#{% endif %}#}
+                        <div>
+                            <a href="{{url_for('home')}}">
+                                <li class="mongo">Mongo<span class="market">Market</span></li>
+                            </a>
+                        </div>
+                    
                         <div class="SearchDiv">
                             <form method="POST" action="{{url_for('SearchFor', saisie='')}}">
                                 <input type="text" id="SearchInput" name="saisie">
@@ -79,19 +76,22 @@
                             </form>
                         </div>
                         
-                        <form method="POST">
-                            <a href="{{ url_for('panierForUserNonConnecte')}}" style="color: white; text-decoration: none;" >
-                                <div class="panier-div" >
-                                    <div id="cart-count" class="cart-count">{{session['panier']|length}}</div>
-                                    <i class="fas fa-shopping-cart fa-lg"></i><span class="cart-notification">Mon Panier</span>
-                                </div>
-                            </a>
-                        </form>
-                    
-                        <li><a href="{{url_for('Signup')}}"><button class="signup-lien">SIGNUP</button></a>
-                        </li>
-                        <li><a href="{{url_for('Login')}}"><button class="login-lien">LOGIN</button></a>
-                        </li>
+                        <div>
+                            <form method="POST">
+                                <a href="{{ url_for('panierForUserNonConnecte')}}" style="color: white; text-decoration: none;" >
+                                    <div class="panier-div" >
+                                        <div id="cart-count" class="cart-count">{{session['panier']|length}}</div>
+                                        <i class="fas fa-shopping-cart fa-lg"></i><span class="cart-notification">Mon Panier</span>
+                                    </div>
+                                </a>
+                            </form>
+                        </div>
+
+                            <li><a href="{{url_for('Signup')}}"><button class="signup-lien">SIGNUP</button></a>
+                            </li>
+                            <li><a href="{{url_for('Login')}}"><button class="login-lien">LOGIN</button></a>
+                            </li>
+                        
                     {% else %}
                         
                         <a href="{{url_for('home')}}">
