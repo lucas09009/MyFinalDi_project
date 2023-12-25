@@ -241,7 +241,7 @@ def ajouterCategorie():
 @app.route('/ajouterCategorie/Promo', methods=['GET', 'POST'])
 def ajouterCategoriePromo():
     form = PromotionsForm()
-    print(form.validate_on_submit())
+    # print(form.validate_on_submit())
     if form.validate_on_submit():
         promo_name = form.nom_de_la_promotion.data,
         duree_de_la_promo = form.duree_de_la_promo.data
