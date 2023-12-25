@@ -23,28 +23,28 @@ app.config.from_object(Config)
 basedir = os.path.abspath(os.path.dirname(__file__))
 
 
-db_info = {
-    "host": "dpg-cm3g5fen7f5s73boed70-a.frankfurt-postgres.render.com",
-    "user": "shoponlinedb",
-    "port": "5432",
-    "psw": "Ts1RtwjNdFoSpl5oFO2Qw65wb7heFEnW",
-    "database": "shoponlinedb_ksv8" 
-}
+# db_info = {
+#     "host": "dpg-cm3g5fen7f5s73boed70-a.frankfurt-postgres.render.com",
+#     "user": "shoponlinedb",
+#     "port": "5432",
+#     "psw": "Ts1RtwjNdFoSpl5oFO2Qw65wb7heFEnW",
+#     "database": "shoponlinedb_ksv8" 
+# }
 
 # postgres://shoponlinedb:Ts1RtwjNdFoSpl5oFO2Qw65wb7heFEnW@dpg-cm3g5fen7f5s73boed70-a.frankfurt-postgres.render.com/shoponlinedb_ksv8
 
-# db_info = {
-#     "host": "localhost",
-#     "user": "postgres",
-#     "port": "5432",
-#     "psw": "bayernmunich",
-#     "database": "ShopOnlineDB" 
-# }
+db_info = {
+    "host": "localhost",
+    "user": "postgres",
+    "port": "5432",
+    "psw": "bayernmunich",
+    "database": "ShopOnlineDB" 
+}
 
 app.config['SQLALCHEMY_DATABASE_URI'] = os.environ.get("DATABASE_URL")
 # postgres://shoponlinedb:XfIGBJfvYyDAEOtgzYbhQW9tuSawOUMK@dpg-cm2vf321hbls73fu5lf0-a.frankfurt-postgres.render.com/shoponlinedb_jof6
-# app.config['SQLALCHEMY_DATABASE_URI'] = f"postgresql://{db_info['user']}:{db_info['psw']}@{db_info['host']}/{db_info['database']}"
-# app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
+app.config['SQLALCHEMY_DATABASE_URI'] = f"postgresql://{db_info['user']}:{db_info['psw']}@{db_info['host']}/{db_info['database']}"
+app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 
 # print('sdsdsdsdsd',app.config['SQLALCHEMY_DATABASE_URI'])
 

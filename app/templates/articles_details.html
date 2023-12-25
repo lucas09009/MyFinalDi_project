@@ -7,7 +7,7 @@
 
     <main>
         <div class="mon-main">
-            <ul class="liste">
+            {#<ul class="liste">
                 <div class="presentation">
                     <i class="fas fa-bars menu-icon"></i>
                     <span>Menu</span>
@@ -21,7 +21,7 @@
                 <li>Aliments</li>
                 <li>Les produits Tendances </li>
                 <li>Explorez nos produits</li>
-            </ul>
+            </ul>#}
             <div style="width:100%">
                 {% if current_user.is_authenticated %}
                     {% for items in articles %}
