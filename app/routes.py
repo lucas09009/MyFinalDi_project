@@ -237,10 +237,11 @@ def ajouterCategorie():
 
     return render_template('ajouterCategorie.html', form=form)
 
-
+@admin_required
 @app.route('/ajouterCategorie/Promo', methods=['GET', 'POST'])
 def ajouterCategoriePromo():
     form = PromotionsForm()
+    print(form.validate_on_submit())
     if form.validate_on_submit():
         promo_name = form.nom_de_la_promotion.data,
         duree_de_la_promo = form.duree_de_la_promo.data
@@ -254,6 +255,7 @@ def ajouterCategoriePromo():
         new_path = '/'.join(path_list)
 
         new_category = Promotions(nom_de_la_promotion=promo_name, duree_de_la_promo=duree_de_la_promo, reduction=reduction, image = new_path)
+        print("new_category",new_category)
         db.session.add(new_category)
         db.session.commit()
         flash("La catégorie a été ajoutée avec succès")
@@ -334,6 +336,7 @@ def VoirArticlesEnPromo(promo_id):
 
 
 ############# CETTE ROUTE PERMET AUX ADMINS DE SUPPRIMER DES ARTICLES ###########
+@admin_required
 @app.route('/deleteArticle', methods=['GET', 'POST']) 
 def deleteArticle():
     article_id = request.args.get('article_id')

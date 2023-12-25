@@ -23,7 +23,7 @@ class Promotions(db.Model):
 #     promo_name = db.Column(db.String, nullable=False)
 #     duree_de_la_promo = db.Column(db.Integer, nullable=False)
 #     reduction = db.Column(db.Integer, nullable=False)
-    # articles = db.relationship('Articles', backref='category', lazy=True)
+#     articles = db.relationship('Articles', backref='category', lazy=True)
 
 class Category(db.Model):
     id = db.Column(db.Integer, primary_key=True)
