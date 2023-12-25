@@ -61,122 +61,121 @@
         <header>
             <nav>
                 <ul>                  
-                        {% if not current_user.is_authenticated %}
-                            {% if not current_user.is_admin %}
-                            <a href="{{url_for('home')}}">
-                                <li class="mongo">Mongo<span class="market">Market</span></li>
-                            </a>
-                            {% else %}
-                            <a href="{{url_for('viewsForAdmin')}}">
-                                <li class="mongo">Mongo<span class="market">Market</span></li>
-                            </a>
-                            {% endif %}
-                            <div class="SearchDiv">
-                                <form method="POST" action="{{url_for('SearchFor', saisie='')}}">
-                                    <input type="text" id="SearchInput" name="saisie">
-                                    <i class="fas fa-camera"></i>
-                                    <button type="submit">Search</button>
-                                </form>
-                            </div>
-                            
-                            <form method="POST">
-                                <a href="{{ url_for('panierForUserNonConnecte')}}" style="color: white; text-decoration: none;" >
-                                    <div class="panier-div" >
-                                        <div id="cart-count" class="cart-count">{{session['panier']|length}}</div>
-                                        <i class="fas fa-shopping-cart fa-lg"></i><span class="cart-notification">Mon Panier</span>
-                                    </div>
-                                </a>
+                    {% if not current_user.is_authenticated %}
+                        {#{% if not current_user.is_admin %}#}
+                        <a href="{{url_for('home')}}">
+                            <li class="mongo">Mongo<span class="market">Market</span></li>
+                        </a>
+                        {#{% else %}#}
+                        <!-- <a href="{{url_for('viewsForAdmin')}}">
+                            <li class="mongo">Mongo<span class="market">Market</span></li>
+                        </a> -->
+                        {#{% endif %}#}
+                        <div class="SearchDiv">
+                            <form method="POST" action="{{url_for('SearchFor', saisie='')}}">
+                                <input type="text" id="SearchInput" name="saisie">
+                                <i class="fas fa-camera"></i>
+                                <button type="submit">Search</button>
                             </form>
+                        </div>
                         
-                            <li><a href="{{url_for('Signup')}}"><button class="signup-lien">SIGNUP</button></a>
-                            </li>
-                            <li><a href="{{url_for('Login')}}"><button class="login-lien">LOGIN</button></a>
-                            </li>
-                        {% else %}
-                            
-                            <a href="{{url_for('home')}}">
-                                <li class="mongo">Mongo<span class="market">Market</span></li>
-                            </a>
-                            <div class="SearchDiv">
-                                <form method="POST" action="{{url_for('SearchFor', saisie='')}}">
-                                    <input type="text" id="SearchInput" name="saisie" title="research">
-            
-                                    <button type="submit">Search</button>
-                                </form>
-                            </div>
-                            <form method="POST">
-                                <a href="{{ url_for('panier')}}" style="color: white; text-decoration: none;">
-                                    <div class="panier-div" onmouseover="survolPanier()" onmouseout="quittePanier()"    >
-                                        <div id="cart-count" class="cart-count">{{cart_item|length}}</div>
-                                        <i class="fas fa-shopping-cart fa-lg"></i><span class="cart-notification">Mon Panier</span>
-                                        <div id="panier-div-id">Cliquez pour accéder au contenu de votre panier</div>
-                                    </div>
-                                </a>
-                            </form>
-                            <a href="{{url_for('MesArticles')}}" style="color: white; text-decoration: none;">
-                                <div class="articles-div" onmouseover="survol()" onmouseout="quitte()">
-                                    <i class="fas fa-tag"></i>
-                                    <span class="cart-notification">Mes articles</span>
-                                    <div id="articles-div-id">Retrouvez ici vos articles mis en vente</div>
+                        <form method="POST">
+                            <a href="{{ url_for('panierForUserNonConnecte')}}" style="color: white; text-decoration: none;" >
+                                <div class="panier-div" >
+                                    <div id="cart-count" class="cart-count">{{session['panier']|length}}</div>
+                                    <i class="fas fa-shopping-cart fa-lg"></i><span class="cart-notification">Mon Panier</span>
                                 </div>
                             </a>
-                            {% if not current_user.is_admin %}
-                            <a href="{{url_for('VoirFavoris')}}" style="color: white; text-decoration: none;">
-                                <div class="articles-div" onmouseover="survolFavoris()" onmouseout="quitteFavoris()">
-                                    <i class="fas fa-heart"></i>
-                                    <span class="cart-notification">Favoris</span>
-                                    <div id="favoris-div-id">Découvrez vos favoris</div>
-                                </div>
-                            </a>   
-                            {% endif %}
-                            
+                        </form>
+                    
+                        <li><a href="{{url_for('Signup')}}"><button class="signup-lien">SIGNUP</button></a>
+                        </li>
+                        <li><a href="{{url_for('Login')}}"><button class="login-lien">LOGIN</button></a>
+                        </li>
+                    {% else %}
                         
-                                <div class="depliant" id="users-info">
-                                    <ul class="depliant-content">
-                                        <li>
-                                            <a href="{{ url_for('userProfile', user_id=current_user.id) }}"><i class="fa-solid fa-user fa-lg"></i>Profil</a>
-                                        </li>
-                                        {% if current_user.is_admin %}
-                                        <li>
-                                            <a href="{{ url_for('publierArticles') }}"><i class="fa-solid fa-shop"></i>Mettre un article
-                                                en
-                                                vente</a>
-                                        </li>
+                        <a href="{{url_for('home')}}">
+                            <li class="mongo">Mongo<span class="market">Market</span></li>
+                        </a>
+                        <div class="SearchDiv">
+                            <form method="POST" action="{{url_for('SearchFor', saisie='')}}">
+                                <input type="text" id="SearchInput" name="saisie" title="research">
+        
+                                <button type="submit">Search</button>
+                            </form>
+                        </div>
+                        <form method="POST">                
+                            <a href="{{ url_for('panier')}}" style="color: white; text-decoration: none;">
+                                <div class="panier-div" onmouseover="survolPanier()" onmouseout="quittePanier()"    >
+                                    <div id="cart-count" class="cart-count">{{cart_item|length}}</div>
+                                    <i class="fas fa-shopping-cart fa-lg"></i><span class="cart-notification">Mon Panier</span>
+                                    <div id="panier-div-id">Cliquez pour accéder au contenu de votre panier</div>
+                                </div>
+                            </a>
+                        </form>
+                        {% if current_user.is_admin %}
+                        <a href="{{url_for('MesArticles')}}" style="color: white; text-decoration: none;">
+                            <div class="articles-div" onmouseover="survol()" onmouseout="quitte()">
+                                <i class="fas fa-tag"></i>
+                                <span class="cart-notification">Mes articles</span>
+                                <div id="articles-div-id">Retrouvez ici vos articles mis en vente</div>
+                            </div>
+                        </a>
+                        {% endif %} 
 
-                                        <li>
-                                            <a href="{{url_for('deleteArticle')}}"><i class="fa-solid fa-trash-can"></i>Supprimer un
-                                                article</a>
-                                        </li>
+                        <a href="{{url_for('VoirFavoris')}}" style="color: white; text-decoration: none;">
+                            <div class="articles-div" onmouseover="survolFavoris()" onmouseout="quitteFavoris()">
+                                <i class="fas fa-heart"></i>
+                                <span class="cart-notification">Favoris</span>
+                                <div id="favoris-div-id">Découvrez vos favoris</div>
+                            </div>
+                        </a>   
+                            <div class="depliant" id="users-info">
+                                <ul class="depliant-content">
+                                    <li>
+                                        <a href="{{ url_for('userProfile', user_id=current_user.id) }}"><i class="fa-solid fa-user fa-lg"></i>Profil</a>
+                                    </li>
+                                    {% if current_user.is_admin %}
+                                    <li>
+                                        <a href="{{ url_for('publierArticles') }}"><i class="fa-solid fa-shop"></i>Mettre un article
+                                            en
+                                            vente</a>
+                                    </li>
 
-                                        {#<li>
-                                            <a href="{{url_for('make_new_promo', article_id = article.id)}}"><i class="fa-solid fa-shop"></i>Promouvoir un
-                                                article</a>
-                                        </li>#}
-                                        {% endif %}
-                                        <li style=" white-space: nowrap;">
-                                            <a href="#"><i class="fas fa-cog menu-icon"></i>Préférences</a>
-                                            <hr class="trait">
-                                        </li>
-                                        <li>
-                                            <a href="{{url_for('Logout')}}"><i
-                                                    class="fa-solid fa-right-from-bracket"></i>Déconnexion</a>
-                                        </li>
-                                    </ul>
-            
+                                    <li>
+                                        <a href="{{url_for('deleteArticle')}}"><i class="fa-solid fa-trash-can"></i>Supprimer un
+                                            article</a>
+                                    </li>
 
-                                    {% if current_user.Image == None %}
-                                    <div class="profil">
-                                        <li class="username" >{{current_user.Username}}</li>
-                                        <li><i class="fa-solid fa-user fa-lg" style="padding:15px 5px 15px 5px; background-color: white;color:#3d5d83; border-radius:50px; cursor:pointer"></i></li>
-                                    </div>
-                                    {% else %}
-                                    <div class="profil">
-                                        <li class="username" >{{ current_user.Username }}</li>
-                                        <img class src="{{ current_user.Image }}" width="30px" height="27px"; style= "border-radius: 50% 50% 50% 50%">
-                                    </div>  
+                                    {#<li>
+                                        <a href="{{url_for('make_new_promo', article_id = article.id)}}"><i class="fa-solid fa-shop"></i>Promouvoir un
+                                            article</a>
+                                    </li>#}
                                     {% endif %}
+                                    <li style=" white-space: nowrap;">
+                                        <a href="#"><i class="fas fa-cog menu-icon"></i>Préférences</a>
+                                        <hr class="trait">
+                                    </li>
+                                    <li>
+                                        <a href="{{url_for('Logout')}}"><i
+                                                class="fa-solid fa-right-from-bracket"></i>Déconnexion</a>
+                                    </li>
+                                </ul>
+        
+
+                                {% if current_user.Image == None %}
+                                <div class="profil">
+                                    <li class="username" >{{current_user.Username}}</li>
+                                    <li><i class="fa-solid fa-user fa-lg" style="padding:15px 5px 15px 5px; background-color: white;color:#3d5d83; border-radius:50px; cursor:pointer"></i></li>
                                 </div>
-                        {% endif %}
+                                {% else %}
+                                <div class="profil">
+                                    <li class="username" >{{ current_user.Username }}</li>
+                                    <img class src="{{ current_user.Image }}" width="30px" height="27px"; style= "border-radius: 50% 50% 50% 50%">
+                                </div>  
+                                {% endif %}
+                            </div>
+                    {% endif %}
                 </ul>
             </nav>
         </header>

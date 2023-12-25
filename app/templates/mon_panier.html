@@ -33,7 +33,7 @@
                         <img src="{{url_for('static', filename='images/illustration-3d-amusante-arbitre-americain.jpg')}}"
                             width="100%" height="400px">
                     </div>
-                    <div style="flex-direction: column;width: 70%; margin: 50px 0px 0px 15px">
+                    <div style="flex-direction: column;width: 70%; margin: 0px 0px 0px 15px">
                         <p
                             style="background-color: white;width: 95%;font-family: Courgette; margin:0px 0px 10px 5px; height:40px; text-align: center;">
                             Decouvrez nos divers categories de produits</p>
@@ -49,7 +49,7 @@
                                 width="105%">
                         </div>
                     </div>
-                    <div class="" style="width:30%;flex-direction: column;margin:50px 20px 0px 0px; background-color: rgb(255, 255, 255);height:auto">
+                    <div class="" style="width:30%;flex-direction: column;margin:0px 20px 0px 0px; background-color: rgb(255, 255, 255);height:auto">
                     <p style="font-family: Courgette; text-align: center;">Articles avec le plus de vues</p>
                     {% for article in articles %}
                         {% if article.nombre_de_vues>=5 %}
@@ -72,7 +72,7 @@
                     </div>
                 {% else %}
                     <div style="width:100%">
-                        <h4 style="margin:10px 0px 0px 10px">Votre Panier({{panier_utilisateur|length}})</h4>
+                        <h4 style="margin:0px 0px 0px 10px">Votre Panier({{panier_utilisateur|length}})</h4>
                         {% for cart_item, article in panier_utilisateur %}
                         <div class="exposition-panier-articles" data-category="{{ article.category }}">
                             <div style="display: flex; flex-direction: column; margin: 0px 0px 10px 20px;width:20%">

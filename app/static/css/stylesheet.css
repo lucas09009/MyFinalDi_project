@@ -91,12 +91,12 @@ nav ul li {
     border-radius: 0px 50px 50px 0px; 
 }
 
-#mon-main{
+/* .mon-main{
     margin-top: 85px;
 
-}
+} */
 
-#mon-main .liste {
+.mon-main .liste {
     display: flex;
     height:50px;
     border: 1px solid gray;
@@ -105,7 +105,7 @@ nav ul li {
 
 }
 
-#mon-main .liste{
+.mon-main .liste{
     list-style: none;
     font-family: Arial;
     cursor: pointer;
@@ -116,7 +116,7 @@ nav ul li {
     height:auto;
     width: 5cm;
     background-color: rgb(255, 255, 255);
-    margin: 5px 0px 0px 13px;
+    margin: 0px 0px 0px 13px;
 }
 
 .Menu ul {

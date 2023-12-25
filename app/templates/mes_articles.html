@@ -2,17 +2,8 @@
 {% block blocktitle %}Home{% endblock %}
 
 {% block body %}
-<div class="notification-container"></div>
-
-
 <main>
     <div class="mon-main">
-        <!-- <div class="bar-defilante">
-            <div class="message">
-                <p>Bienvenue sur MongoDB, votre plateforme d'achat et de vente en ligne. Faites vos achats en toute
-                    sécurité</p>
-            </div>
-        </div>-->
         {#<ul class="liste">
             <div class="presentation">
                 <i class="fas fa-bars menu-icon"></i>
@@ -29,35 +20,30 @@
             <li>Explorez nos produits</li>
         </ul>#}
 
-
         <div style="flex-direction:column;width:97%">
-            <h4 style="margin:100px 0px 0px 10px">Mes articles({{mes_articles|length}})</h4>
+            <h4 style="margin:0px 0px 0px 10px">Mes articles({{mes_articles|length}})</h4>
             <div class="inventaire-des-articles" style="width:100%; display:flex">
-            {% if mes_articles|length != 0 %}
-                {% for article in mes_articles %}
-                <div class="exposition-images" data-category="{{ article.category }} " style="width:23%">
-                    <img src="{{article.image}}" width="250px" height="290px" alt="image de{{ article.name}}">
-                    <!-- <div style="justify-content: space-around; ">
-                        <div style="display:flex; height:190px"> -->
-                            <div class="description">
-                                <a href="{{url_for('make_new_promo', article_id = article.id )}}">faire la promo de l'article</a>
+                {% if mes_articles|length != 0 %}
+                    {% for article in mes_articles %}
+                    <div class="exposition-images" data-category="{{ article.category }} " style="width:23%">
+                        <img src="{{article.image}}" width="250px" height="290px" alt="image de{{ article.name}}">
+                        <div class="description">
+                            <a href="{{url_for('make_new_promo', article_id = article.id )}}">faire la promo de l'article</a>
 
-                                <form method="POST" action="{{ url_for('editArticle', article_id=article.id) }}">
-                                    <button type="submit">Modifier l'article</button>
-                                </form>
-                                <form method="POST" action="{{ url_for('deleteArticle', article_id=article.id) }}">
-                                    <button type="submit">Supprimer l'article</button>
-                                </form>
-                                <span class="article_name">{{article.name}}</span>
-                                <span class="article_price">{{article.price}}francs</span>
-                            </div>
-                        <!-- </div>
-                    </div> -->
-                </div>
-                {% endfor %}
-            {% else %}
-                <p style="color:white;background-color: #072345; width:100%; font-family:Quicksand; font-weight: bold;padding-left: 10px;">Vous n'avez pas encore publié d'articles</p>
-            {% endif %}
+                            <form method="POST" action="{{ url_for('editArticle', article_id=article.id) }}">
+                                <button type="submit">Modifier l'article</button>
+                            </form>
+                            <form method="POST" action="{{ url_for('deleteArticle', article_id=article.id) }}">
+                                <button type="submit">Supprimer l'article</button>
+                            </form>
+                            <span class="article_name">{{article.name}}</span>
+                            <span class="article_price">{{article.price}}francs</span>
+                        </div>
+                    </div>
+                    {% endfor %}
+                {% else %}
+                    <p style="color:white;background-color: #072345; width:100%; font-family:Quicksand; font-weight: bold;padding-left: 10px;">Vous n'avez pas encore publié d'articles</p>
+                {% endif %}
             </div>
         </div>
     </div>

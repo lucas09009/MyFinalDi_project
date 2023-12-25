@@ -41,10 +41,10 @@ db_info = {
 #     "database": "ShopOnlineDB" 
 # }
 
-app.config['SQLALCHEMY_DATABASE_URI'] = os.environ.get("DATABASE_URL")
+# app.config['SQLALCHEMY_DATABASE_URI'] = os.environ.get("DATABASE_URL")
 # postgres://shoponlinedb:XfIGBJfvYyDAEOtgzYbhQW9tuSawOUMK@dpg-cm2vf321hbls73fu5lf0-a.frankfurt-postgres.render.com/shoponlinedb_jof6
-# app.config['SQLALCHEMY_DATABASE_URI'] = f"postgresql://{db_info['user']}:{db_info['psw']}@{db_info['host']}/{db_info['database']}"
-# app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
+app.config['SQLALCHEMY_DATABASE_URI'] = f"postgresql://{db_info['user']}:{db_info['psw']}@{db_info['host']}/{db_info['database']}"
+app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 
 # print('sdsdsdsdsd',app.config['SQLALCHEMY_DATABASE_URI'])
 
