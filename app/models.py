@@ -112,7 +112,7 @@ class Articles(db.Model):
     details = db.Column(db.String(180), nullable=False)
     price = db.Column(db.Integer, nullable=False)
     quantity = db.Column(db.Integer, nullable=False)
-    image = db.Column(db.String, nullable=False)
+    image = db.Column(db.String(255), nullable=False)
     user_id = db.Column(db.Integer, nullable=False)
     user_name = db.Column(db.String)
     user_image = db.Column(db.String)
