@@ -109,7 +109,7 @@ class Articles(db.Model):
     name = db.Column(db.String(22), nullable=False)
     Description = db.Column(db.String(30), nullable=False)
     date_arrive = db.Column(db.Date, nullable=False)
-    details = db.Column(db.String(80), nullable=False)
+    details = db.Column(db.String(180), nullable=False)
     price = db.Column(db.Integer, nullable=False)
     quantity = db.Column(db.Integer, nullable=False)
     image = db.Column(db.String, nullable=False)
