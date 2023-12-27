@@ -25,14 +25,26 @@
 </head>
 <style>
 
+
+.alert-container {
+    position: fixed;
+    top: 18%;
+    left: 90%;
+    transform: translate(-50%, -50%);
+    z-index: 10;
+    width:200px;
+    align-content: center; 
+}
+
 .alert-error {
     background-color: red;
     color: white;
     font-family: "Quicksand";
     animation: flashAnimation 8s;
     animation-fill-mode: forwards;
-    height: cm;
-    justify-content: center;
+    height: 1cm;
+    width:auto;
+    padding:14px 0px 0px 60px;
 }
 
 .alert-success {
@@ -42,7 +54,8 @@
     animation: flashAnimation 8s;
     animation-fill-mode: forwards;
     height: 1cm;
-    align-items: center;
+    width:auto;
+    padding:10px 0px 0px 15px;
 }
 
 @keyframes flashAnimation {
@@ -51,7 +64,7 @@
     }
     100% {
         opacity: 0;
-        display:none
+        display:none;
     }
 }
 </style>

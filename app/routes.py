@@ -1,5 +1,5 @@
 ########## MES-IMPORTATIONS ##########
-from flask import render_template, redirect, url_for, request, flash, session, make_response, json
+from flask import render_template, redirect,abort, url_for, request, flash, session, make_response, json
 from app import app, bcrypt, db, login_manager
 from .models import Promotions, Articles, UsersData, Panier, Payement, Category, ArticlesFavoris, Commentaires
 from .forms import LoginForm, SignupForm, PublierArticles,EditProfileForm, PromotionsForm,DeleteArticleForm, EditArticleForm, CommentaireForm, PayementForm, AjouterCategorieForm
@@ -51,7 +51,8 @@ def admin_required(view):
         if current_user.is_authenticated and current_user.is_admin:
             return view(*args, **kwargs)
         
-        return redirect(url_for('home'))
+        abort(403)
+        # return redirect(url_for('home'))
     return view_decorate    
 
 
@@ -237,8 +238,8 @@ def ajouterCategorie():
 
     return render_template('ajouterCategorie.html', form=form)
 
-@admin_required
 @app.route('/ajouterCategorie/Promo', methods=['GET', 'POST'])
+@admin_required
 def ajouterCategoriePromo():
     form = PromotionsForm()
     # print(form.validate_on_submit())
@@ -264,8 +265,8 @@ def ajouterCategoriePromo():
     return render_template('ajouterCategoriePromo.html', form=form)
 
 ############# CETTE ROUTE PERMET AUX Utilisateurs DE PUBLIER DES ARTICLES ###########
-@admin_required
 @app.route('/publierArticles', methods=['GET', 'POST'])
+@admin_required
 def publierArticles():
     form = PublierArticles()
     form.category.choices = ChoixDeCategories()
@@ -326,7 +327,7 @@ def VoirArticlesEnPromo(promo_id):
         liste_des_articles.append(articles)
             
     for items in liste_des_articles:
-        items.image = '/'.join(''.join(items.image.split('/')[1:]).split('\\'))
+        items.image = items.image.split('/')[-1]  
 
     if current_user.is_authenticated:
         cart_item = Panier.query.filter_by(user_id = current_user.id).all()
@@ -595,9 +596,10 @@ def ArticlesDetails(article_id):
         category = Category.query.get(article.category_id)
         comments = db.session.query(Commentaires, Articles).join(Articles).filter(Commentaires.article_id == article_id, Articles.id == article_id).all()
         articles = Articles.query.all()
-        print(comments)
-        for items in articles :
-            items.image = '/'.join(''.join(items.image.split('/')[1:]).split('\\'))
+
+        for items in articles:
+            items.image = items.image.split('/')[-1]  
+            # items.image = ''.join(''.join(items.image.split('/')[1:]).split('\\'))
 
             if not current_user.is_authenticated:
                 pass
@@ -641,7 +643,7 @@ def AjouterAuxFavoris(id_of_user, id_of_article):
             db.session.add(favoris)
 
         db.session.commit()
-        flash(f"L'article a été ajouté avec succès,success")
+        flash(f"L'article a été ajouté avec succès;success")
         return redirect(url_for('home'))
 
     return render_template('Favoris.html')

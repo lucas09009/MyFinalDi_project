@@ -26,7 +26,7 @@
             <div style="display: flex; height:auto">
                 <div class="exposition-images" data-category="{{ items.category }}">
                     <a href="{{url_for('ArticlesDetails', article_id = items.id)}}">
-                        <img src="{{ url_for('static' , filename = items.image) }}" width="100px" height="auto"
+                        <img src="{{ url_for('static' , filename ='images/'+ items.image) }}" width="100px" height="auto"
                             alt="{{ items.name }}">
                     </a>
                 </div>

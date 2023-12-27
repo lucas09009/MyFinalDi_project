@@ -48,12 +48,12 @@ app.config['SQLALCHEMY_DATABASE_URI'] = os.environ.get("DATABASE_URL")
 
 # print('sdsdsdsdsd',app.config['SQLALCHEMY_DATABASE_URI'])
 
-app.config['MAIL_SERVER'] = 'smtp.gmail.com'
-app.config['MAIL_PORT'] = 465
+app.config['MAIL_SERVER'] = 'smtp.mailtrap.io'
+app.config['MAIL_PORT'] = 587 
 app.config['MAIL_USE_TLS'] = False
 app.config['MAIL_USE_SSL'] = True
-app.config['MAIL_USERNAME'] = 'awetandtesfit@gmail.com'
-app.config['MAIL_PASSWORD'] = 'Micheal79'
+app.config['MAIL_USERNAME'] = 'api'
+app.config['MAIL_PASSWORD'] = '45a1f9d819f20b682bf406b368f6e5c8'
 
 
 db = SQLAlchemy(app)
