@@ -106,8 +106,8 @@ class UsersData(db.Model, UserMixin):
 class Articles(db.Model):
     __tablename__ = 'articles'
     id = db.Column(db.Integer, primary_key=True)
-    name = db.Column(db.String(22), nullable=False)
-    Description = db.Column(db.String(30), nullable=False)
+    name = db.Column(db.String(100), nullable=False)
+    Description = db.Column(db.String(300), nullable=False)
     date_arrive = db.Column(db.Date, nullable=False)
     details = db.Column(db.String(180), nullable=False)
     price = db.Column(db.Integer, nullable=False)
