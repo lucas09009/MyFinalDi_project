@@ -32,6 +32,7 @@
                                         <img src="{{ url_for('static', filename='images/'+items.image) }}" width="100px" height="auto"
                                             alt="{{ items.name }}">
                                     </a>
+
                                 </div>
                                 <div style="display:flex; height:100px">
                                     <div class="description" style="margin: 20px 0px 0px 30px;">
@@ -115,7 +116,6 @@
                                 {% endif %}
                                 {% endfor %}
                             </div>
-                            
                         </div>
                         <div style="width:30%; margin: 45px 40px 0px 0px; background-color: white;">
                         <p style="font-family: Courgette; text-align: center;">Articles avec le plus de vues</p>
@@ -145,7 +145,6 @@
                                     <img src="{{ url_for('static', filename='images/'+items.image) }}" width="100px" height="auto"
                                         alt="{{ items.name }}">
                                 </a>
-
                             </div>
                             <div style="display:flex; height:100px">
                                 <div class="description" style="margin: 20px 0px 0px 30px;">

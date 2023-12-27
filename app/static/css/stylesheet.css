@@ -1071,9 +1071,9 @@ margin: 0;
         font-size: 25px;
     }
 
-    .username{
+    /* .username{
         margin-left:30px
-    }
+    } */
 }   
 
 
@@ -1088,8 +1088,10 @@ margin: 0;
     }
 
     .SearchDiv button {
-        height:25px
+        height:25px;
+        margin-top:1px
     }
+
     .mongo{
         font-size: 22px;
     }
@@ -1098,9 +1100,9 @@ margin: 0;
         font-size:10px
     }
 
-    .panier-div{
+    /* .panier-div{
         margin-left:14px
-    }
+    } */
 
     .articles-div{
         margin-left:8px
@@ -1119,19 +1121,20 @@ margin: 0;
     }
 
     .SearchDiv input{
-        width: 7cm;
-        height: 20px
+        width: 8cm;
+        height: 22px
     }
     .SearchDiv button {
-        height:20px
+        height:22px;
+        margin-top:1px
     }
     .mongo{
-        font-size: 18px;
+        font-size: 22px;
     }
-   .mon-main .liste{
+   /* .mon-main .liste{
         width:90%;
         font-size:10px
-    }
+    } */
 
     
    
@@ -1144,22 +1147,22 @@ margin: 0;
     }
 
     .SearchDiv input{
-        width: 5cm;
-        height: 15px;
+        width: 7cm;
+        height: 20px;
         margin-left: 10px;
 
     }
     .SearchDiv button {
-        height:15px;
+        height:20px;
     }
     .mongo{
-        font-size: 13px;
+        font-size: 22px;
     }
-   .mon-main .liste{
+   /* .mon-main .liste{
         width:90%;
         font-size:12px;
         list-style: none;
-    }
+    } */
     .message{
         display:none;
     }
@@ -1177,30 +1180,76 @@ margin: 0;
         font-size:45px
     } */
 
-    .panier-div{
-        font-size: 11px;
+    /* .panier-div{
+        font-size: 16px;
     }
 
     .articles-div{
-        font-size:11px
-    }
+        font-size:17px
+    } */
 }   
-@media screen and (max-width: 668px) {
+
+@media screen and (max-width: 828px) {
     .bloc {
         width: 100%
     }
 
-    .SearchDiv{
-        display: none
+    .SearchDiv input{
+        width: 6cm;
+        height: 17px;
+        margin-left: 10px;
+
+    }
+    .SearchDiv button {
+        height:17px;
     }
     .mongo{
-        font-size:19px;
+        font-size: 18px;
     }
-   .mon-main .liste{
-        width:90%;
-        font-size:8px
+
+    .panier-div{
+        font-size: 12px;
     }
-    
+
+    .articles-div{
+        font-size:12px
+    }
+
+    .username{
+    font-size: 12px;
+    }
+}
+
+@media screen and (max-width: 668px) {
+    .bloc {
+        width: 100%
+    }    
+
+    .SearchDiv input{
+        width: 5cm;
+        height: 14px;
+        margin-left: 10px;
+
+    }
+    .SearchDiv button {
+        height:14px;
+    }
+
+    .mongo{
+        font-size:17px;
+    }
+
+    .panier-div{
+        font-size: 10px;
+    }
+
+    .articles-div{
+        font-size:10px
+    }
+
+    .username{
+    font-size: 10px;
+    }
     .exposition-images{
         flex:1;
         flex-basis: 100%;
@@ -1231,7 +1280,6 @@ margin: 0;
         width: auto; 
         text-align: center;
         cursor:pointer;
-        margin-left:25px;
         font-size:9px
     }
 
@@ -1240,22 +1288,87 @@ margin: 0;
         align-items: center;
         width: auto; 
         text-align: center;
-        margin-left:20px;
         font-size:9px
     }
 
     .profil {
         display:flex;
         align-items:center;
-        margin-left: 40px
     }
 
     .profil .username{
-        font-size:16px;
-        margin-left: 40px;
+        font-size:10px;
     }
 }
 
+
+@media screen and (max-width: 571px) {
+    .bloc {
+        width: 100%
+    }    
+
+    .SearchDiv input{
+        width: 4cm;
+        height: 12px;
+        margin-left: 10px;
+
+    }
+    .SearchDiv button {
+        height:12px;
+        width:28px;
+    }
+
+
+    .mongo{
+        font-size:14px;
+    }
+
+    .username{
+    font-size: 8px;
+    }
+    .exposition-images{
+        flex:1;
+        flex-basis: 100%;
+    }
+       
+    .signup-lien{
+        background-color: white; 
+        color:#3d5d83; 
+        width:50px; 
+        border-radius: 5px; 
+        border:1px solid #3d5d83; 
+        height: 30px; 
+        /* margin-left: 20px; */
+    }
+
+    .login-lien{
+        background-color:#173354 ; 
+        color:white; 
+        width:45px; 
+        border-radius: 5px; 
+        border:1px solid #3d5d83; 
+        height: 30px
+    }
+
+    .panier-div{
+        cursor:pointer;
+        font-size:9px
+    }
+
+    .articles-div{
+        cursor:pointer;
+        font-size:9px
+    }
+
+    .profil {
+        display:flex;
+        align-items:center;
+    }
+
+    .profil .username{
+        font-size:10px;
+    }
+}
 .big-div{ 
     background-image: url('/static/images/bas-affichage-angle-plusieurs-affaires-financier-gratte-ciel-batiments-dans-singapour.jpg');
     background-size: cover; 

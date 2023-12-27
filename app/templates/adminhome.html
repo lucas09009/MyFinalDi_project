@@ -62,7 +62,7 @@
                         <div class="description">
 
                             <span class="article_description">Mise en vente par: {{article.user_name|upper}} SHOP</span>
-                            <span class="article_description">{{article.Description}}</span>
+                            <span class="article_description">{{article.Description if article.Description|length <= 24 else article.Description[:35] ~  '...' }}</span>
                             <span class="article_name">{{article.name if article.name|length <= 24 else article.name[:21] ~  '...' }}</span>
                             <span class="article_price">{{article.price}}francs</span>
 

@@ -598,8 +598,8 @@ def ArticlesDetails(article_id):
         articles = Articles.query.all()
 
         for items in articles:
+            items.image = '/'.join('/'.join(items.image.split('/')[1:]).split('\\'))
             items.image = items.image.split('/')[-1]  
-            # items.image = ''.join(''.join(items.image.split('/')[1:]).split('\\'))
 
             if not current_user.is_authenticated:
                 pass
