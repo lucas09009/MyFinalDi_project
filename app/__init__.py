@@ -3,13 +3,10 @@ from flask_sqlalchemy import SQLAlchemy
 from flask_migrate import Migrate
 from flask_login import LoginManager
 from flask_bcrypt import Bcrypt
-
 from watchdog.observers import Observer
 from watchdog.events import FileSystemEventHandler
-
 from .config import Config
 from flask_bootstrap import Bootstrap
-from flask_mailman  import Mail
 import os
 import stripe
 
