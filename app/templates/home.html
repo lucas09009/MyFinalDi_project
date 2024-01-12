@@ -83,7 +83,7 @@
                                     {% endif %}
                                 </div>
 
-                                <span class="article_description">{{article.Description if article.Description|length <= 20 else article.Description[:20] ~  '...' }}</span>
+                                <span class="article_description">{{article.Description if article.Description|length <= 18 else article.Description[:18] ~  '...' }}</span>
                                 <span class="article_name">{{article.name if article.name|length <= 19 else article.name[:19] ~  '...' }}</span>
                                 <span class="article_price">{{article.price}}francs</span>
 

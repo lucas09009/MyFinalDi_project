@@ -456,6 +456,7 @@ def panier():
 def supprimer_article_panier(article_id):
     if article_id:
         if current_user.is_authenticated:
+            print('nom',current_user.Username)
             article_to_delete = Panier.query.filter_by(user_id=current_user.id, article_id=article_id).first()
             if article_to_delete:
                 db.session.delete(article_to_delete)
@@ -545,24 +546,6 @@ def ArticlesDetails(article_id):
     return render_template('articles_details.html',comments=comments, articles=articles, article = article, category=category, cart_item=cart_item)
 
 
-@app.route('/commentaires', methods=['GET', 'POST'])
-def Make_A_Comment():
-    article_id = request.args.get('article_id')
-    form = CommentaireForm()
-    if form.validate_on_submit():
-        commentaires = form.commentaires.data
-
-        new_comments = Commentaires(commentaires=commentaires, user_id=current_user.id, article_id=article_id, user_name=current_user.Username, image=current_user.image)
-        db.session.add(new_comments)            
-        db.session.commit()
-        return redirect(url_for('ArticlesDetails', article_id=article_id))
-    return render_template('commentaires.html', form = form)
-
-@app.route('/vider_panier', methods=['POST'])
-def vider_panier():
-    session.clear()
-    flash("Le panier a été vidé", 'info')
-    return redirect(url_for('MonPanier'))
 
 
 @app.route('/favoris/<int:id_of_user>/<int:id_of_article>')
@@ -573,14 +556,14 @@ def AjouterAuxFavoris(id_of_user, id_of_article):
     if user and article:
         favoris = ArticlesFavoris.query.filter_by(id_of_user=id_of_user, id_of_article=id_of_article).first()
 
-        if not favoris:
+        if favoris:
+            flash(f"L'article a été ajouté  à vos favoris;success")
+        else:
             favoris = ArticlesFavoris(id_of_user=id_of_user, id_of_article=id_of_article)
             db.session.add(favoris)
-            flash(f"L'article a été ajouté à vos favoris;success")
             db.session.commit()
-            return redirect(url_for('home'))
-        else:
-            flash('Vous ne pouvez ajouter cet article qu\'une seule fois;success')
+            flash(f"L'article a été ajouté  à vos favoris;success")
+        return redirect(url_for('home'))
     return render_template('Favoris.html')
 
 
@@ -590,9 +573,6 @@ def VoirFavoris():
     user_id = current_user.id
     cart_item = Panier.query.filter_by(user_id = current_user.id).all()
     favoris_utilisateur = db.session.query(ArticlesFavoris, Articles).filter(ArticlesFavoris.id_of_user == user_id, ArticlesFavoris.id_of_article == Articles.id).all()
-    # favoris_utilisateur = ArticlesFavoris.query.filter_by(id_of_user = user_id).all()
-    # print('favoris_utilisateur',favoris_utilisateur)
-    # print('favoris_utilisateur',type(favoris_utilisateur))
     return render_template('Favoris.html', favoris_utilisateur=favoris_utilisateur,cart_item=cart_item)
 
 
