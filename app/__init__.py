@@ -57,10 +57,8 @@ migrate = Migrate(app, db)
 login_manager = LoginManager()
 login_manager.init_app(app)
 login_manager.login_view = 'Login'
-mail = Mail(app)
 
 
-stripe.api_key = os.getenv("STRIPE_API_KEY")
 from app import routes, models
 
 
