@@ -56,7 +56,7 @@
                     {#{% if current_user.is_authenticated and current_user.is_admin %}#}
                     <div class="exposition-images" data-category="{{ article.category.name }}">
                         <a href="{{url_for('ArticlesDetails', article_id = article.id )}}">
-                            <img src="{{article.image}}" width="250px" height="290px">
+                            <img src="{{article.image}}" width="250px" height="290px" alt="img">
                         </a>
 
                         <div class="description">
@@ -67,7 +67,7 @@
                             <span class="article_price">{{article.price}}francs</span>
 
                             <form method="POST" action="{{url_for('panier', article_id=article.id)}}">
-                                <button type="submit" class="cart-button" data-article-id="{{ article.id }}">
+                                <button type="submit" class="cart-button" data-article-id="{{ article.id }}" title="envoi">
                                     <i class="fa-solid fa-cart-shopping"></i>
                                 </button>
                             </form>
@@ -75,6 +75,17 @@
                     </div>
                     {#{% endif %}#}
                     {% endfor %}
+                </div>
+                <div class="pagination">
+                    <ul>
+                        <a href="#"><li>&laquo;</a></li>
+                        <a href="{{url_for('home', page=1 )}}"><li>1</li></a>
+                        <a href="{{url_for('home', page=2 )}}"><li>2</li></a>
+                        <a href="{{url_for('home', page=3 )}}"><li>3</li></a>
+                        <a href="{{url_for('home', page=4 )}}"><li>4</li></a>
+                        <a href="{{url_for('home', page=5 )}}"><li>5</li></a>
+                        <a href="#"><li>&raquo;</li></a>
+                    </ul>
                 </div>
             </div>
 </main>

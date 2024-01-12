@@ -40,7 +40,7 @@
     background-color: red;
     color: white;
     font-family: "Quicksand";
-    animation: flashAnimation 8s;
+    animation: flashAnimation 6s;
     animation-fill-mode: forwards;
     height: 1cm;
     width:auto;
@@ -51,7 +51,7 @@
     background-color: green;
     color: rgb(255, 255, 255);
     font-family: "Quicksand";
-    animation: flashAnimation 8s;
+    animation: flashAnimation 6s;
     animation-fill-mode: forwards;
     height: 1cm;
     width:auto;
@@ -82,8 +82,8 @@
                         </div>
                     
                         <div class="SearchDiv">
-                            <form method="POST" action="{{url_for('SearchFor', saisie='')}}">
-                                <input type="text" id="SearchInput" name="saisie">
+                            <form method="POT" action="{{url_for('SearchFor')}}">
+                                <input type="search" name="saisie" value="" placeholder="Recherchez un article...">
                                 <i class="fas fa-camera"></i>
                                 <button type="submit">Search</button>
                             </form>
@@ -112,8 +112,7 @@
                         </a>
                         <div class="SearchDiv">
                             <form method="POST" action="{{url_for('SearchFor', saisie='')}}">
-                                <input type="text" id="SearchInput" name="saisie" title="research">
-        
+                                <input type="text" id="SearchInpute" name="saisie" title="research" placeholder="Recherchez un article...">
                                 <button type="submit">Search</button>
                             </form>
                         </div>
@@ -155,10 +154,10 @@
                                             vente</a>
                                     </li>
 
-                                    <li>
+                                    {#<li>
                                         <a href="{{url_for('deleteArticle')}}"><i class="fa-solid fa-trash-can"></i>Supprimer un
                                             article</a>
-                                    </li>
+                                    </li>#}
 
                                     <li>
                                         <a href="{{url_for('ajouterCategoriePromo')}}"><i class="fa-solid fa-rectangle-ad"></i>Promouvoir un
@@ -184,7 +183,7 @@
                                 {% else %}
                                 <div class="profil">
                                     <li class="username" >{{ current_user.Username }}</li>
-                                    <img class src="{{ current_user.Image }}" width="30px" height="27px"; style= "border-radius: 50% 50% 50% 50%">
+                                    <img class src="{{ current_user.Image }}" width="30px" height="27px"; style= "border-radius: 50% 50% 50% 50%" alt="photo de profil">
                                 </div>  
                                 {% endif %}
                             </div>

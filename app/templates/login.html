@@ -8,14 +8,14 @@
 <div class="alert-container">
     {% for message in messages %}
     {% if 'error' in message %}   
-    <div class="alert alert-error">
+    <div class="notification-container "></div>
         {% set error_message = message.split(';')[0] %} 
-            <h6>{{error_message}}</h6>
+            <h6 class="alert-error">{{error_message}}</h6>
     </div>
     {% elif 'success' in message %}
-    <div class="alert alert-success">
+    <div class="notification-container  "></div>
         {% set success_message = message.split(';')[0] %} 
-        <h6>{{success_message}}</h6>
+        <h6 class="alert-success">{{success_message}}</h6>
     </div>
     {% endif %}
     {% endfor %}

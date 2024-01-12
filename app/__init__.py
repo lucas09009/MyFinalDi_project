@@ -9,7 +9,7 @@ from watchdog.events import FileSystemEventHandler
 
 from .config import Config
 from flask_bootstrap import Bootstrap
-from flask_mail import Message, Mail
+from flask_mailman  import Mail
 import os
 import stripe
 
@@ -23,37 +23,36 @@ app.config.from_object(Config)
 basedir = os.path.abspath(os.path.dirname(__file__))
 
 
-db_info = {
-    "host": "dpg-cm3g5fen7f5s73boed70-a.frankfurt-postgres.render.com",
-    "user": "shoponlinedb",
-    "port": "5432",
-    "psw": "Ts1RtwjNdFoSpl5oFO2Qw65wb7heFEnW",
-    "database": "shoponlinedb_ksv8" 
-}
+# db_info = {
+#     "host": "dpg-cm3g5fen7f5s73boed70-a.frankfurt-postgres.render.com",
+#     "user": "shoponlinedb",
+#     "port": "5432",
+#     "psw": "Ts1RtwjNdFoSpl5oFO2Qw65wb7heFEnW",
+#     "database": "shoponlinedb_ksv8" 
+# }
 
 # postgres://shoponlinedb:Ts1RtwjNdFoSpl5oFO2Qw65wb7heFEnW@dpg-cm3g5fen7f5s73boed70-a.frankfurt-postgres.render.com/shoponlinedb_ksv8
 
-# db_info = {
-#     "host": "localhost",
-#     "user": "postgres",
-#     "port": "5432",
-#     "psw": "bayernmunich",
-#     "database": "ShopOnlineDB" 
-# }
+db_info = {
+    "host": "localhost",
+    "user": "postgres",
+    "port": "5432",
+    "psw": "bayernmunich",
+    "database": "ShopOnlineDB" 
+}
 
-app.config['SQLALCHEMY_DATABASE_URI'] = os.environ.get("DATABASE_URL")
+# app.config['SQLALCHEMY_DATABASE_URI'] = os.environ.get("DATABASE_URL")
 # postgres://shoponlinedb:XfIGBJfvYyDAEOtgzYbhQW9tuSawOUMK@dpg-cm2vf321hbls73fu5lf0-a.frankfurt-postgres.render.com/shoponlinedb_jof6
-# app.config['SQLALCHEMY_DATABASE_URI'] = f"postgresql://{db_info['user']}:{db_info['psw']}@{db_info['host']}/{db_info['database']}"
-# app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
+app.config['SQLALCHEMY_DATABASE_URI'] = f"postgresql://{db_info['user']}:{db_info['psw']}@{db_info['host']}/{db_info['database']}"
+app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 
-# print('sdsdsdsdsd',app.config['SQLALCHEMY_DATABASE_URI'])
 
-app.config['MAIL_SERVER'] = 'smtp.mailtrap.io'
-app.config['MAIL_PORT'] = 587 
+app.config['MAIL_SERVER'] = 'smtp.fastmail.com'
+app.config['MAIL_PORT'] = 465 
 app.config['MAIL_USE_TLS'] = False
 app.config['MAIL_USE_SSL'] = True
-app.config['MAIL_USERNAME'] = 'api'
-app.config['MAIL_PASSWORD'] = '45a1f9d819f20b682bf406b368f6e5c8'
+app.config['MAIL_USERNAME'] = 'mongo_market@fastmail.com'
+app.config['MAIL_PASSWORD'] = 'tncna2ggdz2cftx3'
 
 
 db = SQLAlchemy(app)

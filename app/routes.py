@@ -10,10 +10,7 @@ from datetime import datetime
 from werkzeug.utils import secure_filename
 from functools import wraps
 from .utils import ChoixDeCategories, get_categories_with_icons, choixDePromo
-from flask_mail import Message
-import stripe
 
-#######CETTE ROUTE RENVOIE LES IMAGES ET LES ARTICLES A LA PAGE D'ACCEUIL ###########
 @app.route('/', methods=['GET', ' POST'])
 def home():
     articles = Articles.query.all()
@@ -21,17 +18,14 @@ def home():
     cart_item = []
     liste_des_articles_en_promo = []
     categories_with_icons = get_categories_with_icons()
-
-    # print('isdsdsdsjdsdkd',app.config['SQLALCHEMY_DATABASE_URI']) 
-
-
     articles_en_promo = Promotions.query.all()
+    
     for item in articles_en_promo:
         liste_des_articles_en_promo.append(item)
     les_promos = liste_des_articles_en_promo
 
     page = request.args.get('page', 1, type=int)
-    pagination = Articles.query.order_by(Articles.date_arrive).paginate(page=page, per_page=8, error_out=False)
+    pagination = Articles.query.order_by(Articles.category_id).paginate(page=page, per_page=21, error_out=False)
     
     articles_a_afficher = pagination.items 
     random.shuffle(articles_a_afficher) 
@@ -39,7 +33,6 @@ def home():
         cart_item = Panier.query.filter_by(user_id = current_user.id).all()
         
     else:        
-      
         pass
     return render_template('home.html',pagination=pagination,articles=articles, les_promos = les_promos,  cart_item = cart_item, categories_with_icons=categories_with_icons)
 
@@ -102,7 +95,7 @@ def promotionsArticles(promo_id, article_id):
 def editProfile(user_id):
     cart_item = Panier.query.filter_by(user_id = current_user.id).all()
     user = UsersData.query.get_or_404(user_id)
-    form = EditProfileForm(obj=user)
+    form = EditProfileForm(obj=user)    
     if user:
         if form.validate_on_submit():
             user.Username = form.Username.data
@@ -117,26 +110,11 @@ def editProfile(user_id):
                 path_list = image_path.split('/')[1:]
                 new_path = '/'.join(path_list)
 
-                # uploaded_file = form.Image.data
-                # filename = secure_filename(uploaded_file.filename)
-                # image_path = os.path.join(app.config['UPLOAD_PATH'], filename)
-                # uploaded_file.save(image_path)
-                # new_path = filename
-                # image = image_path
-                # path_list = image.split('/')[1:]
-                # new_path = '/'.join(path_list)
-                # new_path = new_path.replace('\\', '/')
-
                 user.Image = new_path
-                articles_of_user = Articles.query.filter_by(user_id=current_user.id)
-                if articles_of_user:
-                    for article in articles_of_user:
-                        article.user_image = current_user.Image
                 db.session.commit()
                 flash('Les modifications ont été enregistrées')
                 return redirect(url_for('userProfile', user_id=user.id))
-            # db.session.commit()
-            # print('fss', db.session.commit())
+        db.session.commit()
         return render_template('editprofile.html', form=form, user=user, cart_item=cart_item)
     return "User non trouvé"
 
@@ -148,7 +126,6 @@ def userProfile(user_id):
     user = UsersData.query.get_or_404(user_id)
     form = EditProfileForm(obj=user)
     if user:
-        print('ssff', current_user.Image)
         db.session.commit()
         return render_template('userProfile.html', form=form, user=user, cart_item=cart_item)
 
@@ -299,16 +276,11 @@ def publierArticles():
             image=new_path,
             user_id=current_user.id,
             user_name=current_user.Username,
-            # user_image = current_user.Image
         )
         db.session.add(new_article)
         db.session.commit()
         flash("L'article a été ajouté avec succès")
         return redirect(url_for('viewsForAdmin')) 
-        # else:
-        #     print('connecte')
-        #     next = request.args.get('next')
-        #     return redirect(next or url_for('home'))
     return render_template('publierArticles.html', form=form)
 
 ############# CETTE ROUTE PERMET AUX ADMINS POUR PROMOUVOIR DES ARTICLES OU FAIRE DES ANNONCES ###########
@@ -342,9 +314,10 @@ def VoirArticlesEnPromo(promo_id):
 def deleteArticle():
     article_id = request.args.get('article_id')
     article_to_delete =  Articles.query.get(article_id)
-    form = DeleteArticleForm()
+    form = DeleteArticleForm(obj=article_to_delete)
     if  form.validate_on_submit():
         name = form.name.data
+        article_to_delete.id = form.id.data
         if article_to_delete and (article_to_delete.name == name):
             db.session.delete(article_to_delete)
             db.session.commit()
@@ -488,25 +461,7 @@ def incrementer_quantite(user_id, article_id):
     return render_template('mon_panier.html')
 
 
-@app.route('/decrementer-quantite/<int:user_id>/<int:article_id>', methods=['GET','POST'])
-def decrementer_quantite(user_id, article_id):
-    
-    user = UsersData.query.get(user_id)
-    article = Articles.query.get(article_id)
 
-    if user and article:
-            cart_item = Panier.query.filter_by(user_id=user_id, article_id=article_id).first()
-
-            if cart_item:
-                if cart_item.quantite >= 1:
-                    cart_item.quantite =- 1
-                    if cart_item.quantite == 0:
-                        db.session.delete(cart_item)
-
-            db.session.commit()
-            flash(f"L'article a été ajouté avec succès,success")
-            return redirect(url_for('add_to_cart',user_id=user_id, article_id=article_id ))
-    return render_template('mon_panier.html')
 
 @app.route('/panier', methods=['GET','POST'])
 def panier():
@@ -516,6 +471,7 @@ def panier():
 
     cart_item = Panier.query.filter_by(user_id = current_user.id).all()
     panier_utilisateur = db.session.query(Panier, Articles).filter(Panier.user_id == user_id, Panier.article_id == Articles.id).all()
+    # flash(f"L'article a été ajouté au panier;success")
     return render_template('mon_panier.html', articles=articles, panier_utilisateur=panier_utilisateur, cart_item=cart_item)
 
 
@@ -528,6 +484,7 @@ def supprimer_article_panier(article_id):
             if article_to_delete:
                 db.session.delete(article_to_delete)
                 db.session.commit()
+                flash(f"L'article a été supprimé du panier;success")
             return redirect(url_for('panier'))
         else:
             for item in session['panier']:
@@ -535,6 +492,7 @@ def supprimer_article_panier(article_id):
                     article_to_delete = item
                     session['panier'].remove(article_to_delete)
                     session.modified = True
+                    flash(f"L'article a été supprimé du panier ;success")
         return redirect(url_for('panierForUserNonConnecte'))
     return render_template('mon_panier.html')
 
@@ -548,14 +506,17 @@ def supprimer_article_favoris(article_id):
         if article_to_delete:
             db.session.delete(article_to_delete)
             db.session.commit()
+    # flash(f"L'article a été supprimé de vos favoris;success")
     return redirect(url_for('VoirFavoris'))
 
 
 @app.route('/searchFor', methods=['GET', 'POST'])
 def SearchFor():
     categories_with_icons = get_categories_with_icons()
+    articles_trouvé = []
+    item_recherche = request.args.get('saisie')
+    print("item_recherche",item_recherche)
     if request.method == 'POST':
-        item_recherche = request.form.get('saisie')
         if item_recherche:
             articles_trouvé = Articles.query.filter(Articles.name.ilike(f"%{item_recherche}%")).all()
     return render_template('searchFor.html', articles_trouvé=articles_trouvé, item_recherche=item_recherche, categories_with_icons=categories_with_icons)
@@ -637,13 +598,13 @@ def AjouterAuxFavoris(id_of_user, id_of_article):
         favoris = ArticlesFavoris.query.filter_by(id_of_user=id_of_user, id_of_article=id_of_article).first()
 
         if favoris:
-            flash('Vous ne pouvez ajouter cet article une seule fois')
+            flash('Vous ne pouvez ajouter cet article qu\'une seule fois;success')
         else:
             favoris = ArticlesFavoris(id_of_user=id_of_user, id_of_article=id_of_article)
             db.session.add(favoris)
 
         db.session.commit()
-        flash(f"L'article a été ajouté avec succès;success")
+        flash(f"L'article a été ajouté  à vos favoris;success")
         return redirect(url_for('home'))
 
     return render_template('Favoris.html')

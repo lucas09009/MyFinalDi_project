@@ -11,22 +11,6 @@
                     sécurité</p>
             </div>
         </div>
-        {#<ul class="liste">
-            <div class="presentation">
-                <i class="fas fa-bars menu-icon"></i>
-                <span>Menu</span>
-            </div>
-
-            <div class="presentation1"></div>
-            <a href="{{url_for('home')}}">
-                <i class="fas fa-home menu-icon"></i>
-            </a>
-            <li>Les categories</li>
-            <li>Vetements</li>
-            <li>Aliments</li>
-            <li>Les produits Tendances </li>
-            <li>Explorez nos produits</li>
-        </ul>#}
         <div class="produits-defilants">
             <div class="image_de_produits-defilants">
                 <i class="fa-solid fa-chevron-left"></i>
@@ -77,9 +61,7 @@
                                 </div>
                             {% endfor %}
                         {% else %}
-                        <!-- <div> -->
                             <p style="color:white;background-color: #072345; width:100%; font-family:Quicksand; font-weight: bold;padding-left: 10px;">Aucun resultat trouvé</p>
-                        <!-- </div> -->
                         {% endif %}
                     {% else %}
                         {% for article in articles_trouvé %}

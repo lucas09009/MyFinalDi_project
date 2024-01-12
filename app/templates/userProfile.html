@@ -15,24 +15,21 @@
 {% endwith %}
 <main>
     <div class="profile" style="margin-top:140px">   
-        <!-- <label class="personalisation-champ-image">-->
             <div class="upload-container">
-                <!-- <i class="upload-icon fas fa-image"></i>  -->
                 <img src= "{{ current_user.Image }}" width="100px" height="50px" alt="photo-de-profil">
             </div>
-        <!-- </label><hr style="color:rgb(203, 202, 202); margin-top:30px">  -->
         
         <div style="display:flex">
             <h5>{{ form.Username.label }}</h5 >
-                <h5>{{ form.Username(placeholder='Veuillez saisir votre username', class_='username') }}</h5>
+                <h5>{{ form.Username(readonly=true, placeholder='Veuillez saisir votre username', class_='username') }}</h5>
             </div>
             <p style="color:gray; font-size:10px">Les noms d'utilisateur ne peuvent contenir que des lettres, des chiffres, des traits de soulignement et des points. La modification de ton nom d'utilisateur changera aussi ton lien de profil.</p><hr style="color:rgb(203, 202, 202); margin-top:10px">
         <div style="display:flex; align-items:center">
         <h5>{{ form.Biographie.label }}</h5 >
-        <h5>{{ form.Biographie( placeholder='Biographie', class_='Bio') }}</h5 >
+        <h5>{{ form.Biographie(readonly=true, placeholder='Biographie', class_='Bio') }}</h5 >
         </div>
         <p style="color:gray; font-size:10px; ">Votre biographie ne peut contenir que 80 lettres</p><hr style="color:rgb(203, 202, 202); margin:10px 0px 10px 0px">
-        <a href="{{url_for('editProfile', user_id=current_user.id)}}"style="text-decoration:none; border:1px solid gray; padding:3px; border-radius:3px"><button>Modifier</button></a>
+        <a href="{{url_for('editProfile', user_id=current_user.id)}}"style="text-decoration:none; border:1px solid gray; padding:3px; border-radius:3px">Modifier</a>
     </div>
 </main>
 

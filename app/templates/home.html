@@ -35,22 +35,7 @@
                         sécurité </p>
                 </div>
             </div>
-            {#<ul class="liste">
-                <div class="presentation">
-                    <i class="fas fa-bars menu-icon"></i>
-                    <span>Menu</span>
-                </div>
 
-                <div class="presentation1"></div>
-                <a href="{{url_for('home')}}">
-                <i class="fas fa-home menu-icon"></i>
-                </a>
-                <li>Les categories</li>
-                <li>Vetements</li>
-                <li>Aliments</li>
-                <li>Les produits Tendances </li>
-                <li>Explorez nos produits</li>
-            </ul>#}
             <div class="produits-defilants" onmouseover="survolPromo()" onmouseout="quittePromo()">
                 <div class="image_de_produits-defilants">
                     <i class="fa-solid fa-chevron-left"></i>
@@ -98,8 +83,8 @@
                                     {% endif %}
                                 </div>
 
-                                <span class="article_description">{{article.Description}}</span>
-                                <span class="article_name">{{article.name if article.name|length <= 24 else article.name[:21] ~  '...' }}</span>
+                                <span class="article_description">{{article.Description if article.Description|length <= 20 else article.Description[:20] ~  '...' }}</span>
+                                <span class="article_name">{{article.name if article.name|length <= 19 else article.name[:19] ~  '...' }}</span>
                                 <span class="article_price">{{article.price}}francs</span>
 
                                 <form method="POST"
@@ -118,17 +103,17 @@
                             <div class="description">
                                 <div style="align-items:center">
                                     {% if article.user_image == None %}
-                                    <span class="article_description">Mise en vente par: {{ article.user_name|upper if article.user_name|length <= 16 else article.user_name[:12] ~  '...' }} SHOP</span>
+                                    <span class="article_description">Mise en vente par: {{ article.user_name|upper if article.user_name|length <= 16 else article.user_name[:16] ~  '...' }} SHOP</span>
                                     {% else %}
                                     <span class="article_description" style="align-items:center">
                                         <span><img class src="{{ article.user_image }}"   width="2px" height="2px"  alt="ek" style= "border-radius: 50% 50% 50% 50%;margin-top:5px; max-width:15px; max-height: 15px;"></span>
-                                        <span>Mise en vente par: {{article.user_name|upper if article.user_name|length <= 16 else article.user_name[:12] ~  '...' }} SHOP</span>
+                                        <span>Mise en vente par: {{article.user_name|upper if article.user_name|length <= 16 else article.user_name[:16] ~  '...' }} SHOP</span>
                                     </span>
                                     {% endif %}
                                 </div>
 
-                                <span class="article_description">{{article.Description}}</span>
-                                <span class="article_name">{{article.name if article.name|length <= 24 else article.name[:21] ~  '...' }}</span>
+                                <span class="article_description">{{article.Description if article.Description|length <= 14 else article.Description[:14] ~  '...' }}</span>
+                                <span class="article_name">{{article.name if article.name|length <= 14 else article.name[:14] ~  '...' }}</span>
                                 <span class="article_price">{{article.price}}francs</span>
 
                                 <form method="POST" action="{{ url_for('add_to_cart_without_login', article_id = article.id )}}">
@@ -154,30 +139,6 @@
                     </div>
                 </div>
             </div>                                              
-            {#<div style="display: flex; margin:300px 0px 0px 0px; justify-content: center; ">
-                <a href="{{ url_for('publierArticles')}}" style="color:inherit; text-decoration: none;">
-                    <div style="display: flex;  justify-content: center; background-color:#3d5d83; height:250px;width:500px; border-radius: 20px;">
-                        <p style="font-family: Courgette; color:white; font-size:20px">Devenez un vendeur Mongo Market<br> et profitez de plus d'avantages</p>
-                        <img src="{{url_for('static', filename='images/vendeur-removebg.png')}}" width="100px" height="auto" alt="img">
-                    </div>
-                </a>
-                <a href="{{ url_for('publierArticles')}}" style="color:inherit; text-decoration: none;">
-                <div style="display: flex; flex-direction: column;text-align: center;  background-color:#3d5d83; height:250px;width:500px; margin:0px 0px 0px 20px;border-radius: 20px;">
-                    <div>
-                        <p style="font-family: Courgette; color:white; font-size:20px">Faites votre premier pas avec nous<br> et bénéficiez de 50% de réduction </p>
-                    </div>
-                    <div> 
-                        <img src="{{url_for('static', filename='images/caddie-sac-plastique-rouge-dessus_1340-37199-removebg-preview.png')}}" width="230px" height="auto" alt="img">
-                    </div>
-                </div>
-                </a> 
-            </div>#}
-        {#</div>
-        <div style="margin:40px 0px 0px 40px">
-            <div class="statuts" style="border:3px solid blue;height:100px; width: 100px; border-radius:50%">
-                <img src="{{url_for('static', filename='images/collection-produits-dont-qui-dit-xcel_950347-8927.avif')}}" width="100%" height="100%">
-            </div>
-        </div>#}
     </main>
     
 </div>

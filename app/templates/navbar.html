@@ -23,7 +23,47 @@
         <meta name="theme-color" content="#ffffff">
         <title>{% block title %}Mongo Market{% endblock %}</title>
     </head>
+    <style>
+        
+.alert-container {
+    position: fixed;
+    width:100%;
+}
 
+.alert-error {
+    background-color: red;
+    color: white;
+    font-family: "Quicksand";
+    animation: flashAnimation 6s;
+    animation-fill-mode: forwards;
+    height: 1cm;
+    width:auto;
+    padding:14px 0px 0px 60px;
+}
+
+.alert-success {
+    background-color: green;
+    color: rgb(255, 255, 255);
+    font-family: "Quicksand";
+    animation: flashAnimation 6s;
+    animation-fill-mode: forwards;
+    height: 1cm;
+    width:auto;
+    padding:10px 0px 0px 15px;
+}
+
+@keyframes flashAnimation {
+    0%, 80%{
+        opacity: 1;
+    }
+    100% {
+        opacity: 0;
+        display:none;
+    }
+}
+</style>
+
+    </style>
 <body>
     
     {% block body %}

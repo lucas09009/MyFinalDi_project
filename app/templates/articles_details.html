@@ -1,104 +1,160 @@
-    {% extends "layout.html" %}
-    {% block blocktitle %}Home{% endblock %}
+{% extends "layout.html" %}
+{% block blocktitle %}Home{% endblock %}
 
-    {% block body %}
-    <div class="notification-container"></div>
+{% block body %}
+<div class="notification-container"></div>
 
 
-    <main>
-        <div class="mon-main">
-            {#<ul class="liste">
-                <div class="presentation">
-                    <i class="fas fa-bars menu-icon"></i>
-                    <span>Menu</span>
-                </div>
-                <div class="presentation1"></div>
-                <a href="{{url_for('home')}}">
-                    <i class="fas fa-home menu-icon"></i>
-                </a>
-                <li>Les categories</li>
-                <li>Vetements</li>
-                <li>Aliments</li>
-                <li>Les produits Tendances </li>
-                <li>Explorez nos produits</li>
-            </ul>#}
-            <div style="width:100%">
-                {% if current_user.is_authenticated %}
-                    {% for items in articles %}
-                        {% if items.id == article.id %}
-                            <div style="display: flex; height:300px">
-                                <div class="exposition-images" data-category="{{ items.category }}">
-                                    <a href="{{url_for('payement', article_id=article.id)}}">
-                                        <img src="{{ url_for('static', filename='images/'+items.image) }}" width="100px" height="auto"
-                                            alt="{{ items.name }}">
-                                    </a>
+<main>
+    <div class="mon-main">
+        {#<ul class="liste">
+            <div class="presentation">
+                <i class="fas fa-bars menu-icon"></i>
+                <span>Menu</span>
+            </div>
+            <div class="presentation1"></div>
+            <a href="{{url_for('home')}}">
+                <i class="fas fa-home menu-icon"></i>
+            </a>
+            <li>Les categories</li>
+            <li>Vetements</li>
+            <li>Aliments</li>
+            <li>Les produits Tendances </li>
+            <li>Explorez nos produits</li>
+        </ul>#}
+        <div style="width:100%">
+            {% if current_user.is_authenticated %}
+                {% for items in articles %}
+                    {% if items.id == article.id %}
+                        <div style="display: flex; height:300px">
+                            <div class="exposition-images" data-category="{{ items.category }}">
+                                <a href="{{url_for('payement', article_id=article.id)}}">
+                                    <img src="{{ url_for('static', filename='images/'+items.image) }}" width="100px" height="auto"
+                                        alt="{{ items.name }}">
+                                </a>
 
-                                </div>
-                                <div style="display:flex; height:100px">
-                                    <div class="description" style="margin: 20px 0px 0px 30px;">
-                                        <span style=" white-space: nowrap;">Mise en vente le: {{ items.date_arrive}}</span>
-                                        {#<span style=" white-space: nowrap;">{{items.details}}</span>#}
-                                        <span style=" white-space: nowrap;">Quantité mis en vente:{{items.quantity}}</span>
-                                        <span style=" white-space: nowrap;">Catégorie de l'article: {{items.category.name}}</span>
-                                        <span class="article_name">Vues cumulées: {{items.nombre_de_vues}}</span>
-                                        <span style=" white-space: nowrap;">{{items.Description}} {{items.details if article.details|length <= 24 else article.name[:21] ~  '...' }}</span>
-                                        <span class="article_name" style=" white-space: nowrap">{{items.name}}</span>
-                                        <span class="article_price">{{items.price}}francs</span>
+                            </div>
+                            <div style="display:flex; height:100px">
+                                <div class="description" style="margin: 20px 0px 0px 30px;">
+                                    <span style=" white-space: nowrap;">Mise en vente le: {{ items.date_arrive}}</span>
+                                    {#<span style=" white-space: nowrap;">{{items.details}}</span>#}
+                                    <span style=" white-space: nowrap;">Quantité mis en vente:{{items.quantity}}</span>
+                                    <span style=" white-space: nowrap;">Catégorie de l'article: {{items.category.name}}</span>
+                                    <span class="article_name">Vues cumulées: {{items.nombre_de_vues}}</span>
+                                    <span style=" white-space: nowrap;">{{items.Description}} </span>
+                                    <span class="article_name" style=" white-space: nowrap">{{items.name}}</span>
+                                    <span class="article_price">{{items.price}}francs</span>
 
-                                        <div style="display:flex">
-                                            <form method="POST"
-                                                action="{{ url_for('add_to_cart', article_id =article.id, user_id=current_user.id) }}">
-                                                <button type="submit" class="cart-button" data-article-id="{{ article.id }}" title="button">
-                                                    <i class="fa-solid fa-cart-shopping"></i>
-                                                </button>
-                                            </form>
-
-                                            <button type="submit" class="cart-button" id="commentaires-id" style="margin-left: 10px;">
-                                                Laisser un commentaire
+                                    <div style="display:flex">
+                                        <form method="POST"
+                                            action="{{ url_for('add_to_cart', article_id =article.id, user_id=current_user.id) }}">
+                                            <button type="submit" class="cart-button" data-article-id="{{ article.id }}" title="button">
+                                                <i class="fa-solid fa-cart-shopping"></i>
                                             </button>
-                                        </div>
-                                        <textarea title="comments" style="margin-top: 5px; width: 350px" maxlength="400"></textarea>
+                                        </form>
                                     </div>
                                 </div>
-                                <div style="border-right: 8px solid gray; margin-left: 7px;"></div>
-                                <div class="commentaires" style="background-color: #f0f4f7; width:679px; height:300px">
-                                    <p style="font-family: Courgette; text-align: center; margin-top:20px">Commentaires</p>
-                                    <div style="background-color: #ffffff; width:520px; border-radius: 15px; height:210px; margin: 20px 40px 0px 80px">
-                                        <div class="contenu" onload="nextCommentaire()">
-                                            <i class="fa-solid fa-chevron-left"></i>
-                                            <i class="fa-solid fa-chevron-right">dfsff</i>
-                                            {% for elt, articles in comments %}
-                                                {% if elt.image == None %}
-                                                <div class="profil" style="display: flex; padding: 20px 0px 0px 20px">
-                                                    <i class="fa-solid fa-user fa-lg" style="padding:35px 5px 15px 5px; background-color: white;color:#3d5d83; border-radius:50px; cursor:pointer"></i>
-                                                    <p class="username">{{elt.user_name}}</p>
-                                                </div>
-                                                {% else %}
-                                                <div class="profil" style="display: flex; padding: 20px 0px 0px 20px">
-                                                    <img class src="{{ url_for('static', filename='images/'+ elt.image) }}"   width="30px" height="27px"; style= "border-radius: 50% 50% 50% 50%" alt="img">
-                                                    <p class="username" >{{elt.user_name}}</p>
-                                                </div>  
-                                                {% endif %}
-                                                <p class="contenuCommentaires" style="margin:10px 20px 0px 23px; ">{{ elt.commentaires }}</p>
-                                            {% endfor %}
-                                        </div>
-                                    </div>
+                            </div>
+                        </div>
+                    {% endif %}
+                {% endfor %}
+                <hr style="color:white">
+                <div style=" display:flex; width: 100%;"> 
+                    <div style="width: 100%;">
+                        <p style="color:gray; font-size:20px; margin:10px 0px 0px 15px">Vous aimeriez peut etre ces autres
+                            produits de la meme categorie:</p>
+                        <div class="inventaire-des-articles" style="width:95%; display:flex">
+                            {% for items in articles %}
+                            {% if items.category.name == article.category.name and items.id != article.id %}
+                            <div class="exposition-images-details" data-category="{{ items.category }}" style="width:28%">
+                                <a href="{{url_for('ArticlesDetails', article_id=items.id)}}"
+                                    style="color:inherit; text-decoration: none; width:400px">
+                                    <img src="{{ url_for('static', filename='images/'+items.image) }}" width="260px"
+                                        alt="{{ items.name }}">
+                                </a>
+                                <div class="description">
+                                    <span class="article_description">{{items.Description}}</span><br>
+                                    <span class="article_name">{{items.name}}</span>
+                                    <span class="article_price">{{items.price}}francs</span>
+
+                                    <form method="POST" action="{{ url_for('panier') }}">
+                                        <button type="button" class="cart-button" data-article-id="{{ article.id }}" title="button">
+                                            <i class="fa-solid fa-cart-shopping"></i>
+                                        </button>
+                                    </form>
+                                </div>
+                            </div>
+                            {% endif %}
+                            {% endfor %}
+                        </div>
+                    </div>
+                    <div style="width:30%; margin: 45px 40px 0px 0px; background-color: white;">
+                    <p style="font-family: Courgette; text-align: center;">Articles avec le plus de vues</p>
+                    {% for article in articles %}
+                        {% if article.nombre_de_vues>=5 %}
+                            <div class="exposition-images-panier" data-category="{{ article.category }} " style="width:90%; height:auto;  background-color:#f0f4f7;">
+                                <div style="width:50%">
+                                    <a href="{{url_for('ArticlesDetails', article_id = article.id )}}">
+                                        <img src="{{ url_for('static', filename='images/'+article.image) }}" alt="img">
+                                    </a>
+                                </div>                                   
+                                <div style="width:50%; height:auto">
+                                <span class="article_name_panier">{{article.name if article.name|length <= 18 else article.name[:18] ~  '...' }}</span><br>
+                                    <span class="article_price_panier" >{{article.price}}francs</span><br>
+                                    <span class="article_name_panier"><span>Qté: {{article.quantity}}</span>
                                 </div>
                             </div>
                         {% endif %}
                     {% endfor %}
+                </div>
+            {% else %}
+                {% for items in articles %}
+                    {% if items.id == article.id %}
+                    <div style="display: flex; height:300px">
+                        <div class="exposition-images" data-category="{{ items.category }}">
+                            <a href="{{url_for('payement', article_id=article.id)}}">
+                                <img src="{{ url_for('static', filename='images/'+items.image) }}" width="100px" height="auto"
+                                    alt="{{ items.name }}">
+                            </a>
+                        </div>
+                        <div style="display:flex; height:100px">
+                            <div class="description" style="margin: 20px 0px 0px 30px;">
+                                <span style=" white-space: nowrap;">Mise en vente le: {{ items['date_arrive']}}</span>
+                                <span style=" white-space: nowrap;">{{items['details'] if items['details']|length < 37 else items['details'][:35] ~ '...'}}</span>
+                                <span style=" white-space: nowrap;">Quantité mis en vente:{{items['quantity']}}</span>
+                                <span style=" white-space: nowrap;">Catégorie de l'article:
+                                    {{items.category.name}}</span>
+                                <span class="article_name">Vues cumulées: {{items.nombre_de_vues}}</span>
+                                <span style=" white-space: nowrap;">{{items.Description}}</span>
+                                <span class="article_name" style=" white-space: nowrap">{{items.name}}</span>
+                                <span class="article_price">{{items.price}}francs</span>
+                                <div style="display:flex">
+                                    <form method="POST"
+                                        action="{{ url_for('add_to_cart_without_login', article_id =article.id) }}">
+                                        <button type="submit" class="cart-button" data-article-id="{{ article.id }}">
+                                            <i class="fa-solid fa-cart-shopping"></i>
+                                        </button>
+                                    </form>
+                                </div>
+                            </div>
+                        </div>
+                        <div style="border-right: 8px solid gray; margin-left: 40px;"></div>
+                    </div>
+                    {% endif %}
+                {% endfor %}
                     <hr style="color:white">
-                    <div style=" display:flex; width: 100%;"> 
+                    <div style=" display:flex; width: 100%;">
                         <div style="width: 100%;">
-                            <p style="color:gray; font-size:20px; margin:10px 0px 0px 15px">Vous aimeriez peut etre ces autres
+                            <p style="color:gray; font-size:20px; margin:10px 0px 0px 15px">Vous aimeriez peut etre ces
+                                autres
                                 produits de la meme categorie:</p>
-                            <div class="inventaire-des-articles" style="width:95%; display:flex">
+                            <div class="inventaire-des-articles" style="width:97%; display:flex">
                                 {% for items in articles %}
                                 {% if items.category.name == article.category.name and items.id != article.id %}
                                 <div class="exposition-images-details" data-category="{{ items.category }}" style="width:28%">
                                     <a href="{{url_for('ArticlesDetails', article_id=items.id)}}"
                                         style="color:inherit; text-decoration: none; width:400px">
-                                        <img src="{{ url_for('static', filename='images/'+items.image) }}" width="260px"
+                                        <img src="{{ url_for('static', filename='images/'+items.image) }}" width="260px" height="auto"
                                             alt="{{ items.name }}">
                                     </a>
                                     <div class="description">
@@ -107,7 +163,7 @@
                                         <span class="article_price">{{items.price}}francs</span>
 
                                         <form method="POST" action="{{ url_for('panier') }}">
-                                            <button type="button" class="cart-button" data-article-id="{{ article.id }}" title="button">
+                                            <button type="button" class="cart-button" data-article-id="{{ article.id }}">
                                                 <i class="fa-solid fa-cart-shopping"></i>
                                             </button>
                                         </form>
@@ -118,179 +174,81 @@
                             </div>
                         </div>
                         <div style="width:30%; margin: 45px 40px 0px 0px; background-color: white;">
-                        <p style="font-family: Courgette; text-align: center;">Articles avec le plus de vues</p>
-                        {% for article in articles %}
-                            {% if article.nombre_de_vues>=5 %}
-                                <div class="exposition-images-panier" data-category="{{ article.category }} " style="width:90%; height:auto;  background-color:#f0f4f7;">
-                                    <div style="width:50%">
-                                        <a href="{{url_for('ArticlesDetails', article_id = article.id )}}">
-                                            <img src="{{ url_for('static', filename='images/'+article.image) }}" alt="img">
-                                        </a>
-                                    </div>                                   
-                                    <div style="width:50%; height:auto">
-                                    <span class="article_name_panier">{{article.name if article.name|length <= 18 else article.name[:18] ~  '...' }}</span><br>
-                                        <span class="article_price_panier" >{{article.price}}francs</span><br>
-                                        <span class="article_name_panier"><span>Qté: {{article.quantity}}</span>
-                                    </div>
-                                </div>
-                            {% endif %}
-                        {% endfor %}
-                    </div>
-                {% else %}
-                    {% for items in articles %}
-                        {% if items.id == article.id %}
-                        <div style="display: flex; height:300px">
-                            <div class="exposition-images" data-category="{{ items.category }}">
-                                <a href="{{url_for('payement', article_id=article.id)}}">
-                                    <img src="{{ url_for('static', filename='images/'+items.image) }}" width="100px" height="auto"
-                                        alt="{{ items.name }}">
-                                </a>
-                            </div>
-                            <div style="display:flex; height:100px">
-                                <div class="description" style="margin: 20px 0px 0px 30px;">
-                                    <span style=" white-space: nowrap;">Mise en vente le: {{ items['date_arrive']}}</span>
-                                    <span style=" white-space: nowrap;">{{items['details'] if items['details']|length < 37 else items['details'][:35] ~ '...'}}</span>
-                                    <span style=" white-space: nowrap;">Quantité mis en vente:{{items['quantity']}}</span>
-                                    <span style=" white-space: nowrap;">Catégorie de l'article:
-                                        {{items.category.name}}</span>
-                                    <span class="article_name">Vues cumulées: {{items.nombre_de_vues}}</span>
-                                    <span style=" white-space: nowrap;">{{items.Description}}</span>
-                                    <span class="article_name" style=" white-space: nowrap">{{items.name}}</span>
-                                    <span class="article_price">{{items.price}}francs</span>
-                                    <div style="display:flex">
-                                        <form method="POST"
-                                            action="{{ url_for('add_to_cart_without_login', article_id =article.id) }}">
-                                            <button type="submit" class="cart-button" data-article-id="{{ article.id }}">
-                                                <i class="fa-solid fa-cart-shopping"></i>
-                                            </button>
-                                        </form>
-                                    </div>
-                                </div>
-                            </div>
-                            <div style="border-right: 8px solid gray; margin-left: 40px;"></div>
-                        </div>
-                        {% endif %}
-                    {% endfor %}
-                        <hr style="color:white">
-                        <div style=" display:flex; width: 100%;">
-                            <div style="width: 100%;">
-                                <p style="color:gray; font-size:20px; margin:10px 0px 0px 15px">Vous aimeriez peut etre ces
-                                    autres
-                                    produits de la meme categorie:</p>
-                                <div class="inventaire-des-articles" style="width:97%; display:flex">
-                                    {% for items in articles %}
-                                    {% if items.category.name == article.category.name and items.id != article.id %}
-                                    <div class="exposition-images-details" data-category="{{ items.category }}" style="width:28%">
-                                        <a href="{{url_for('ArticlesDetails', article_id=items.id)}}"
-                                            style="color:inherit; text-decoration: none; width:400px">
-                                            <img src="{{ url_for('static', filename='images/'+items.image) }}" width="260px" height="auto"
-                                                alt="{{ items.name }}">
-                                        </a>
-                                        <div class="description">
-                                            <span class="article_description">{{items.Description}}</span><br>
-                                            <span class="article_name">{{items.name}}</span>
-                                            <span class="article_price">{{items.price}}francs</span>
-
-                                            <form method="POST" action="{{ url_for('panier') }}">
-                                                <button type="button" class="cart-button" data-article-id="{{ article.id }}">
-                                                    <i class="fa-solid fa-cart-shopping"></i>
-                                                </button>
-                                            </form>
-                                        </div>
-                                    </div>
-                                    {% endif %}
-                                    {% endfor %}
-                                </div>
-                            </div>
-                            <div style="width:30%; margin: 45px 40px 0px 0px; background-color: white;">
-                                <p style="font-family: Courgette; text-align: center;">Articles avec le plus de vues</p>
-            
-                                {% for items in articles %}
-                                    {% if items.nombre_de_vues>=5 %}
-                                        <div class="exposition-images-panier" data-category="{{ items.category }} " style="width:90%; height:auto;  background-color:#f0f4f7;">
-                                            <div style="width:50%">
-                                                <a href="{{url_for('ArticlesDetails', article_id = items.id )}}">
-                                                    <img src="{{ url_for('static', filename='images/'+items.image) }}" >
-                                                </a>
-                                            </div>                                   
-                                            <div style="width:50%; height:auto">
-                                            <span class="article_name_panier">{{items.name if article.name|length <= 21 else items.name[:21] ~  '...' }}</span><br>
-                                                <span class="article_price_panier" >{{items.price}}francs</span><br>
-                                                <span class="article_name_panier"><span>Qté: {{items.quantity}}</span>
-                                            </div>
-                                        </div>
-                                    {% endif %}
-                                {% endfor %}
-                            </div>
-                        </div>
-                {% endif %}
-                </div>
-            
-    </main>
-
-    
-    {#<script src="{{url_for('static', filename='javascript/script.js')}}"></script>#}
-    <script>
-        document.addEventListener("DOMContentLoaded", function() {
-            const depliant = document.getElementById("users-info");
+                            <p style="font-family: Courgette; text-align: center;">Articles avec le plus de vues</p>
         
-            depliant.addEventListener("click", function() {
-                this.classList.toggle("active");
-            });
-        });
-     
-        document.addEventListener("DOMContentLoaded", function() {
-        const commentaires = document.getElementById("commentaires-id");
-        const contenuCommentaires = document.querySelector(".commentaires-class");
+                            {% for items in articles %}
+                                {% if items.nombre_de_vues>=5 %}
+                                    <div class="exposition-images-panier" data-category="{{ items.category }} " style="width:90%; height:auto;  background-color:#f0f4f7;">
+                                        <div style="width:50%">
+                                            <a href="{{url_for('ArticlesDetails', article_id = items.id )}}">
+                                                <img src="{{ url_for('static', filename='images/'+items.image) }}" >
+                                            </a>
+                                        </div>                                   
+                                        <div style="width:50%; height:auto">
+                                        <span class="article_name_panier">{{items.name if article.name|length <= 21 else items.name[:21] ~  '...' }}</span><br>
+                                            <span class="article_price_panier" >{{items.price}}francs</span><br>
+                                            <span class="article_name_panier"><span>Qté: {{items.quantity}}</span>
+                                        </div>
+                                    </div>
+                                {% endif %}
+                            {% endfor %}
+                        </div>
+                    </div>
+            {% endif %}
+            </div>
+        
+</main>
 
-        commentaires.addEventListener("click", function() {
-            contenuCommentaires.classList.toggle("active");
+
+{#<script src="{{url_for('static', filename='javascript/script.js')}}"></script>#}
+<script>
+    document.addEventListener("DOMContentLoaded", function() {
+        const depliant = document.getElementById("users-info");
+    
+        depliant.addEventListener("click", function() {
+            this.classList.toggle("active");
         });
     });
-
-
+ 
     document.addEventListener("DOMContentLoaded", function() {
-    const commentairesButton = document.getElementById("commentaires-id");
-    const commentForm = document.getElementById("comment-form");
-    const commentInput = document.getElementById("comment-input");
+    const commentaires = document.getElementById("commentaires-id");
+    const contenuCommentaires = document.querySelector(".commentaires-class");
 
-    commentairesButton.addEventListener("click", function() {
-        commentForm.style.display = "block";
-        commentInput.focus();
+    commentaires.addEventListener("click", function() {
+        contenuCommentaires.classList.toggle("active");
     });
 });
 
 
-    let contenuDiv = document.querySelector('.contenu');
-    let comments = contenuDiv.querySelectorAll('.contenuCommentaires');
-    let username = contenuDiv.querySelectorAll('.profil')
-    let currentIndex = 0;
+document.addEventListener("DOMContentLoaded", function() {
+const commentairesButton = document.getElementById("commentaires-id");
+const commentForm = document.getElementById("comment-form");
+const commentInput = document.getElementById("comment-input");
 
-    function showNextComment() {
-        comments[currentIndex].style.display = 'none';
-        profil[currentIndex].style.display = 'none';
-        currentIndex = (currentIndex + 1) % comments.length;
-        comments[currentIndex].style.display = 'block';
-    }
+commentairesButton.addEventListener("click", function() {
+    commentForm.style.display = "block";
+    commentInput.focus();
+});
+});
 
-    function startInterval() {
-        setInterval(showNextComment, 7000); 
-    }
 
-    window.onload = startInterval;
+let contenuDiv = document.querySelector('.contenu');
+let comments = contenuDiv.querySelectorAll('.contenuCommentaires');
+let username = contenuDiv.querySelectorAll('.profil')
+let currentIndex = 0;
+
+function showNextComment() {
+    comments[currentIndex].style.display = 'none';
+    profil[currentIndex].style.display = 'none';
+    currentIndex = (currentIndex + 1) % comments.length;
+    comments[currentIndex].style.display = 'block';
+}
+
+function startInterval() {
+    setInterval(showNextComment, 7000); 
+}
+
+window.onload = startInterval;
 </script>
 
 {% endblock %}
-
-
-
-
-
-
-
-
-
-
-
-
-
