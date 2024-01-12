@@ -440,29 +440,6 @@ def add_to_cart(user_id, article_id):
     return render_template('mon_panier.html', rupture_de_stock=rupture_de_stock, cart_item=cart_item)
 
 
-@app.route('/incrementer-quantite/<int:user_id>/<int:article_id>', methods=['GET','POST'])
-def incrementer_quantite(user_id, article_id):
-    user = UsersData.query.get(user_id)
-    article = Articles.query.get(article_id)
-
-    if user and article:
-            cart_item = Panier.query.filter_by(user_id=user_id, article_id=article_id).first()
-
-            if cart_item:
-                if cart_item.quantite < article.quantity:
-                    cart_item.quantite += 1
-            else:
-                cart_item = Panier(user_id=user_id, article_id=article_id, quantite=1)
-                db.session.add(cart_item)
-
-            db.session.commit()
-            flash(f"L'article a été ajouté avec succès,success")
-            return redirect(url_for('add_to_cart',user_id=user_id, article_id=article_id ))
-    return render_template('mon_panier.html')
-
-
-
-
 @app.route('/panier', methods=['GET','POST'])
 def panier():
     user_id = current_user.id
@@ -479,7 +456,6 @@ def panier():
 def supprimer_article_panier(article_id):
     if article_id:
         if current_user.is_authenticated:
-            print('nom',current_user.Username)
             article_to_delete = Panier.query.filter_by(user_id=current_user.id, article_id=article_id).first()
             if article_to_delete:
                 db.session.delete(article_to_delete)
@@ -597,16 +573,14 @@ def AjouterAuxFavoris(id_of_user, id_of_article):
     if user and article:
         favoris = ArticlesFavoris.query.filter_by(id_of_user=id_of_user, id_of_article=id_of_article).first()
 
-        if favoris:
-            flash('Vous ne pouvez ajouter cet article qu\'une seule fois;success')
-        else:
+        if not favoris:
             favoris = ArticlesFavoris(id_of_user=id_of_user, id_of_article=id_of_article)
             db.session.add(favoris)
-
-        db.session.commit()
-        flash(f"L'article a été ajouté  à vos favoris;success")
-        return redirect(url_for('home'))
-
+            flash(f"L'article a été ajouté à vos favoris;success")
+            db.session.commit()
+            return redirect(url_for('home'))
+        else:
+            flash('Vous ne pouvez ajouter cet article qu\'une seule fois;success')
     return render_template('Favoris.html')
 
 
