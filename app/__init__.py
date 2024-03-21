@@ -4,8 +4,10 @@ from flask_migrate import Migrate
 from flask_login import LoginManager
 from flask_bcrypt import Bcrypt
 from .config import Config
-import os
+import os, stripe
 from flask_mail import Mail
+from dotenv import load_dotenv
+
 
 app = Flask(__name__)
 bcrypt = Bcrypt(app)
@@ -34,6 +36,14 @@ app.config['SQLALCHEMY_DATABASE_URI'] = f"postgresql://{db_info['user']}:{db_inf
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 
 
+
+
+app.config['STRIPE_PUBLIC_KEY'] ='pk_test_51Nn1NTI0GTnWYq6mdWdyNj22RpBUNdvf5MX2LnvjHiil7kJgEKhyKcGjNPv9J5yUJtC0apOLGAbQWMqVKfjVdqsB00oEJwGiNS'
+app.config['STRIPE_SECRET_KEY'] ='sk_test_51Nn1NTI0GTnWYq6mQaKiiw0LLjXCRrkKpDxTmtigyqWWPrBt16n7qzPlyg8qLuCZfgND42UF1jn3BS9VXv4TCxsr00k5GoTpbJ'
+
+stripe.api_key = app.config['STRIPE_SECRET_KEY'] 
+
+
 app.config['MAIL_SERVER'] ='smtp.gmail.com'
 app.config['MAIL_PORT'] = 587
 app.config['MAIL_USE_TLS'] = True
@@ -57,5 +67,7 @@ login_manager = LoginManager()
 login_manager.init_app(app)
 login_manager.login_view = 'Login' 
 
+
+load_dotenv()  
 mail = Mail(app)
 from app import routes, models

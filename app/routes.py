@@ -2,16 +2,17 @@
 from flask import render_template, redirect,abort, url_for, request, flash,current_app, session, make_response, json
 from app import app, bcrypt, db, login_manager
 from .models import Promotions, Articles, UsersData, Panier, Payement, Category, ArticlesFavoris, Commentaires
-from .forms import LoginForm, SignupForm, PublierArticles,EditProfileForm, PromotionsForm,DeleteArticleForm, EditArticleForm, CommentaireForm, PayementForm, AjouterCategorieForm
+from .forms import LoginForm, SignupForm,ResetPasswordRequestForm,change_passwordForm, PublierArticles,EditProfileForm, PromotionsForm,DeleteArticleForm, EditArticleForm, CommentaireForm, PayementForm, AjouterCategorieForm
 from flask_login import login_user, logout_user, current_user
 import flask_login
-import os, random
+import os, random, stripe
 from datetime import datetime
 from werkzeug.utils import secure_filename
 from functools import wraps
 from .utils import ChoixDeCategories, get_categories_with_icons, choixDePromo
 from flask_mail import Message
 from app import mail
+from itsdangerous import URLSafeTimedSerializer
 ########## MA ROUTE POUR MA PAGE D'ACCEUIL ##########
 @app.route('/', methods=['GET', ' POST'])
 def home():
@@ -153,7 +154,7 @@ def Login():
                 return redirect(url_for('Login'))
                         
                         
-        flash("Veuillez d'abord créer un compte;error")
+        flash("Identifiants ou mot de passe incorrect. Veuillez réessayer;error")
         return redirect(url_for('Login'))
 
     return render_template('login.html', form=form)
@@ -523,16 +524,20 @@ def SearchFor():
 @app.route('/payement/<int:article_id>', methods=['GET', 'POST'])
 @flask_login.login_required
 def payement(article_id):
-    article = Articles.query.get(article_id)
-    name = current_user.Username
-    Montant_Total = article.price
+    session = stripe.checkout.Session(
+    payment_method_types=['card'],
+    line_items=[{
+        'price': 'price_1OwrzII0GTnWYq6mYNVfWQe4',
+        'quantity': 1
+    }],
+    mode = 'payment',
+    success_url=url_for('thanks', _external=True) + '?session_id={CHECKOUT_SESSION_ID}',
+    cancel_url=url_for('index', _external=True),
+    )    
 
-    form = PayementForm(name=name,  prix_total=Montant_Total)
-    payement = Payement(name=name, prix_total=Montant_Total)
-    db.session.add(payement)
-    db.session.commit()
-    flash(f"Votre demande est en cours de traitement, vous serez contactez dans un instant ")
-    return render_template('payement.html', form=form, article=article)
+    return render_template('payement.html', 
+    checkout_session_id = session['id'], 
+    checkout_public_key=app.config['STRIPE_PUBLIC_KEY'])
 
 
 
@@ -597,44 +602,105 @@ def VoirFavoris():
 
 
 
-@app.route('/send', methods=['GET', 'POST'])
-def send_Emails():
-        msg = Message('envoi d\'email',
-                    recipients=['luckpegan@gmail.com'])
-        msg.body = "Corps du message"
-        msg.html = "Corps du message, html, JE SUIS TTROOP CONTENT CA MARCHE"
 
-        mail.send(msg)
-        return "Message envoye"
+# @app.route('/send', methods=['GET', 'POST'])
+# def send_reset_password_email():
+#         email = request.form.get('email')
+
+#         msg = Message('envoi d\'email',
+#                     recipients=['luckpegan@gmail.com'])
+#         msg.body = "Corps du message"
+#         msg.html = "Corps du message, html, JE SUIS TTROOP CONTENT CA MARCHE"
+
+#         mail.send(msg)
+#         return "Message envoye"
 
 
 
 
-import requests
-import json
 
-def send_payment_request(auth_token, phone_number, amount, identifier, network):
-    # URL de l'API du service de paiement
-    api_url = 'https://paygateglobal.com/api/v1/pay'
+# @app.route('/forgot_password', methods=['GET', 'POST'])
+# def forgot_password():
+#     form = ResetPasswordRequestForm()
+#     if form.validate_on_submit():
+#         email = form.email.data
 
-    # Paramètres de la requête
-    payload = {
-        'auth_token': auth_token,
-        'phone_number': phone_number,
-        'amount': amount,
-        'description': 'Description de la transaction',
-        'identifier': identifier,
-        'network': network
-    }
+#         users_data = UsersData(
+#             email=email
+#         )
+#         db.session.add(users_data)
+#         db.session.commit()
+    
+#     return render_template('forgot_password.html', form=form)
 
-    # Envoi de la requête HTTP POST avec les paramètres JSON
-    response = requests.post(api_url, json=payload)
 
-    # Traitement de la réponse
-    if response.status_code == 200:
-        # La requête a réussi
-        data = response.json()
-        return data  # Vous pouvez traiter les données renvoyées par l'API ici
-    else:
-        # La requête a échoué
-        return {'error': f'Erreur {response.status_code}: {response.text}'}
+
+from itsdangerous import URLSafeTimedSerializer
+from flask_mail import Message
+
+
+@app.route('/forgot_password', methods=['GET', 'POST'])
+def forgot_password():
+    form = ResetPasswordRequestForm()
+    if form.validate_on_submit():
+        email = form.email.data
+
+        # Générer et envoyer le token de réinitialisation de mot de passe
+        token = generate_reset_token(email)
+        send_reset_password_email(email, token)
+        flash('Un email de réinitialisation de mot de passe a été envoyé.', 'success')
+     
+    return render_template('forgot_password.html', form=form)
+
+def generate_reset_token(email):
+    secret_key = app.config['SECRET_KEY']
+    serializer = URLSafeTimedSerializer(secret_key)
+    return serializer.dumps(email, salt='reset-password-salt')
+
+def send_reset_password_email(email, token):
+    # Construire le lien de réinitialisation de mot de passe
+    reset_link = url_for('change_password', token=token, _external=True)
+
+    # Créer le contenu de l'email
+    subject = "Réinitialisation de mot de passe"
+    body = f"Pour réinitialiser votre mot de passe, veuillez cliquer sur le lien suivant : {reset_link}"
+    recipients = [email]
+
+    # Envoyer l'email
+    message = Message(subject=subject, body=body, recipients=recipients)
+    mail.send(message)
+
+
+
+
+
+
+@app.route('/change_password/<token>', methods=['GET', 'POST'])
+def change_password(token):
+    serializer = URLSafeTimedSerializer(app.config['SECRET_KEY'])
+    try:
+        email = serializer.loads(token, salt='reset-password-salt', max_age=3600)  # Vérifie si le token est valide pendant 1 heure
+    except:
+        flash('Ce lien de réinitialisation de mot de passe est invalide ou expiré.', 'error')
+        return redirect(url_for('forgot_password'))
+
+    user = UsersData.query.filter_by(email=email).first()
+    if not user:
+        flash('Cet email n\'est pas associé à un compte.', 'error')
+        return redirect(url_for('forgot_password'))
+
+    form = change_passwordForm()
+    if form.validate_on_submit():
+        Password = form.Password.data
+        confirm_Password = form.confirm_Password.data
+         
+        if Password == confirm_Password:
+        # Sauvegarder le nouveau mot de passe dans la base de données
+            user.Password = bcrypt.generate_password_hash(Password).decode('utf8')
+        db.session.commit()
+        flash('Votre mot de passe a été réinitialisé avec succès.', 'success')
+        return redirect(url_for('Login'))
+
+    return render_template('change_password.html', form=form)
+
+

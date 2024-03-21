@@ -100,6 +100,9 @@ class CommentaireForm(FlaskForm):
 
 class ResetPasswordRequestForm(FlaskForm):
     email = StringField('Email', validators=[DataRequired()])
-    subject = StringField('Subject', validators=[DataRequired()])
-    message = StringField('TextField', validators=[DataRequired()])
-    submit = SubmitField('Request Password Reset')
+   
+
+class change_passwordForm(FlaskForm):
+    Password = PasswordField("Password",  validators=[DataRequired()])
+    confirm_Password = PasswordField("Confirm Password", validators=[DataRequired()])
+    submit = SubmitField("Enregistrer")

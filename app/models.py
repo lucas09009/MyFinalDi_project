@@ -108,6 +108,8 @@ class Articles(db.Model):
     carts = db.relationship('Panier', backref='articles', lazy=True)
     nombre_de_vues = db.Column(db.Integer, default=0)
     commentaires = db.relationship('Commentaires', backref='articles')
+    email = db.Column(db.String(100), default = True)
+
     # articles_favoris = db.relationship('Articles', backref='articles')
     articles_favoris = db.relationship('ArticlesFavoris', primaryjoin="Articles.id == ArticlesFavoris.id_of_article", backref='articles', lazy=True)
 
