@@ -15,12 +15,13 @@
 </div>
 {% endif %}
 {% endwith %}
+
 <h2>Les promotions en cours</h2>
 <div class="les-promos">
     {% for items in liste %}
     <a href="{{url_for('promotionsArticles', promo_id = items.id, article_id = article.id )}}" style="color:inherit; text-decoration:none; ">
         <div class="cadre">
-            <img src="">
+            <!-- <img src="" alt="image_de_la_promotion"> -->
             <h4 style="text-align: center; display: inline-block; color: blue">Promo: {{items.nom_de_la_promotion }}</h4>
             <p>duree de la promo:{{items.duree_de_la_promo}} jours</p>
             <p>reduction: {{ items.reduction  }}%</p>

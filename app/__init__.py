@@ -3,23 +3,14 @@ from flask_sqlalchemy import SQLAlchemy
 from flask_migrate import Migrate
 from flask_login import LoginManager
 from flask_bcrypt import Bcrypt
-from watchdog.observers import Observer
-from watchdog.events import FileSystemEventHandler
 from .config import Config
-from flask_bootstrap import Bootstrap
 import os
-import stripe
-
-
+from flask_mail import Mail
 
 app = Flask(__name__)
 bcrypt = Bcrypt(app)
-bootstrap = Bootstrap(app)
-
 app.config.from_object(Config)
 basedir = os.path.abspath(os.path.dirname(__file__))
-
-
 db_info = {
     "host": "dpg-cm3g5fen7f5s73boed70-a.frankfurt-postgres.render.com",
     "user": "shoponlinedb",
@@ -39,36 +30,32 @@ db_info = {
 # }
 
 app.config['SQLALCHEMY_DATABASE_URI'] = os.environ.get("DATABASE_URL")
-# postgres://shoponlinedb:XfIGBJfvYyDAEOtgzYbhQW9tuSawOUMK@dpg-cm2vf321hbls73fu5lf0-a.frankfurt-postgres.render.com/shoponlinedb_jof6
 app.config['SQLALCHEMY_DATABASE_URI'] = f"postgresql://{db_info['user']}:{db_info['psw']}@{db_info['host']}/{db_info['database']}"
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 
 
-app.config['MAIL_SERVER'] = 'smtp.fastmail.com'
-app.config['MAIL_PORT'] = 465 
-app.config['MAIL_USE_TLS'] = False
-app.config['MAIL_USE_SSL'] = True
-app.config['MAIL_USERNAME'] = 'mongo_market@fastmail.com'
-app.config['MAIL_PASSWORD'] = 'tncna2ggdz2cftx3'
+app.config['MAIL_SERVER'] ='smtp.gmail.com'
+app.config['MAIL_PORT'] = 587
+app.config['MAIL_USE_TLS'] = True
+app.config['MAIL_USE_SSL'] = False
+app.config['MAIL_DEBUG'] = True
+app.config['MAIL_USERNAME'] = 'luckpegan@gmail.com'
+app.config['MAIL_PASSWORD'] = "tuli jmxk efeo oduz "
+app.config['MAIL_DEFAULT_SENDER'] =('Mongo Market', 'luckpvghegan@gmail.com')
+app.config['MAIL_MAX_EMAILS'] = None
+app.config['MAIL_SUPPRESS_SEND'] = False
+app.config['MAIL_ASCII_ATTACHMENTS' ]= False
 
+#Initialisation de SQLAlchemy
+db = SQLAlchemy(app) 
 
-db = SQLAlchemy(app)
+#Initialisation de Migrate
 migrate = Migrate(app, db)
+
+#Création d'une instance de LoginManager() et initialisation
 login_manager = LoginManager()
 login_manager.init_app(app)
-login_manager.login_view = 'Login'
+login_manager.login_view = 'Login' 
 
-
+mail = Mail(app)
 from app import routes, models
-
-
-
-
-class MyHandler(FileSystemEventHandler):
-    def on_modified(self, event):
-        print(f'event type: {event.event_type}  path : {event.src_path}')
-
-event_handler = MyHandler()
-observer = Observer()
-observer.schedule(event_handler, path='.', recursive=False)
-observer.start()

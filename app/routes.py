@@ -1,5 +1,5 @@
 ########## MES-IMPORTATIONS ##########
-from flask import render_template, redirect,abort, url_for, request, flash, session, make_response, json
+from flask import render_template, redirect,abort, url_for, request, flash,current_app, session, make_response, json
 from app import app, bcrypt, db, login_manager
 from .models import Promotions, Articles, UsersData, Panier, Payement, Category, ArticlesFavoris, Commentaires
 from .forms import LoginForm, SignupForm, PublierArticles,EditProfileForm, PromotionsForm,DeleteArticleForm, EditArticleForm, CommentaireForm, PayementForm, AjouterCategorieForm
@@ -10,7 +10,9 @@ from datetime import datetime
 from werkzeug.utils import secure_filename
 from functools import wraps
 from .utils import ChoixDeCategories, get_categories_with_icons, choixDePromo
-
+from flask_mail import Message
+from app import mail
+########## MA ROUTE POUR MA PAGE D'ACCEUIL ##########
 @app.route('/', methods=['GET', ' POST'])
 def home():
     articles = Articles.query.all()
@@ -31,13 +33,11 @@ def home():
     random.shuffle(articles_a_afficher) 
     if current_user.is_authenticated:
         cart_item = Panier.query.filter_by(user_id = current_user.id).all()
-        
     else:        
         pass
     return render_template('home.html',pagination=pagination,articles=articles, les_promos = les_promos,  cart_item = cart_item, categories_with_icons=categories_with_icons)
 
 ####### CE CODE RESTREINT L'ACCES A CERTAINES ROUTES 
-
 def admin_required(view):                 
     @wraps(view)
     def view_decorate(*args, **kwargs):
@@ -45,11 +45,10 @@ def admin_required(view):
             return view(*args, **kwargs)
         
         abort(403)
-        # return redirect(url_for('home'))
     return view_decorate    
 
 
-######### CETTE ROUTE RETURNE LE TEMPLATE home.html UNE FOIS QU'ON ACCEDE A L'URL '/ADMIN' 
+######### CETTE ROUTE RETOURNE LE TEMPLATE adminhome.html UNE FOIS QU'ON ACCEDE A L'URL '/admin' 
 @app.route('/admin')
 @admin_required
 def viewsForAdmin():
@@ -67,12 +66,12 @@ def viewsForAdmin():
     return render_template('adminhome.html', articles=articles, les_promos=les_promos, categories_with_icons=categories_with_icons)
 
 
-####### CETTE ROUTE PERMET DE CHARGER D'UN UTILISATEUR DEPUIS LA DATABASE UsersData A PARTIR DE SON ID #########
+####### CETTE ROUTE PERMET DE CHARGER UN UTILISATEUR DEPUIS LA TABLE UsersData A PARTIR DE SON ID #########
 @login_manager.user_loader
 def load_user(user_id):
     return UsersData.query.get(int(user_id))
 
-############# CETTE ROUTarticles_en_promoX ADMINS DE MODIFIER DES ARTICLES ###########
+############# CETTE ROUTE DE RECUPERER L'ARTICLE QU'ON SOUHAITE AJOUTER A UNE PROMOTION  ###########
 
 @app.route('/Make_A_Promo/<int:article_id>', methods = ['GET', 'POST'])
 def make_new_promo(article_id):
@@ -81,12 +80,12 @@ def make_new_promo(article_id):
     return render_template('adminPromotionsPage.html', article=article, liste=liste)
 
 
+############# CETTE ROUTE EST LA SUITE DE LA ROUTE PRECEDENTE . ELLE PERMET D'AJOUTER A UNE CATEGORIE DE PROMOTIONS  ###########
 
 @app.route('/PromotionsArticles/<int:promo_id>/<int:article_id>', methods = ['GET', 'POST'])
 def promotionsArticles(promo_id, article_id):
     article = Articles.query.get(article_id)
     article.promotion_id = promo_id
-    print(article.promotion_id)
     db.session.commit()
     return redirect(url_for('home'))
 
@@ -119,6 +118,7 @@ def editProfile(user_id):
     return "User non trouvé"
 
 
+############# CETTE ROUTE PERMET AUX UTILISATEURS DE VOIR LEUR PROFIL ###########
 
 @app.route('/userProfile/<int:user_id>', methods = ['GET', 'POST'])
 def userProfile(user_id):
@@ -129,7 +129,7 @@ def userProfile(user_id):
         db.session.commit()
         return render_template('userProfile.html', form=form, user=user, cart_item=cart_item)
 
-############# CETTE ROUTE PERMET AUX Utilisateurs DE SE CONNECTER ###########
+############# CETTE ROUTE PERMET AUX UTILISATEURS DE SE CONNECTER ###########
 
 
 @app.route('/Login', methods=['GET', 'POST'])
@@ -159,7 +159,7 @@ def Login():
     return render_template('login.html', form=form)
 
 
-############# CETTE ROUTE PERMET AUX Utilisateurs DE SE DECONNECTER ###########
+############# CETTE ROUTE PERMET AUX UTILISATEURS DE SE DECONNECTER ###########
 
 
 @app.route('/Logout')
@@ -168,7 +168,7 @@ def Logout():
     return redirect(url_for('home'))
 
 
-############# CETTE ROUTE PERMET AUX Utilisateurs DE S'INSCRIRE ###########
+############# CETTE ROUTE PERMET AUX UTILISATEURS DE S'INSCRIRE ###########
 
 @app.route('/Signup', methods=['GET', 'POST'])
 def Signup():
@@ -200,6 +200,8 @@ def Signup():
     return render_template('Signup.html', form =form)
 
 
+############# CETTE ROUTE est reservé à l'ADMIN AFIN DE créer une nouvelle catégorie d'article ###########
+@admin_required
 @app.route('/ajouterCategorie', methods=['GET', 'POST'])
 def ajouterCategorie():
     form = AjouterCategorieForm()
@@ -214,6 +216,9 @@ def ajouterCategorie():
         return redirect(url_for('ajouterCategorie')) 
 
     return render_template('ajouterCategorie.html', form=form)
+
+
+############# CETTE ROUTE est reservé à l'ADMIN AFIN DE créer une nouvelle catégorie d'article ###########
 
 @app.route('/ajouterCategorie/Promo', methods=['GET', 'POST'])
 @admin_required
@@ -328,6 +333,8 @@ def deleteArticle():
     return render_template('delete_article.html', form=form, article=article_to_delete)
 
 
+############# CETTE ROUTE PERMET AUX ADMINS DE SUPPRIMER DES ARTICLES ###########
+
 @app.route('/editArticle/<int:article_id>', methods=['GET', 'POST'])
 def editArticle(article_id):
     article_to_edit = Articles.query.get(article_id)
@@ -362,6 +369,9 @@ def editArticle(article_id):
         return render_template('edit_article.html', form=form)
 
 
+############# CETTE ROUTE PERMET AUX ADMINS DE VOIR LES ARTICLES MIS EN VENTE ###########
+
+@admin_required
 @flask_login.login_required
 @app.route('/Mes_articles')
 def MesArticles():
@@ -372,12 +382,13 @@ def MesArticles():
     return render_template('mes_articles.html', mes_articles=mes_articles, cart_item=cart_item)
 
 
+############# CETTE ROUTE PERMET AUX USERS NON CONNECTES D'AJOUTER DES ARTICLES AU PANIER ###########
+
 @app.route('/add_to_cart/without_login/<int:article_id>', methods=['GET', 'POST'])
 def add_to_cart_without_login(article_id):
     article = Articles.query.get(article_id)
     if request.method == 'POST':
         if 'panier' not in session:
-            print('notoanier')
             session['panier'] = [] 
         else:
             new_add = {
@@ -409,6 +420,8 @@ def add_to_cart_without_login(article_id):
         return redirect(url_for('home'))
     return render_template('mon_panier.html', articles=articles)
 
+############# CETTE ROUTE PERMET AUX UTILISATEURS NON connectés DE VOIR LE CONTENU DE LEURS PANIERS ###########
+
 @app.route('/panier/Users/NotConnected', methods=['GET', 'POST'])
 def panierForUserNonConnecte():
     articles = Articles.query.all()
@@ -416,6 +429,8 @@ def panierForUserNonConnecte():
         items.image = '/'.join(''.join(items.image.split('/')[1:]).split('\\'))
     return render_template('mon_panier.html', articles=articles)
 
+
+############# CETTE ROUTE PERMET AUX USERS CONNECTES D'AJOUTER DES ARTICLES AU PANIER ###########
 
 @app.route('/add_to_cart/<int:user_id>/<int:article_id>', methods=['GET','POST'])
 def add_to_cart(user_id, article_id):
@@ -440,6 +455,7 @@ def add_to_cart(user_id, article_id):
     return render_template('mon_panier.html', rupture_de_stock=rupture_de_stock, cart_item=cart_item)
 
 
+############# CETTE ROUTE PERMET AUX UTILISATEURS connectés DE VOIR LE CONTENU DE LEURS PANIERS ###########
 @app.route('/panier', methods=['GET','POST'])
 def panier():
     user_id = current_user.id
@@ -451,6 +467,8 @@ def panier():
     # flash(f"L'article a été ajouté au panier;success")
     return render_template('mon_panier.html', articles=articles, panier_utilisateur=panier_utilisateur, cart_item=cart_item)
 
+
+############# CETTE ROUTE PERMET AUX UTILISATEURS connectés DE SUPPRIMER LE CONTENU DE LEURS PANIERS ###########
 
 @app.route('/supprimer_article_panier/<int:article_id>', methods=['GET', 'POST'])
 def supprimer_article_panier(article_id):
@@ -474,6 +492,7 @@ def supprimer_article_panier(article_id):
     return render_template('mon_panier.html')
 
 
+############# CETTE ROUTE PERMET AUX UTILISATEURS connectés DE SUPPRIMER LE CONTENU DE LEURS FQVORIS ###########
 
 @app.route('/supprimer_article_favoris/<int:article_id>', methods=['GET', 'POST'])
 def supprimer_article_favoris(article_id):
@@ -486,17 +505,18 @@ def supprimer_article_favoris(article_id):
     # flash(f"L'article a été supprimé de vos favoris;success")
     return redirect(url_for('VoirFavoris'))
 
+############# CETTE ROUTE PERMET AUX UTILISATEURS DE RECHERCHER DES ARTICLES ###########
 
 @app.route('/searchFor', methods=['GET', 'POST'])
 def SearchFor():
     categories_with_icons = get_categories_with_icons()
-    articles_trouvé = []
+    articles_trouve = []
     item_recherche = request.args.get('saisie')
     print("item_recherche",item_recherche)
-    if request.method == 'POST':
-        if item_recherche:
-            articles_trouvé = Articles.query.filter(Articles.name.ilike(f"%{item_recherche}%")).all()
-    return render_template('searchFor.html', articles_trouvé=articles_trouvé, item_recherche=item_recherche, categories_with_icons=categories_with_icons)
+    if item_recherche:
+        articles_trouve = Articles.query.filter(Articles.name.ilike(f"%{item_recherche}%")).all()
+        print("articles_trouve", articles_trouve)
+    return render_template('searchFor.html', articles_trouve=articles_trouve, item_recherche=item_recherche, categories_with_icons=categories_with_icons)
     
 
 
@@ -577,3 +597,44 @@ def VoirFavoris():
 
 
 
+@app.route('/send', methods=['GET', 'POST'])
+def send_Emails():
+        msg = Message('envoi d\'email',
+                    recipients=['luckpegan@gmail.com'])
+        msg.body = "Corps du message"
+        msg.html = "Corps du message, html, JE SUIS TTROOP CONTENT CA MARCHE"
+
+        mail.send(msg)
+        return "Message envoye"
+
+
+
+
+import requests
+import json
+
+def send_payment_request(auth_token, phone_number, amount, identifier, network):
+    # URL de l'API du service de paiement
+    api_url = 'https://paygateglobal.com/api/v1/pay'
+
+    # Paramètres de la requête
+    payload = {
+        'auth_token': auth_token,
+        'phone_number': phone_number,
+        'amount': amount,
+        'description': 'Description de la transaction',
+        'identifier': identifier,
+        'network': network
+    }
+
+    # Envoi de la requête HTTP POST avec les paramètres JSON
+    response = requests.post(api_url, json=payload)
+
+    # Traitement de la réponse
+    if response.status_code == 200:
+        # La requête a réussi
+        data = response.json()
+        return data  # Vous pouvez traiter les données renvoyées par l'API ici
+    else:
+        # La requête a échoué
+        return {'error': f'Erreur {response.status_code}: {response.text}'}

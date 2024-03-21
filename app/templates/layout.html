@@ -155,13 +155,16 @@
                                     </li>
 
                                     {#<li>
-                                        <a href="{{url_for('deleteArticle')}}"><i class="fa-solid fa-trash-can"></i>Supprimer un
+                                        <a href="{{url_for('make_new_promo')}}"><i class="fa-solid fa-trash-can"></i>Supprimer un
                                             article</a>
                                     </li>#}
 
                                     <li>
-                                        <a href="{{url_for('ajouterCategoriePromo')}}"><i class="fa-solid fa-rectangle-ad"></i>Promouvoir un
-                                            article</a>
+                                        <a href="{{url_for('ajouterCategoriePromo')}}"><i class="fa-solid fa-rectangle-ad"></i>Create a promo</a>
+                                    </li>
+                                    
+                                    <li>
+                                        <a href="{{url_for('ajouterCategorie')}}"><i class="fa-solid fa-rectangle-ad"></i>Create a category</a>
                                     </li>
                                     {% endif %}
                                     <li style=" white-space: nowrap;">

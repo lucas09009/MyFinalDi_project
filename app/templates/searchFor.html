@@ -35,8 +35,8 @@
             <div style="flex-direction: column; width:100%">
                 <div class="inventaire-des-articles" style="width:97%">
                     {% if current_user.is_authenticated %}
-                        {% if  articles_trouvé|length != 0  %}
-                            {% for article in articles_trouvé %}
+                        {% if  articles_trouve|length != 0  %}
+                            {% for article in articles_trouve %}
                                 <div class="exposition-images" data-category="{{ article.category.name }}">
                                     <a href="{{url_for('ArticlesDetails', article_id = article.id )}}" >
                                     <img src="{{article.image}}" width="250px" height="290px" alt="img">
@@ -64,25 +64,29 @@
                             <p style="color:white;background-color: #072345; width:100%; font-family:Quicksand; font-weight: bold;padding-left: 10px;">Aucun resultat trouvé</p>
                         {% endif %}
                     {% else %}
-                        {% for article in articles_trouvé %}
-                        <div class="exposition-images" data-category="{{ article.category }}">
-                            <a href="{{url_for('ArticlesDetails', article_id = article.id )}}">
-                                <img src="{{article['image']}}" width="250px" height="290px" alt="img">
-                            </a>
-                            <div class="description">
-                                <span class="article_description">Mise en vente par: {{article['user_name']|upper}} SHOP</span>
-                                <span class="article_description">{{article['Description']}}</span>
-                                <span class="article_name">{{article['name']}}</span>
-                                <span class="article_price">{{article['price']}}francs</span>
+                        {% if  articles_trouve|length != 0  %}
+                            {% for article in articles_trouve %}
+                            <div class="exposition-images" data-category="{{ article.category }}">
+                                <a href="{{url_for('ArticlesDetails', article_id = article.id )}}">
+                                    <img src="{{article['image']}}" width="250px" height="290px" alt="img">
+                                </a>
+                                <div class="description">
+                                    <span class="article_description">Mise en vente par: {{article['user_name']|upper}} SHOP</span>
+                                    <span class="article_description">{{article['Description']}}</span>
+                                    <span class="article_name">{{article['name']}}</span>
+                                    <span class="article_price">{{article['price']}}francs</span>
 
-                                <form method="POST" action="{{url_for('add_to_cart_without_login', article_id=article.id)}}">
-                                    <button type="submit" class="cart-button" data-article-id="{{ article.id }}" title="button">
-                                        <i class="fa-solid fa-cart-shopping"></i>
-                                    </button>
-                                </form>
-                            </div> 
-                        </div>
-                        {% endfor %}
+                                    <form method="POST" action="{{url_for('add_to_cart_without_login', article_id=article.id)}}">
+                                        <button type="submit" class="cart-button" data-article-id="{{ article.id }}" title="button">
+                                            <i class="fa-solid fa-cart-shopping"></i>
+                                        </button>
+                                    </form>
+                                </div> 
+                            </div>
+                            {% endfor %}
+                        {% else %}
+                            <p style="color:white;background-color: #072345; width:100%; font-family:Quicksand; font-weight: bold;padding-left: 10px;">Aucun resultat trouvé</p>
+                        {% endif %}
                     {% endif %}
                 </div>
                 <div class="pagination">

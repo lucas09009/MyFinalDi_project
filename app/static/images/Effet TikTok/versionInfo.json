@@ -1,0 +1,14 @@
+{
+  "version": "3.7.2",
+  "handlers": {
+    "ComponentsCompatibilityHandler": {
+      "Transform": "85bfce2f4ffa628888c59a61f15d5b51",
+      "Camera": "8e55c3cc4ccbe0b02971fcd64010eb00",
+      "EffectNode": "d751713988987e9331980363e24189ce",
+      "DirectionalLight": "ef18955537902d318b25333b9e7b53f1",
+      "EnvironmentLighting": "3174ed5b249dee36048cc3acff47d1e7",
+      "FaceCapture": "85bd24afd012b51072e17e97395efeae",
+      "Image": "e1045c6167efec3158b76a730d390114"
+    }
+  }
+}

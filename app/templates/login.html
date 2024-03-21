@@ -3,40 +3,45 @@
 <title>{% block blocktitle %} HOME{% endblock %}</title>
 
 {% block body%}
-{% with messages = get_flashed_messages() %}
-{% if messages %}
-<div class="alert-container">
-    {% for message in messages %}
-    {% if 'error' in message %}   
-    <div class="notification-container "></div>
-        {% set error_message = message.split(';')[0] %} 
-            <h6 class="alert-error">{{error_message}}</h6>
-    </div>
-    {% elif 'success' in message %}
-    <div class="notification-container  "></div>
-        {% set success_message = message.split(';')[0] %} 
-        <h6 class="alert-success">{{success_message}}</h6>
-    </div>
-    {% endif %}
-    {% endfor %}
-</div>
-{% endif %}
-{% endwith %}
-<div class="big-div">   
-    <form method="POST"  enctype="multipart/form-data" class="container">
+
+<div class="big-div" style="display:flex; flex-direction: column;">  
+    <form method="POST"  enctype="multipart/form-data" class="container"> 
         <div class="formulaire-LOGIN">
-            {{ form.hidden_tag() }}
-            <h1 class="h1">Connexion</h1><br>
-            {{ form.Username(placeholder="Pseudo",class_='style') }}<br>
-
-            {{ form.Password(placeholder="Password",class_='style') }}<br>
-
-            {{ form.submit(class_ = 'LOGIN-submit' ) }}<br>
-
             <div>
-            <a href="{{url_for('Signup')}}" style="text-decoration: none; color: inherit; font-family:'Cairo'; margin-right: 20px;">Pas de compte?<span style="text-decoration:underline">Inscrivez vous</span></a>
-            {#<a href="{{url_for('send_Message')}}" style="text-decoration: none; color: inherit; font-family:'Cairo'; margin-right: 20px;">Mot de passe oublié?</a>#}
-            </div>
+                <div>
+                    {{ form.hidden_tag() }}
+                    {% with messages = get_flashed_messages() %}
+                    {% if messages %}
+                    <div class="alert-container">
+                        {% for message in messages %}
+                        {% if 'error' in message %}   
+                        <div class="notification-container "></div>
+                            {% set error_message = message.split(';')[0] %} 
+                                <h6 class="alert-error">{{error_message}}</h6>
+                        </div>
+                        {% elif 'success' in message %}
+                        <div class="notification-container  "></div>
+                            {% set success_message = message.split(';')[0] %} 
+                            <h6 class="alert-success">{{success_message}}</h6>
+                        </div>
+                        {% endif %}
+                        {% endfor %}
+                    </div>
+                    {% endif %}
+                    {% endwith %} 
+                </div> 
+                <h1 class="h1" style="margin-top: 40px;">Connexion</h1><br>
+                {{ form.Username(placeholder="Pseudo",class_='style') }}<br>
+    
+                {{ form.Password(placeholder="Password",class_='style') }}<br>
+    
+                {{ form.submit(class_ = 'LOGIN-submit' ) }}<br>
+    
+                <div>
+                <a href="{{url_for('Signup')}}" style="text-decoration: none; color: inherit; font-family:'Cairo'; margin-right: 20px;">Pas de compte?<span style="text-decoration:underline">Inscrivez vous</span></a>
+                {#<a href="{{url_for('send_Message')}}" style="text-decoration: none; color: inherit; font-family:'Cairo'; margin-right: 20px;">Mot de passe oublié?</a>#}
+                </div>
+            <!-- </div> -->
         </div>
     </form>
 </div>

@@ -17,14 +17,6 @@ class Promotions(db.Model):
     def __repr__(self):
         return f'<Articles: {self.id}-->' 
 
-
-# class categoryPromo(db.Model):
-#     id = db.Column(db.Integer, primary_key=True)
-#     promo_name = db.Column(db.String, nullable=False)
-#     duree_de_la_promo = db.Column(db.Integer, nullable=False)
-#     reduction = db.Column(db.Integer, nullable=False)
-#     articles = db.relationship('Articles', backref='category', lazy=True)
-
 class Category(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     icon_name = db.Column(db.String, nullable=False)
@@ -62,8 +54,6 @@ class Panier(db.Model):
     # articles_paniers = db.relationship('Articles',secondary=association_table_articles_panier, backref='articles')
 
 
-
-
 class Commentaires(db.Model):
     __tablename__ = 'commentaires'
     id = db.Column(db.Integer, primary_key=True, autoincrement=True)
@@ -75,7 +65,6 @@ class Commentaires(db.Model):
 
     
 
-
 class ArticlesFavoris(db.Model):
     __tablename__ = 'articlesfavoris'
     id = db.Column(db.Integer, primary_key=True)
@@ -83,8 +72,6 @@ class ArticlesFavoris(db.Model):
     id_of_article  = db.Column(db.Integer, db.ForeignKey('articles.id'))
     category_id  = db.Column(db.Integer)
     Username = db.Column(db.Integer)
-
-
 
 
 class UsersData(db.Model, UserMixin):

@@ -2,6 +2,8 @@ from wtforms import StringField, PasswordField, SubmitField, DateField,FloatFiel
 from wtforms.validators import DataRequired, Optional
 from flask_wtf import FlaskForm
 from .utils import ChoixDeCategories
+
+# SignupForm est une classe de formulaire qui hérite de FlaskForm ;donc elle dispose de toutes les fonctionnalités dont dispose FlaskForm
 class SignupForm(FlaskForm):
     Username = StringField("Username",  validators=[DataRequired()])
     email = StringField("Email", validators=[DataRequired()])
@@ -88,16 +90,16 @@ class PayementForm(FlaskForm):
 
 
 class CommentaireForm(FlaskForm):
-    # id = IntegerField("userId", validators=[DataRequired()])
-    # name = StringField('Nom', validators=[DataRequired()])
+    id = IntegerField("userId", validators=[DataRequired()])
+    name = StringField('Nom', validators=[DataRequired()])
     commentaires = TextAreaField('Commentaires',validators=[DataRequired()])
     submit = SubmitField("submit", validators=[DataRequired()])
 
 
 
 
-# class ResetPasswordRequestForm(FlaskForm):
-#     email = StringField('Email', validators=[DataRequired()])
-#     subject = StringField('Subject', validators=[DataRequired()])
-#     message = StringField('TextField', validators=[DataRequired()])
-#     submit = SubmitField('Request Password Reset')
+class ResetPasswordRequestForm(FlaskForm):
+    email = StringField('Email', validators=[DataRequired()])
+    subject = StringField('Subject', validators=[DataRequired()])
+    message = StringField('TextField', validators=[DataRequired()])
+    submit = SubmitField('Request Password Reset')

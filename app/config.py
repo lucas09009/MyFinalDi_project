@@ -1,5 +1,4 @@
 import os
-import stripe
 from dotenv import load_dotenv
 load_dotenv()
 
@@ -10,3 +9,5 @@ class Config:
     SESSION_PERMANENT = os.getenv('SESSION_PERMANENT')
     SESSION_TYPE = os.getenv('SESSION_TYPE')
     STRIPE_API_KEY = os.getenv("STRIPE_API_KEY")
+
+    
